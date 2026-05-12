@@ -19,8 +19,8 @@ public class PelletPursuitDemo extends Application {
 
     // ── Customize your game ──────────────────────────────────────────────────
     // Change any of these to make your submission feel like your own.
-    private static final String GAME_TITLE        = "Pellet Pursuit";
-    private static final String GAME_SUBTITLE     = "your tagline here";
+    private static final String GAME_TITLE        = "Pokémon CS Academy";
+    private static final String GAME_SUBTITLE     = "Pokmon in Pekmen???";
     private static final String MSG_READY         = "GET READY!";
     private static final String MSG_DEAD          = "OUCH!";
     private static final String MSG_WIN           = "YOU WIN!";
@@ -32,7 +32,7 @@ public class PelletPursuitDemo extends Application {
     // ─────────────────────────────────────────────────────────────────────────
 
     // --- Layout ---
-    private static final int HUD_HEIGHT = 48;
+    private static final int HUD_HEIGHT = 0;
 
     // Canvas and stage stored as fields so startLevel() can resize them for variable-size maps
     private Canvas canvas;
@@ -419,6 +419,7 @@ public class PelletPursuitDemo extends Application {
     }
 
     private void drawHUD(GraphicsContext gc) {
+        /*
         gc.setFill(HUD_COLOR);
         gc.fillRect(0, 0, map.width, HUD_HEIGHT);
 
@@ -429,19 +430,25 @@ public class PelletPursuitDemo extends Application {
 
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("LEVEL " + level, map.width / 2.0, 30);
+        */
 
         // Lives as small pac-man icons
+
+        /*
         for (int i = 0; i < lives; i++) {
             double lx = map.width - 30 - i * 24, ly = 14;
             gc.setFill(Color.YELLOW);
             gc.fillArc(lx, ly, 18, 18, 30, 300, javafx.scene.shape.ArcType.ROUND);
         }
+        */
 
         // Pause hint
+        /*
         gc.setFont(Font.font("Monospace", 12));
         gc.setFill(Color.web("#555"));
         gc.setTextAlign(TextAlignment.RIGHT);
         gc.fillText("SPACE: PAUSE", map.width - 10, HUD_HEIGHT - 6);
+        */
 
         // Transient HUD notification (extra life, etc.)
         if (hudMessageTimer > 0) {

@@ -1,5 +1,6 @@
 package game;
 
+//import javafx.scene.media;
 import javax.sound.sampled.*;
 
 /**
@@ -56,9 +57,21 @@ public class AudioManager {
     public void playDeath()      { play(death); }
     public void playBonus()      { play(bonus); }
 
+    public void playMusic() {
+        URL resource = getClass().getResource("music/battle.mp3");
+        MediaPlayer a = new MediaPlayer(new Media(resource.toString()));
+        a.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                a.seek(Duration.ZERO);
+            }
+        });
+        a.play();
+    }
+
     public void startSiren() {
         if (runningSiren == null) runningSiren = sirenSlow;
-        loop(runningSiren);
+        //loop(runningSiren);
+        playMusic();
     }
 
     public void startFrightenedSiren() {
