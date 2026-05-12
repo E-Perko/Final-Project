@@ -44,7 +44,7 @@ public class AudioManager {
 
     private Clip runningSiren = null;
 
-    java.net.URL resource = getClass().getResource("game.music/sample.mp3");
+    private final java.net.URL resource = getClass().getResource("music/battle.mp3");
     private final MediaPlayer mediaPlayer;
     {
         assert resource != null;
@@ -76,7 +76,7 @@ public class AudioManager {
     public void startSiren() {
         if (runningSiren == null) runningSiren = sirenSlow;
         //loop(runningSiren);
-        //mediaPlayer.play();
+        mediaPlayer.play();
     }
 
     public void startFrightenedSiren() {
