@@ -1,7 +1,18 @@
 package game;
 
-//import javafx.scene.media;
 import javax.sound.sampled.*;
+
+
+//import javafx.fxml.FXML;
+//import javafx.fxml.FXMLLoader;
+//import javafx.scene.Parent;
+//import javafx.scene.control.Button;
+//import javafx.event.ActionEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
+import javafx.scene.media.AudioClip;
+
 
 /**
  * AudioManager — generates all game sounds in code using javax.sound.sampled.
@@ -36,6 +47,9 @@ public class AudioManager {
 
     private Clip runningSiren = null;
 
+    private final Media sound = new Media("music/battle.mp3");
+    private final MediaPlayer mediaPlayer = new MediaPlayer(sound);
+
     public AudioManager() {
         chomp      = makeClip(chompData());
         pellet     = makeClip(pelletData());
@@ -57,21 +71,12 @@ public class AudioManager {
     public void playDeath()      { play(death); }
     public void playBonus()      { play(bonus); }
 
-    public void playMusic() {
-        URL resource = getClass().getResource("music/battle.mp3");
-        MediaPlayer a = new MediaPlayer(new Media(resource.toString()));
-        a.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                a.seek(Duration.ZERO);
-            }
-        });
-        a.play();
-    }
+
 
     public void startSiren() {
         if (runningSiren == null) runningSiren = sirenSlow;
         //loop(runningSiren);
-        playMusic();
+        mediaPlayer.play();
     }
 
     public void startFrightenedSiren() {
