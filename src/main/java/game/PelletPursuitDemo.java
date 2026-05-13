@@ -113,7 +113,7 @@ public class PelletPursuitDemo extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         StackPane root = new StackPane(canvas);
-        Scene scene = new Scene(root, map.width, canvasH(), Color.BLACK);
+        Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -515,6 +515,16 @@ public class PelletPursuitDemo extends Application {
             gc.fillText(String.valueOf(value), x, y);
             gc.restore();
         }
+    }
+
+    public int getMapWidth()
+    {
+        return this.map.width;
+    }
+
+    public int getMapHeight()
+    {
+        return this.map.height;
     }
 
     public static void main(String[] args) { launch(args); }

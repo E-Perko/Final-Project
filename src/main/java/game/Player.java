@@ -46,12 +46,12 @@ public class Player extends Sprite {
     public void update(double dt, GameMap map) {
         double pixels = speed * dt * 60;
 
-        // Try to honour queued turn at tile centre
+        // Try to honor queued turn at tile center
         if (isAligned(map)) {
             int col = col(map), row = row(map);
             if (!map.isWall(col + nextDx, row + nextDy)) {
                 if (nextDx != dx || nextDy != dy) {
-                    // Snap exactly to tile centre before turning so the new
+                    // Snap exactly to tile center before turning so the new
                     // corridor is entered perfectly centred
                     x = map.tileCenterX(col) - size / 2.0;
                     y = map.tileCenterY(row) - size / 2.0;
@@ -82,7 +82,7 @@ public class Player extends Sprite {
         }
 
         // Continuously correct the perpendicular axis so straight movement
-        // never drifts off-centre in a corridor
+        // never drifts off-center in a corridor
         if (dx != 0) y = map.tileCenterY(row(map)) - size / 2.0;
         if (dy != 0) x = map.tileCenterX(col(map)) - size / 2.0;
 
@@ -100,7 +100,7 @@ public class Player extends Sprite {
         }
     }
 
-    // True when the sprite is close enough to a tile centre to allow turning
+    // True when the sprite is close enough to a tile center to allow turning
     private boolean isAligned(GameMap map) {
         double cx = centerX(), cy = centerY();
         double tx = map.tileCenterX(col(map));
@@ -118,7 +118,7 @@ public class Player extends Sprite {
         else if (dy ==  1) angle = 90;
 
         gc.save();
-        gc.translate(centerX(), centerY());
+        gc.translate(GameMap.TILE * 7.5, GameMap.TILE * 7.5);
         gc.rotate(angle);
 
         if (spriteImage != null) {

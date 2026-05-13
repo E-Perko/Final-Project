@@ -5,24 +5,15 @@ import javax.sound.sampled.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-//import javafx.fxml.FXML;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Parent;
-//import javafx.scene.control.Button;
-//import javafx.event.ActionEvent;
-
 /**
  * AudioManager — generates all game sounds in code using javax.sound.sampled.
- *
  * No audio files are needed. Every effect is a synthesized sine-wave tone
  * built from raw PCM data, so the game works out of the box on any machine.
- *
  * How it works (good for students to read):
  *   Sound is just numbers. We fill a byte array with values that describe how
  *   a speaker cone should move 44,100 times per second. A sine wave at a given
  *   frequency produces a pure musical tone; changing the frequency over time
  *   creates sweeps, wah effects, and melodies.
- *
  * EXTENSION: Replace any makeXxxData() method with your own wave shape, or
  * load a real WAV file with AudioSystem.getClip() and AudioSystem.getAudioInputStream().
  */
@@ -44,12 +35,13 @@ public class AudioManager {
 
     private Clip runningSiren = null;
 
-    private final java.net.URL resource = getClass().getResource("music/battle.mp3");
+    private final java.net.URL resource = getClass().getResource("/music/town.mp3");
     private final MediaPlayer mediaPlayer;
     {
         assert resource != null;
         Media sound = new Media(resource.toExternalForm());
         mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     public AudioManager() {
@@ -212,7 +204,7 @@ public class AudioManager {
         return data;
     }
 
-    /** Write a normalised sample value in [-1, 1] as little-endian 16-bit PCM. */
+    /** Write a normalized sample value in [-1, 1] as little-endian 16-bit PCM. */
     private static void putSample(byte[] buf, int index, double value) {
         short s = (short)(value * Short.MAX_VALUE);
         buf[index * 2]     = (byte)(s & 0xFF);

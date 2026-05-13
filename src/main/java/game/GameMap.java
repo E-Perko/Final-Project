@@ -16,7 +16,7 @@ import java.util.EnumSet;
 public class GameMap {
 
     // TILE is a rendering constant — always 28 px regardless of maze size
-    public static final int TILE = 40;
+    public static final int TILE = 50;
 
     // Instance dimensions — derived from whichever layout was passed in
     public final int cols;
@@ -63,7 +63,7 @@ public class GameMap {
     // ---------------------------------------------------------------
     public static final Tile[][] DEFAULT_LAYOUT = {
         {W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W},
-        {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
+        {D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D},
         {W,  P,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  P,  W},
         {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
         {W,  D,  W,  W,  W,  W,  W,  E,  W,  W,  W,  W,  W,  D,  W},
@@ -221,12 +221,12 @@ public class GameMap {
                 {
                     double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
                     gc.setFill(Color.web("#ffeb99"));
-                    gc.fillOval(cx - 3, cy - 3, 6, 6);
+                    gc.fillOval(cx - 3, cy - 3, TILE / 6.0, TILE / 6.0);
                 }
                 else if (t == Tile.P)
                 {
                     double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
-                    gc.fillOval(cx - 7, cy - 7, 14, 14);
+                    gc.fillOval(cx - 7, cy - 7, TILE / 3.0, TILE / 3.0);
                 }
                 else {
 
