@@ -197,11 +197,11 @@ public class GameMap {
     public double tileCenterY(int row)  { return row * TILE + TILE / 2.0; }
 
     public void draw(GraphicsContext gc) {
-        draw(gc, Color.web("#5fa331")); // change this hex code to pick your wall color
+        draw(gc, Color.web("#704444")); // change this hex code to pick your wall color
     }
 
     public void draw(GraphicsContext gc, Color wallColor) {
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.web("#508040"));
         gc.fillRect(0, 0, width, height);
 
         for (int r = 0; r < rows; r++)
@@ -220,7 +220,7 @@ public class GameMap {
                 else if (t == Tile.D)
                 {
                     double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
-                    gc.setFill(Color.web("#ffeb99"));
+                    gc.setFill(Color.web("#885544"));
                     gc.fillOval(cx - 3, cy - 3, TILE / 6.0, TILE / 6.0);
                 }
                 else if (t == Tile.P)

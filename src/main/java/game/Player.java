@@ -79,6 +79,7 @@ public class Player extends Sprite {
         if (canMove) {
             x = nx;
             y = ny;
+
         }
 
         // Continuously correct the perpendicular axis so straight movement

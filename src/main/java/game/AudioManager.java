@@ -35,7 +35,7 @@ public class AudioManager {
 
     private Clip runningSiren = null;
 
-    private final java.net.URL resource = getClass().getResource("/music/town.mp3");
+    private final java.net.URL resource = getClass().getResource("/music/battle.mp3");
     private final MediaPlayer mediaPlayer;
     {
         assert resource != null;
