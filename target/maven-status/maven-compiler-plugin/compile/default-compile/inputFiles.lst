@@ -1,8 +1,10 @@
 /Users/edwardperko/Final-Project/src/main/java/game/Ambush.java
 /Users/edwardperko/Final-Project/src/main/java/game/AudioManager.java
+/Users/edwardperko/Final-Project/src/main/java/game/Battle.java
 /Users/edwardperko/Final-Project/src/main/java/game/BonusItem.java
 /Users/edwardperko/Final-Project/src/main/java/game/GameMap.java
 /Users/edwardperko/Final-Project/src/main/java/game/Ghost.java
+/Users/edwardperko/Final-Project/src/main/java/game/GraphicsManager.java
 /Users/edwardperko/Final-Project/src/main/java/game/LevelConfig.java
 /Users/edwardperko/Final-Project/src/main/java/game/Patrol.java
 /Users/edwardperko/Final-Project/src/main/java/game/PelletPursuitDemo.java

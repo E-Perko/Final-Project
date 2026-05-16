@@ -17,6 +17,7 @@ import javafx.scene.media.MediaPlayer;
  * EXTENSION: Replace any makeXxxData() method with your own wave shape, or
  * load a real WAV file with AudioSystem.getClip() and AudioSystem.getAudioInputStream().
  */
+
 public class AudioManager {
 
     private static final int    SAMPLE_RATE = 44100;
@@ -35,14 +36,27 @@ public class AudioManager {
 
     private Clip runningSiren = null;
 
-    private final java.net.URL resource = getClass().getResource("/music/battle.mp3");
-    private final MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer;
+
+    public void playSong(String song)
     {
+        if (mediaPlayer != null) mediaPlayer.stop();
+        java.net.URL resource = getClass().getResource("/music/" + song + ".mp3");
         assert resource != null;
         Media sound = new Media(resource.toExternalForm());
         mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
+
+//    private final java.net.URL resource = getClass().getResource("/music/town.mp3");
+//    private final MediaPlayer mediaPlayer;
+//    {
+//        assert resource != null;
+//        Media sound = new Media(resource.toExternalForm());
+//        mediaPlayer = new MediaPlayer(sound);
+//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+//    }
 
     public AudioManager() {
         chomp      = makeClip(chompData());
@@ -57,7 +71,7 @@ public class AudioManager {
 
     // -----------------------------------------------------------------------
     // Public API — called by the game loop
-    // -----------------------------------------------------------------------
+    // ---------------------------=--------------------------------------------
 
     public void playChomp()      { play(chomp); }
     public void playPellet()     { play(pellet); }
@@ -68,7 +82,6 @@ public class AudioManager {
     public void startSiren() {
         if (runningSiren == null) runningSiren = sirenSlow;
         //loop(runningSiren);
-        mediaPlayer.play();
     }
 
     public void startFrightenedSiren() {

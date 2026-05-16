@@ -32,13 +32,13 @@ public abstract class Sprite {
 
     // Loads an image from src/main/resources. Use a path like "/game/images/mysprite.png".
     // Returns null silently if the file is missing, so the default drawing is used instead.
-    protected Image loadImage(String resourcePath) {
-        try {
-            return new Image(getClass().getResourceAsStream(resourcePath));
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
+//    protected Image loadImage(String resourcePath) {
+//        try {
+//            return new Image(getClass().getResourceAsStream(resourcePath));
+//        } catch (Exception ignored) {
+//            return null;
+//        }
+//    }
 
     // Tile the center of this sprite currently occupies
     public int col(GameMap map) { return map.pixelToCol(centerX()); }

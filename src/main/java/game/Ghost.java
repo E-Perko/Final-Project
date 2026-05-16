@@ -265,7 +265,7 @@ public abstract class Ghost extends Sprite {
         // more? Try a value and see how it feels in-game, then add a comment
         // explaining your choice — and why pixel distance gives a fairer result
         // than checking whether both sprites are on the same tile.
-        return false; // placeholder — replace this
+        return distanceTo(p.centerX(), p.centerY()) <= GameMap.TILE * 19 / 20.0;
     }
 
     @Override

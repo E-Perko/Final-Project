@@ -63,8 +63,6 @@ public class GameMap {
     // ---------------------------------------------------------------
     public static final Tile[][] DEFAULT_LAYOUT = {
         {W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W},
-        {D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D},
-        {W,  P,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  P,  W},
         {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
         {W,  D,  W,  W,  W,  W,  W,  E,  W,  W,  W,  W,  W,  D,  W},
         {W,  D,  D,  D,  W,  E,  G1, G0, G2, E,  W,  D,  D,  D,  W},
@@ -72,10 +70,7 @@ public class GameMap {
         {W,  D,  D,  D,  W,  W,  W,  W,  W,  W,  W,  D,  D,  D,  W},
         {W,  D,  W,  W,  D,  D,  D,  PL, D,  D,  D,  W,  W,  D,  W},
         {W,  D,  D,  D,  D,  W,  D,  BN, D,  W,  D,  D,  D,  D,  W},
-        {W,  D,  W,  W,  D,  W,  D,  D,  D,  W,  D,  W,  W,  D,  W},
-        {W,  P,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  P,  W},
         {W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W},
-        {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
         {W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W},
     };
 
@@ -197,11 +192,11 @@ public class GameMap {
     public double tileCenterY(int row)  { return row * TILE + TILE / 2.0; }
 
     public void draw(GraphicsContext gc) {
-        draw(gc, Color.web("#704444")); // change this hex code to pick your wall color
+        draw(gc, Color.web("#202090")); // change this hex code to pick your wall color
     }
 
     public void draw(GraphicsContext gc, Color wallColor) {
-        gc.setFill(Color.web("#508040"));
+        gc.setFill(Color.web("#000000"));
         gc.fillRect(0, 0, width, height);
 
         for (int r = 0; r < rows; r++)

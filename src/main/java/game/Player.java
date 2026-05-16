@@ -119,7 +119,7 @@ public class Player extends Sprite {
         else if (dy ==  1) angle = 90;
 
         gc.save();
-        gc.translate(GameMap.TILE * 7.5, GameMap.TILE * 7.5);
+        gc.translate(x + (GameMap.TILE / 2.0), y + (GameMap.TILE / 2.0));
         gc.rotate(angle);
 
         if (spriteImage != null) {
