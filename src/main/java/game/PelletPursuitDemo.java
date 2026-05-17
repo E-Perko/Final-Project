@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -89,13 +90,16 @@ public class PelletPursuitDemo extends Application {
 
     private boolean paused            = false;
     private boolean freeze            = false;
+    private boolean inBattle          = false;
     private boolean frightenedSirenOn = false;
+
+    GraphicsManager graphics = new GraphicsManager();
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
 
     // Convenience — canvas height tracks HUD + current map height
-    private int canvasH() { return map.height + HUD_HEIGHT; }
+    public int canvasH() { return map.height + HUD_HEIGHT; }
 
     /**
      * Return the Tile[][] layout for a given level number.
@@ -327,7 +331,8 @@ public class PelletPursuitDemo extends Application {
 //                    pauseTimer = DEAD_PAUSE;
                     freeze = true;
                     audio.playSong("champion");
-                    battle.startBattle();
+                    inBattle = true;
+                    //battle.startBattle();
                     return;
                 }
             }
@@ -403,8 +408,6 @@ public class PelletPursuitDemo extends Application {
             drawCenteredText(gc, GAME_SUBTITLE, 16, Color.web("#aaaaaa"), canvasH() / 2.0 - 10);
             drawCenteredText(gc, "PRESS ENTER TO START", 20, HUD_TEXT, canvasH() / 2.0 + 20);
             drawCenteredText(gc, "SPACE TO PAUSE", 16, Color.web("#aaa"), canvasH() / 2.0 + 46);
-            GraphicsManager graphics = new GraphicsManager();
-            graphics.draw(gc);
         } else if (state == State.GET_READY) {
             drawCenteredText(gc, MSG_READY, 36, Color.YELLOW, canvasH() / 2.0);
         } else if (state == State.DEAD_PAUSE) {
@@ -423,6 +426,19 @@ public class PelletPursuitDemo extends Application {
             gc.fillRect(0, 0, map.width, canvasH());
             drawCenteredText(gc, "PAUSED", 40, Color.YELLOW, canvasH() / 2.0);
             drawCenteredText(gc, "PRESS SPACE TO RESUME", 18, Color.WHITE, canvasH() / 2.0 + 40);
+        }
+
+        if (inBattle) {
+            gc.setFill(Color.web("#c8c8c8"));
+            gc.fillRect(0, 0, map.width, GameMap.TILE * 10);
+            gc.setFill(Color.web("#c0f0c0"));
+            gc.fillRect(0, GameMap.TILE * 7, map.width, GameMap.TILE * 3);
+            drawCenteredText(gc, "What will your Pokémon do?", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 8);
+            drawCenteredText(gc, "Squirtle", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 2);
+            drawCenteredText(gc, "Charmander", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
+            Image image = new Image("file:/graphics/charmander_back.png");
+            gc.drawImage(image, GameMap.TILE * 5, GameMap.TILE * 5);
+            //graphics.draw(gc);
         }
     }
 
