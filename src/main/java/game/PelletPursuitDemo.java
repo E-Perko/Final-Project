@@ -92,8 +92,7 @@ public class PelletPursuitDemo extends Application {
     private boolean freeze            = false;
     private boolean inBattle          = false;
     private boolean frightenedSirenOn = false;
-
-    GraphicsManager graphics = new GraphicsManager();
+    private Ghost battleGhost = null;
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
@@ -195,6 +194,14 @@ public class PelletPursuitDemo extends Application {
         if (key == KeyCode.SPACE && state == State.PLAYING && !freeze) {
             paused = !paused;
             if (paused) audio.stopSiren(); else audio.startSiren();
+        }
+        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
+            battle.calcDamage();
+            if (battle.battleEnd() == 2) {
+                inBattle = false;
+                freeze = false;
+                death(battleGhost);
+            }
         }
         if (key == KeyCode.ENTER) {
             if (state == State.READY || state == State.WIN) {
@@ -330,8 +337,9 @@ public class PelletPursuitDemo extends Application {
 //                    state      = State.DEAD_PAUSE;
 //                    pauseTimer = DEAD_PAUSE;
                     freeze = true;
-                    audio.playSong("champion");
+                    audio.playSong("battle");
                     inBattle = true;
+                    battleGhost = g;
                     //battle.startBattle();
                     return;
                 }
@@ -434,8 +442,11 @@ public class PelletPursuitDemo extends Application {
             gc.setFill(Color.web("#c0f0c0"));
             gc.fillRect(0, GameMap.TILE * 7, map.width, GameMap.TILE * 3);
             drawCenteredText(gc, "What will your Pokémon do?", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 8);
-            drawCenteredText(gc, "Squirtle", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 2);
-            drawCenteredText(gc, "Charmander", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
+            drawCenteredText(gc, "Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE);
+            drawCenteredText(gc, "Squirtle Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 2);
+            drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
+            drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
+            drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
             Image image = new Image("file:/graphics/charmander_back.png");
             gc.drawImage(image, GameMap.TILE * 5, GameMap.TILE * 5);
             //graphics.draw(gc);
@@ -533,6 +544,17 @@ public class PelletPursuitDemo extends Application {
             gc.fillText(String.valueOf(value), x, y);
             gc.restore();
         }
+    }
+
+    public void death(Ghost g) {
+        audio.playSong("town");
+        lives--;
+        killerGhost = g;
+        audio.stopSiren();
+        audio.playDeath();
+        state      = State.DEAD_PAUSE;
+        pauseTimer = DEAD_PAUSE;
+        battle.resetBattle();
     }
 
     public int getMapWidth()
