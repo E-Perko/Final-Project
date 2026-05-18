@@ -197,6 +197,11 @@ public class PelletPursuitDemo extends Application {
         }
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
             battle.calcDamage();
+            if (battle.battleEnd() == 1) {
+                inBattle = false;
+                freeze = false;
+                win(battleGhost);
+            }
             if (battle.battleEnd() == 2) {
                 inBattle = false;
                 freeze = false;
@@ -254,7 +259,7 @@ public class PelletPursuitDemo extends Application {
                         for (int i = 1; i < ghosts.size(); i++) ghosts.get(i).setActive(false);
                     }
                     scoreFlashes.clear();
-                    frightenedSirenOn = false;
+                    //frightenedSirenOn = false;
                     pauseTimer = 2.0;
                     state = State.GET_READY;
                 }
@@ -308,15 +313,15 @@ public class PelletPursuitDemo extends Application {
         for (Ghost g : ghosts) g.update(dt, map, player);
 
         // Switch siren between normal and frightened mode as ghosts change state
-        boolean anyFrightened = ghosts.stream().anyMatch(g -> g.isActive() && !g.isDead() && g.isFrightened());
-        if (anyFrightened && !frightenedSirenOn) {
-            frightenedSirenOn = true;
-            audio.startFrightenedSiren();
-        } else if (!anyFrightened && frightenedSirenOn) {
-            frightenedSirenOn = false;
-            audio.startSiren();
-            audio.updateSirenRate((double) dotsEaten / map.getTotalDots());
-        }
+        //boolean anyFrightened = ghosts.stream().anyMatch(g -> g.isActive() && !g.isDead() && g.isFrightened());
+//        if (anyFrightened && !frightenedSirenOn) {
+//            frightenedSirenOn = true;
+//            audio.startFrightenedSiren();
+//        } else if (!anyFrightened && frightenedSirenOn) {
+//            frightenedSirenOn = false;
+//            audio.startSiren();
+//            audio.updateSirenRate((double) dotsEaten / map.getTotalDots());
+//        }
 
         // Ghost collisions
         for (Ghost g : ghosts) {
@@ -554,6 +559,17 @@ public class PelletPursuitDemo extends Application {
         audio.playDeath();
         state      = State.DEAD_PAUSE;
         pauseTimer = DEAD_PAUSE;
+        battle.resetBattle();
+    }
+
+    public void win(Ghost g) {
+        audio.playSong("town");
+        int pts = 200 * (1 << ghostsEatenThisPellet);
+        score += pts;
+        ghostsEatenThisPellet++;
+        audio.playGhostEaten();
+        scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
+        g.kill();
         battle.resetBattle();
     }
 

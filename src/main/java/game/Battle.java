@@ -1,20 +1,20 @@
 package game;
 
 public class Battle {
-    private int pHealth = 40;
-    private int eHealth = 40;
+    private int pHealth = 15;
+    private int eHealth = 15;
     private int turn = 0;
 
-    public void startBattle() {
-
-    }
+//    public void startBattle() {
+//
+//    }
 
     public void calcDamage() {
         turn++;
         if (turn % 2 == 0) {
-            pHealth -= 5;
+            pHealth -= (int) (Math.random() * 2) + 1;
         } else {
-            eHealth -= 5;
+            eHealth -= (int) (Math.random() * 2) + 1;
         }
     }
 
@@ -41,8 +41,8 @@ public class Battle {
     }
 
     public void resetBattle() {
-        pHealth = 40;
-        eHealth = 40;
+        pHealth = 15;
+        eHealth = 15;
         turn = 0;
     }
 }
