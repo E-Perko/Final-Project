@@ -15,6 +15,10 @@ import javafx.stage.Stage;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+//import java.io.inputStream;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class PelletPursuitDemo extends Application {
 
@@ -342,7 +346,7 @@ public class PelletPursuitDemo extends Application {
 //                    state      = State.DEAD_PAUSE;
 //                    pauseTimer = DEAD_PAUSE;
                     freeze = true;
-                    audio.playSong("battle");
+                    audio.playSong("champion");
                     inBattle = true;
                     battleGhost = g;
                     //battle.startBattle();
@@ -452,9 +456,9 @@ public class PelletPursuitDemo extends Application {
             drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
             drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
             drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
-            Image image = new Image("file:/graphics/charmander_back.png");
-            gc.drawImage(image, GameMap.TILE * 5, GameMap.TILE * 5);
-            //graphics.draw(gc);
+            Image image = new Image("file:/graphics/charmanderBack.png", 100, 0, false, false);
+            ImageView iv1 = new ImageView();
+            iv1.setImage(image);
         }
     }
 
