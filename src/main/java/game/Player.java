@@ -25,7 +25,7 @@ public class Player extends Sprite {
             map.spawnCol(GameMap.Tile.SPAWN_PLAYER) * GameMap.TILE,
             map.spawnRow(GameMap.Tile.SPAWN_PLAYER) * GameMap.TILE,
             GameMap.TILE,
-            2.5
+            GameMap.TILE / 15.0
         );
         this.startCol = map.spawnCol(GameMap.Tile.SPAWN_PLAYER);
         this.startRow = map.spawnRow(GameMap.Tile.SPAWN_PLAYER);
@@ -79,7 +79,6 @@ public class Player extends Sprite {
         if (canMove) {
             x = nx;
             y = ny;
-
         }
 
         // Continuously correct the perpendicular axis so straight movement

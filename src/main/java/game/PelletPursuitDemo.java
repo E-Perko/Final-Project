@@ -98,7 +98,10 @@ public class PelletPursuitDemo extends Application {
     private boolean frightenedSirenOn = false;
     private Ghost battleGhost = null;
 
-    public ImageView images = new ImageView();
+    public ImageView images1 = new ImageView();
+    public ImageView images2 = new ImageView();
+
+    int criticalMusic = 0;
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
@@ -126,12 +129,23 @@ public class PelletPursuitDemo extends Application {
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
         //Image image = new Image("/charmander_back.png");
-        Image image = new Image("/charmander_back.png");
-        images.setFitWidth(100);
-        images.setPreserveRatio(true);
-        images.setImage(image);
-        Pane imgPane = new Pane(images);
-        root.getChildren().addAll(imgPane);
+        Image image1 = new Image("/charmander_back.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
+        images1.setFitWidth(GameMap.TILE * 4);
+        images1.setPreserveRatio(true);
+        images1.setX(GameMap.TILE);
+        images1.setY(GameMap.TILE * 3);
+        images1.setImage(image1);
+        Pane imgPane1 = new Pane(images1);
+        Image image2 = new Image("/squirtle_front.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
+        images2.setFitWidth(GameMap.TILE * 4);
+        images2.setPreserveRatio(true);
+        images2.setX(GameMap.TILE * 9);
+        images2.setY(0);
+        images2.setImage(image2);
+        Pane imgPane2 = new Pane(images2);
+        //root.getChildren().addAll(imgPane1, imgPane2);
+        root.getChildren().addAll(imgPane1);
+        root.getChildren().addAll(imgPane2);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -210,14 +224,20 @@ public class PelletPursuitDemo extends Application {
         }
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
             battle.calcDamage();
+            if (battle.getPHealth() <= 5 && criticalMusic == 0) {
+                audio.playSong("critical");
+                criticalMusic = 1;
+            }
             if (battle.battleEnd() == 1) {
                 inBattle = false;
                 freeze = false;
+                criticalMusic = 0;
                 win(battleGhost);
             }
             if (battle.battleEnd() == 2) {
                 inBattle = false;
                 freeze = false;
+                criticalMusic = 0;
                 death(battleGhost);
             }
         }
@@ -459,15 +479,16 @@ public class PelletPursuitDemo extends Application {
             gc.fillRect(0, 0, map.width, GameMap.TILE * 10);
             gc.setFill(Color.web("#c0f0c0"));
             gc.fillRect(0, GameMap.TILE * 7, map.width, GameMap.TILE * 3);
-            drawCenteredText(gc, "What will your Pokémon do?", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 8);
-            drawCenteredText(gc, "Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE);
-            drawCenteredText(gc, "Squirtle Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 2);
-            drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
-            drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
-            drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
+            gc.setFill(Color.DARKSLATEGRAY);
+            gc.setTextAlign(TextAlignment.LEFT);
+            gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
+            gc.fillText("What will your Pokémon do?", GameMap.TILE, GameMap.TILE * 8);
+            gc.fillText("Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE, GameMap.TILE);
+            gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE * 2);
+            gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
+            gc.fillText("Health: " + battle.getEHealth(), GameMap.TILE, GameMap.TILE * 3);
+            gc.fillText("Health: " + battle.getPHealth(), GameMap.TILE * 6, GameMap.TILE * 6);
             //graphics.displayImg("paper");
-            Image image = new Image("/paper.png");
-            images.setImage(image);
         }
     }
 

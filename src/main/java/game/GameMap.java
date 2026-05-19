@@ -16,7 +16,7 @@ import java.util.EnumSet;
 public class GameMap {
 
     // TILE is a rendering constant — always 28 px regardless of maze size
-    public static final int TILE = 50;
+    public static final int TILE = 64;
 
     // Instance dimensions — derived from whichever layout was passed in
     public final int cols;
