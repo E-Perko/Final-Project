@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -15,9 +16,7 @@ import javafx.stage.Stage;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-//import java.io.inputStream;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class PelletPursuitDemo extends Application {
@@ -120,9 +119,15 @@ public class PelletPursuitDemo extends Application {
 
         canvas = new Canvas(map.width, canvasH());
         GraphicsContext gc = canvas.getGraphicsContext2D();
-
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
+
+        Image image = new Image("/charmander_back.png");
+        ImageView iv1 = new ImageView();
+        iv1.setImage(image);
+        Pane imgPane = new Pane(iv1);
+
+        root.getChildren().addAll(imgPane);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -456,9 +461,6 @@ public class PelletPursuitDemo extends Application {
             drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
             drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
             drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
-            Image image = new Image("file:/graphics/charmanderBack.png", 100, 0, false, false);
-            ImageView iv1 = new ImageView();
-            iv1.setImage(image);
         }
     }
 
