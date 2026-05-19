@@ -90,6 +90,7 @@ public class PelletPursuitDemo extends Application {
 
     private final AudioManager audio = new AudioManager();
     private final Battle battle = new Battle();
+    //private final GraphicsManager graphics = new GraphicsManager();
 
     private boolean paused            = false;
     private boolean freeze            = false;
@@ -130,7 +131,6 @@ public class PelletPursuitDemo extends Application {
         images.setPreserveRatio(true);
         images.setImage(image);
         Pane imgPane = new Pane(images);
-
         root.getChildren().addAll(imgPane);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
@@ -465,7 +465,8 @@ public class PelletPursuitDemo extends Application {
             drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
             drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
             drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
-            Image image = new Image("/paper.jpeg");
+            //graphics.displayImg("paper");
+            Image image = new Image("/paper.png");
             images.setImage(image);
         }
     }

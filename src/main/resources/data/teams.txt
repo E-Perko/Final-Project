@@ -1,9 +1,8 @@
 === TRAINER_RIVAL_OAKS_LAB_SQUIRTLE ===
-Name: TERRY
-Class: Rival Early Frlg
-Pic: Rival Early Frlg
-Music: Male
-Double Battle: No
+Name: Gary
+Class: Rival
+Pic: rival
+Music: rival
 AI: Check Bad Move / Try To Faint / Check Viability
 
 Squirtle
@@ -13,11 +12,10 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Tail Whip
 
 === TRAINER_RIVAL_OAKS_LAB_BULBASAUR ===
-Name: TERRY
-Class: Rival Early Frlg
-Pic: Rival Early Frlg
-Music: Male
-Double Battle: No
+Name: Gary
+Class: Rival
+Pic: rival
+Music: rival
 AI: Check Bad Move / Try To Faint / Check Viability
 
 Bulbasaur
@@ -27,11 +25,10 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Growl
 
 === TRAINER_RIVAL_OAKS_LAB_CHARMANDER ===
-Name: TERRY
-Class: Rival Early Frlg
-Pic: Rival Early Frlg
-Music: Male
-Double Battle: No
+Name: Gary
+Class: Rival
+Pic: rival
+Music: rival
 AI: Check Bad Move / Try To Faint / Check Viability
 
 Charmander
