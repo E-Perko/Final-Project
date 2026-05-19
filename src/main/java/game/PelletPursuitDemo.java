@@ -97,6 +97,8 @@ public class PelletPursuitDemo extends Application {
     private boolean frightenedSirenOn = false;
     private Ghost battleGhost = null;
 
+    public ImageView images = new ImageView();
+
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
 
@@ -122,10 +124,12 @@ public class PelletPursuitDemo extends Application {
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
+        //Image image = new Image("/charmander_back.png");
         Image image = new Image("/charmander_back.png");
-        ImageView iv1 = new ImageView();
-        iv1.setImage(image);
-        Pane imgPane = new Pane(iv1);
+        images.setFitWidth(100);
+        images.setPreserveRatio(true);
+        images.setImage(image);
+        Pane imgPane = new Pane(images);
 
         root.getChildren().addAll(imgPane);
 
@@ -461,6 +465,8 @@ public class PelletPursuitDemo extends Application {
             drawCenteredText(gc, "Charmander Level 5", GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 5);
             drawCenteredText(gc, "Health: " + battle.getEHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 3);
             drawCenteredText(gc, "Health: " + battle.getPHealth(), GameMap.TILE * 2 / 3, Color.DARKSLATEGRAY, GameMap.TILE * 6);
+            Image image = new Image("/paper.jpeg");
+            images.setImage(image);
         }
     }
 
