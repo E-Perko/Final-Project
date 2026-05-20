@@ -101,7 +101,7 @@ public class PelletPursuitDemo extends Application {
     public ImageView images1 = new ImageView();
     public ImageView images2 = new ImageView();
 
-    int criticalMusic = 0;
+    boolean criticalMusic = false;
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
@@ -132,14 +132,14 @@ public class PelletPursuitDemo extends Application {
         Image image1 = new Image("/charmander_back.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
         images1.setFitWidth(GameMap.TILE * 4);
         images1.setPreserveRatio(true);
-        images1.setX(GameMap.TILE);
+        images1.setX(GameMap.TILE * -10);
         images1.setY(GameMap.TILE * 3);
         images1.setImage(image1);
         Pane imgPane1 = new Pane(images1);
         Image image2 = new Image("/squirtle_front.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
         images2.setFitWidth(GameMap.TILE * 4);
         images2.setPreserveRatio(true);
-        images2.setX(GameMap.TILE * 9);
+        images2.setX(GameMap.TILE * -10);
         images2.setY(0);
         images2.setImage(image2);
         Pane imgPane2 = new Pane(images2);
@@ -223,21 +223,29 @@ public class PelletPursuitDemo extends Application {
             if (paused) audio.stopSiren(); else audio.startSiren();
         }
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
-            battle.calcDamage();
-            if (battle.getPHealth() <= 5 && criticalMusic == 0) {
+            battle.playTurn();
+            if (battle.getPStats()[1] < 5 && !criticalMusic) {
                 audio.playSong("critical");
-                criticalMusic = 1;
+                criticalMusic = true;
+            }
+            if (battle.getPStats()[1] >= 5 && criticalMusic) {
+                audio.playSong("champion");
+                criticalMusic = false;
             }
             if (battle.battleEnd() == 1) {
                 inBattle = false;
                 freeze = false;
-                criticalMusic = 0;
+                criticalMusic = false;
+                images1.setX(GameMap.TILE * -10);
+                images2.setX(GameMap.TILE * -10);
                 win(battleGhost);
             }
             if (battle.battleEnd() == 2) {
                 inBattle = false;
                 freeze = false;
-                criticalMusic = 0;
+                criticalMusic = false;
+                images1.setX(GameMap.TILE * -10);
+                images2.setX(GameMap.TILE * -10);
                 death(battleGhost);
             }
         }
@@ -486,9 +494,11 @@ public class PelletPursuitDemo extends Application {
             gc.fillText("Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE, GameMap.TILE);
             gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE * 2);
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
-            gc.fillText("Health: " + battle.getEHealth(), GameMap.TILE, GameMap.TILE * 3);
-            gc.fillText("Health: " + battle.getPHealth(), GameMap.TILE * 6, GameMap.TILE * 6);
+            gc.fillText("Health: " + battle.getEStats()[1], GameMap.TILE, GameMap.TILE * 3);
+            gc.fillText("Health: " + battle.getPStats()[1], GameMap.TILE * 6, GameMap.TILE * 6);
             //graphics.displayImg("paper");
+            images1.setX(GameMap.TILE);
+            images2.setX(GameMap.TILE * 9);
         }
     }
 
@@ -605,16 +615,6 @@ public class PelletPursuitDemo extends Application {
         scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
         g.kill();
         battle.resetBattle();
-    }
-
-    public int getMapWidth()
-    {
-        return this.map.width;
-    }
-
-    public int getMapHeight()
-    {
-        return this.map.height;
     }
 
     public static void main(String[] args) { launch(args); }
