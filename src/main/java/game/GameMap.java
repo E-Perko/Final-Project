@@ -223,9 +223,6 @@ public class GameMap {
                     double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
                     gc.fillOval(cx - 7, cy - 7, TILE / 3.0, TILE / 3.0);
                 }
-                else {
-
-                }
             }
         }
     }

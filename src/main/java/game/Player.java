@@ -37,7 +37,6 @@ public class Player extends Sprite {
             case LEFT, A -> { nextDx = -1; nextDy = 0; }
             case UP, W -> { nextDx = 0; nextDy = -1; }
             case DOWN, S -> { nextDx = 0; nextDy = 1; }
-            // add cases for LEFT/A, DOWN/S, UP/W
             default -> {}
         }
     }
