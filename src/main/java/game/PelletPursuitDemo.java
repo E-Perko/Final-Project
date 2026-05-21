@@ -90,8 +90,8 @@ public class PelletPursuitDemo extends Application {
 
     private final AudioManager audio = new AudioManager();
     private final Battle battle = new Battle();
-    //private final GraphicsManager graphics = new GraphicsManager();
-    private final GameInterface gameInterface = new GameInterface();
+    private final GraphicsManager graphics = new GraphicsManager();
+    private final GameInterface gameUI = new GameInterface();
 
     private boolean paused            = false;
     private boolean freeze            = false;
@@ -101,10 +101,6 @@ public class PelletPursuitDemo extends Application {
 
     public ImageView images1 = new ImageView();
     public ImageView images2 = new ImageView();
-
-    public int[][] battleMoves = {{1, 0}, {0, 0}};
-    public int selectX = 0;
-    public int selectY = 0;
 
     boolean criticalMusic = false;
 
@@ -133,24 +129,8 @@ public class PelletPursuitDemo extends Application {
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
-        //Image image = new Image("/charmander_back.png");
-        Image image1 = new Image("/charmander_back.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
-        images1.setFitWidth(GameMap.TILE * 4);
-        images1.setPreserveRatio(true);
-        images1.setX(GameMap.TILE * -10);
-        images1.setY(GameMap.TILE * 3);
-        images1.setImage(image1);
-        Pane imgPane1 = new Pane(images1);
-        Image image2 = new Image("/squirtle_front.png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
-        images2.setFitWidth(GameMap.TILE * 4);
-        images2.setPreserveRatio(true);
-        images2.setX(GameMap.TILE * -10);
-        images2.setY(0);
-        images2.setImage(image2);
-        Pane imgPane2 = new Pane(images2);
-        //root.getChildren().addAll(imgPane1, imgPane2);
-        root.getChildren().addAll(imgPane1);
-        root.getChildren().addAll(imgPane2);
+        graphics.displayImg("charmander_back", 4, 1, 3, 0, root);
+        graphics.displayImg("squirtle_front", 4, 9, 0, 1, root);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -228,30 +208,40 @@ public class PelletPursuitDemo extends Application {
             if (paused) audio.stopSiren(); else audio.startSiren();
         }
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
-            battle.playTurn();
-            if (battle.getPStats()[1] < 5 && !criticalMusic) {
-                audio.playSong("critical");
-                criticalMusic = true;
-            }
-            if (battle.getPStats()[1] >= 5 && criticalMusic) {
-                audio.playSong("champion");
-                criticalMusic = false;
-            }
-            if (battle.battleEnd() == 1) {
-                inBattle = false;
-                freeze = false;
-                criticalMusic = false;
-                images1.setX(GameMap.TILE * -10);
-                images2.setX(GameMap.TILE * -10);
-                win(battleGhost);
-            }
-            if (battle.battleEnd() == 2) {
-                inBattle = false;
-                freeze = false;
-                criticalMusic = false;
-                images1.setX(GameMap.TILE * -10);
-                images2.setX(GameMap.TILE * -10);
-                death(battleGhost);
+            if (gameUI.battleState == 1) {
+                battle.playTurn();
+                if (battle.getPStats()[1] < 5 && !criticalMusic) {
+                    audio.playSong("critical");
+                    criticalMusic = true;
+                }
+                if (battle.getPStats()[1] >= 5 && criticalMusic) {
+                    audio.playSong("champion");
+                    criticalMusic = false;
+                }
+                if (battle.battleEnd() == 1) {
+                    inBattle = false;
+                    freeze = false;
+                    criticalMusic = false;
+                    images1.setX(GameMap.TILE * -10);
+                    images2.setX(GameMap.TILE * -10);
+                    gameUI.battleState = 0;
+                    gameUI.selectX = 0;
+                    gameUI.selectY = 0;
+                    win(battleGhost);
+                }
+                if (battle.battleEnd() == 2) {
+                    inBattle = false;
+                    freeze = false;
+                    criticalMusic = false;
+                    images1.setX(GameMap.TILE * -10);
+                    images2.setX(GameMap.TILE * -10);
+                    gameUI.battleState = 0;
+                    gameUI.selectX = 0;
+                    gameUI.selectY = 0;
+                    death(battleGhost);
+                }
+            } else if (gameUI.selectX == 0 && gameUI.selectY == 0) {
+                gameUI.battleState = 1;
             }
         }
         if (key == KeyCode.ENTER) {
@@ -263,17 +253,17 @@ public class PelletPursuitDemo extends Application {
         }
         if (state == State.PLAYING || state == State.GET_READY) player.handleKey(key);
         if (inBattle) {
-            if (key == KeyCode.RIGHT && selectX == 0) {
-                selectX = 1;
+            if (key == KeyCode.RIGHT && gameUI.selectX == 0) {
+                gameUI.selectX = 1;
             }
-            if (key == KeyCode.LEFT && selectX == 1) {
-                selectX = 0;
+            if (key == KeyCode.LEFT && gameUI.selectX == 1) {
+                gameUI.selectX = 0;
             }
-            if (key == KeyCode.DOWN && selectY == 0) {
-                selectY = 1;
+            if (key == KeyCode.DOWN && gameUI.selectY == 0) {
+                gameUI.selectY = 1;
             }
-            if (key == KeyCode.UP && selectY == 1) {
-                selectY = 0;
+            if (key == KeyCode.UP && gameUI.selectY == 1) {
+                gameUI.selectY = 0;
             }
         }
     }
@@ -509,22 +499,14 @@ public class PelletPursuitDemo extends Application {
             gc.setFill(Color.DARKSLATEGRAY);
             gc.setTextAlign(TextAlignment.LEFT);
             gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
-            gc.fillText("What will your", GameMap.TILE, GameMap.TILE * 8);
-            gc.fillText("Pokémon do?", GameMap.TILE, GameMap.TILE * 9);
             gc.fillText("Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE, GameMap.TILE);
             gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE * 2);
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
             gc.fillText("Health: " + battle.getEStats()[1] + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 3);
             gc.fillText("Health: " + battle.getPStats()[1] + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
-            //graphics.displayImg("paper");
             images1.setX(GameMap.TILE);
             images2.setX(GameMap.TILE * 9);
-            //gameInterface.renderBattle(gc);
-            gc.fillArc((GameMap.TILE * 8) + (GameMap.TILE * selectX * 3.5), (GameMap.TILE * 7.75) + (GameMap.TILE * selectY), 10, 10, 0, 360, javafx.scene.shape.ArcType.ROUND);
-            gc.fillText("Fight", GameMap.TILE * 8.5, GameMap.TILE * 8);
-            gc.fillText("Bag", GameMap.TILE * 12, GameMap.TILE * 8);
-            gc.fillText("Pokémon", GameMap.TILE * 8.5, GameMap.TILE * 9);
-            gc.fillText("Run", GameMap.TILE * 12, GameMap.TILE * 9);
+            gameUI.renderBattle(gc);
         }
     }
 

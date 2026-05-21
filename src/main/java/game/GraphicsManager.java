@@ -1,22 +1,24 @@
 package game;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 public class GraphicsManager {
-    PelletPursuitDemo main = new PelletPursuitDemo();
-    Image image;
-    int count = 0;
+    ImageView[] imgView = new ImageView[2];
+    Image[] image = new Image[2];
+    Pane[] pane = new Pane[2];
 
-    public void displayImg(String img, int scale, int xPos, int yPos) {
-        if (count == 0) {
-            image = new Image("/" + img + ".png", 10000.0, 10000.0, true, false);
-            main.images1.setFitWidth(GameMap.TILE * scale);
-            main.images1.setPreserveRatio(true);
-            main.images1.setX(GameMap.TILE * xPos);
-            main.images1.setY(GameMap.TILE * yPos);
-            main.images1.setImage(image);
-            count++;
-        }
+    public void displayImg(String img, int width, int xPos, int yPos, int imgNum, StackPane root) {
+        imgView[imgNum] = new ImageView();
+        image[imgNum] = new Image("/" + img + ".png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
+        imgView[imgNum].setFitWidth(GameMap.TILE * width);
+        imgView[imgNum].setPreserveRatio(true);
+        imgView[imgNum].setX(GameMap.TILE * xPos);
+        imgView[imgNum].setY(GameMap.TILE * yPos);
+        imgView[imgNum].setImage(image[imgNum]);
+        pane[imgNum] = new Pane(imgView[imgNum]);
+        root.getChildren().addAll(pane[imgNum]);
     }
 }
