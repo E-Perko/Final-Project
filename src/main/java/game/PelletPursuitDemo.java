@@ -98,7 +98,9 @@ public class PelletPursuitDemo extends Application {
     public boolean inBattle          = false;
     private Ghost battleGhost = null;
 
-    boolean criticalMusic = false;
+    public boolean criticalMusic = false;
+
+    public int currentAnimHP;
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
@@ -206,11 +208,11 @@ public class PelletPursuitDemo extends Application {
                 gameUI.battleState = 2;
                 battle.playTurn();
                 gameUI.battleState = 1;
-                if (battle.getPStats()[1] < 5 && !criticalMusic) {
+                if ((double) battle.getPStats()[1] / battle.getPStats()[2] < 0.25 && !criticalMusic) {
                     audio.playSong("critical");
                     criticalMusic = true;
                 }
-                if (battle.getPStats()[1] >= 5 && criticalMusic) {
+                if ((double) battle.getPStats()[1] / battle.getPStats()[2] > 0.25 && criticalMusic) {
                     audio.playSong("eliteFour");
                     criticalMusic = false;
                 }
@@ -474,6 +476,12 @@ public class PelletPursuitDemo extends Application {
             graphics.setImgX(0, GameMap.TILE);
             graphics.setImgX(1, GameMap.TILE * 9);
             gameUI.renderBattle(gc);
+            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 3.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
+            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
+            gc.setFill(Color.web(hpColor((double) battle.getEStats()[1] / battle.getEStats()[2])));
+            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 3.25, GameMap.TILE * 3.0 * battle.getEStats()[1] / battle.getEStats()[2], GameMap.TILE / 4.0);
+            gc.setFill(Color.web(hpColor((double) battle.getPStats()[1] / battle.getPStats()[2])));
+            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.25, GameMap.TILE * 3.0 * battle.getPStats()[1] / battle.getPStats()[2], GameMap.TILE / 4.0);
         }
     }
 
@@ -600,6 +608,23 @@ public class PelletPursuitDemo extends Application {
         gameUI.battleState = 0;
         gameUI.selectX = 0;
         gameUI.selectY = 0;
+    }
+
+    public String hpColor(double hpRatio) {
+        if (hpRatio < 0.25) {
+            return "#e3110e";
+        } else if (hpRatio < 0.5) {
+            return "#f7ed20";
+        } else {
+            return "#8bd95b";
+        }
+    }
+
+    public void hpBarAnim() {
+        while (battle.hpInitial != battle.hpFinal) {
+            battle.hpInitial -= 0.001;
+            currentAnimHP = (int) battle.hpInitial;
+        }
     }
 
     public static void main(String[] args) { launch(args); }

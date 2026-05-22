@@ -4,6 +4,9 @@ public class Battle {
     private int turn = 0;
     public int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
     private int[] eStats = {5, 15, 15, 8, 8, 8, 8, 8};
+
+    public double hpInitial;
+    public double hpFinal;
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
 
 //    public void startBattle() {
@@ -13,9 +16,13 @@ public class Battle {
     public void playTurn() {
         turn++;
         if (turn % 2 == 0) {
+            hpInitial = pStats[1];
             pStats[1] -= calcDamage(pStats, eStats);
+            hpFinal = pStats[1];
         } else {
+            hpInitial = eStats[1];
             eStats[1] -= calcDamage(eStats, pStats);
+            hpFinal = pStats[1];
         }
     }
 
@@ -65,5 +72,7 @@ public class Battle {
         eStats[1] = 15;
         eStats[2] = 15;
         turn = 0;
+        hpInitial = pStats[1];
+        hpFinal = eStats[1];
     }
 }
