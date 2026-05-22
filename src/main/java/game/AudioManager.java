@@ -30,11 +30,6 @@ public class AudioManager {
     private final Clip ghostEaten;
     private final Clip death;
     private final Clip bonus;
-    private final Clip sirenSlow;        // used for the first half of a level
-    private final Clip sirenFast;        // kicks in after half the dots are eaten
-    private final Clip sirenFrightened;  // higher, faster — plays while ghosts are blue
-
-    private Clip runningSiren = null;
 
     MediaPlayer mediaPlayer;
 
@@ -64,9 +59,6 @@ public class AudioManager {
         ghostEaten = makeClip(ghostEatenData());
         death      = makeClip(deathData());
         bonus      = makeClip(bonusData());
-        sirenSlow      = makeClip(sirenData(4, 220, 300));
-        sirenFast      = makeClip(sirenData(6, 220, 300));
-        sirenFrightened = makeClip(sirenData(10, 380, 480)); // fast, high-pitched
     }
 
     // -----------------------------------------------------------------------
@@ -79,37 +71,6 @@ public class AudioManager {
     public void playDeath()      { play(death); }
     public void playBonus()      { play(bonus); }
 
-    public void startSiren() {
-        if (runningSiren == null) runningSiren = sirenSlow;
-        //loop(runningSiren);
-    }
-
-    public void startFrightenedSiren() {
-        stopSiren();
-        runningSiren = sirenFrightened;
-        loop(sirenFrightened);
-    }
-
-    public void stopSiren() {
-        if (sirenSlow != null)       sirenSlow.stop();
-        if (sirenFast != null)       sirenFast.stop();
-        if (sirenFrightened != null) sirenFrightened.stop();
-        runningSiren = null;
-    }
-
-    /**
-     * Speeds up the siren as the level progresses.
-     * @param fraction 0.0 = level just started, 1.0 = all dots eaten
-     */
-    public void updateSirenRate(double fraction) {
-        Clip next = (fraction >= 0.5) ? sirenFast : sirenSlow;
-        if (next != runningSiren) {
-            stopSiren();
-            runningSiren = next;
-            loop(runningSiren);
-        }
-    }
-
     // -----------------------------------------------------------------------
     // Playback helpers
     // -----------------------------------------------------------------------
@@ -119,12 +80,6 @@ public class AudioManager {
         clip.stop();
         clip.setFramePosition(0);
         clip.start();
-    }
-
-    private void loop(Clip clip) {
-        if (clip == null) return;
-        clip.setFramePosition(0);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     // -----------------------------------------------------------------------
@@ -180,24 +135,6 @@ public class AudioManager {
     // Bonus: quick three-note ascending jingle (C E G)
     private static byte[] bonusData() {
         return concat(tone(523, 0.07), tone(659, 0.07), tone(784, 0.12));
-    }
-
-    // Siren: abrupt two-frequency alternation using a sine wave (not square —
-    // a looping square wave is painfully harsh). Volume is kept lower than
-    // one-shot effects since this plays continuously throughout a level.
-    private static final double SIREN_VOLUME = 0.18;
-
-    private static byte[] sirenData(int wahHz, double freqLow, double freqHigh) {
-        int samplesPerHalf = SAMPLE_RATE / (wahHz * 2);
-        int n = samplesPerHalf * 2 * wahHz; // exact multiple → seamless loop
-        byte[] data = new byte[n * 2];
-        double phase = 0;
-        for (int i = 0; i < n; i++) {
-            double freq = ((i / samplesPerHalf) % 2 == 0) ? freqHigh : freqLow;
-            phase += 2 * Math.PI * freq / SAMPLE_RATE;
-            putSample(data, i, SIREN_VOLUME * Math.sin(phase));
-        }
-        return data;
     }
 
     // -----------------------------------------------------------------------

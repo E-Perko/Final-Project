@@ -1,0 +1,21 @@
+name: "Pound"
+description: "Pounds the foe with\n forelegs or tail."
+effect: EFFECT_HIT
+power: 40
+type: "Normal"
+accuracy: 100
+pp: 35
+priority: 0
+category: "Physical"
+makesContact: true
+
+name: "Tail Whip"
+description = "Wags the tail to lower the\n foe's Defense."
+effect = EFFECT_DEFENSE_DOWN
+power = 0
+type = TYPE_NORMAL
+accuracy = 100
+pp = 30
+priority = 0
+category = "Status"
+makesContact: false

@@ -1,9 +1,8 @@
-=== TRAINER_RIVAL_OAKS_LAB_SQUIRTLE ===
+TRAINER_RIVAL_OAKS_LAB_SQUIRTLE
 Name: Gary
 Class: Rival
 Pic: rival
 Music: rival
-AI: Check Bad Move / Try To Faint / Check Viability
 
 Squirtle
 Level: 5
@@ -11,12 +10,11 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Tackle
 - Tail Whip
 
-=== TRAINER_RIVAL_OAKS_LAB_BULBASAUR ===
+TRAINER_RIVAL_OAKS_LAB_BULBASAUR
 Name: Gary
 Class: Rival
 Pic: rival
 Music: rival
-AI: Check Bad Move / Try To Faint / Check Viability
 
 Bulbasaur
 Level: 5
@@ -24,12 +22,11 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Tackle
 - Growl
 
-=== TRAINER_RIVAL_OAKS_LAB_CHARMANDER ===
+TRAINER_RIVAL_OAKS_LAB_CHARMANDER
 Name: Gary
 Class: Rival
 Pic: rival
 Music: rival
-AI: Check Bad Move / Try To Faint / Check Viability
 
 Charmander
 Level: 5

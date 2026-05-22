@@ -2,7 +2,7 @@ package game;
 
 public class Battle {
     private int turn = 0;
-    private int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
+    public int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
     private int[] eStats = {5, 15, 15, 8, 8, 8, 8, 8};
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
 

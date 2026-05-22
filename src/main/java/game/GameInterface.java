@@ -7,7 +7,7 @@ public class GameInterface {
     public int selectX = 0;
     public int selectY = 0;
 
-    public int[][] battleMoves = {{1, 1}, {0, 0}};
+    public String[][] battleMoves = {{"Scratch", "Tail Whip"}, {"------", "------"}};
 
     public int battleState = 0;
     // 0: Initial Options
@@ -28,18 +28,22 @@ public class GameInterface {
             }
             case 1 -> {
                 gc.fillArc((GameMap.TILE) + (GameMap.TILE * selectX * 5), (GameMap.TILE * 7.75) + (GameMap.TILE * selectY), 10, 10, 0, 360, javafx.scene.shape.ArcType.ROUND);
-                gc.fillText("Scratch", GameMap.TILE * 1.5, GameMap.TILE * 8);
-                gc.fillText("Growl", GameMap.TILE * 6.5, GameMap.TILE * 8);
-                gc.fillText("------", GameMap.TILE * 1.5, GameMap.TILE * 9);
-                gc.fillText("------", GameMap.TILE * 6.5, GameMap.TILE * 9);
+                gc.fillText(battleMoves[0][0], GameMap.TILE * 1.5, GameMap.TILE * 8);
+                gc.fillText(battleMoves[0][1], GameMap.TILE * 6.5, GameMap.TILE * 8);
+                gc.fillText(battleMoves[1][0], GameMap.TILE * 1.5, GameMap.TILE * 9);
+                gc.fillText(battleMoves[1][1], GameMap.TILE * 6.5, GameMap.TILE * 9);
             }
             case 2 -> {
-
+                gc.fillText("Charmander used Scratch!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 3 -> {
 
             }
             default -> {}
         }
+    }
+
+    public boolean verifyMoveSlot(int x, int y) {
+        return (battleState == 0 || !battleMoves[selectY + y][selectX + x].equals("------"));
     }
 }

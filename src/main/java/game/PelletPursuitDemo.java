@@ -96,11 +96,7 @@ public class PelletPursuitDemo extends Application {
     private boolean paused            = false;
     private boolean freeze            = false;
     public boolean inBattle          = false;
-    private boolean frightenedSirenOn = false;
     private Ghost battleGhost = null;
-
-    public ImageView images1 = new ImageView();
-    public ImageView images2 = new ImageView();
 
     boolean criticalMusic = false;
 
@@ -129,8 +125,8 @@ public class PelletPursuitDemo extends Application {
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
-        graphics.displayImg("charmander_back", 4, 1, 3, 0, root);
-        graphics.displayImg("squirtle_front", 4, 9, 0, 1, root);
+        graphics.displayImg("charmander_back", 4, -10, 3, 0, root);
+        graphics.displayImg("squirtle_front", 4, -10, 0, 1, root);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -197,7 +193,6 @@ public class PelletPursuitDemo extends Application {
         scoreFlashes.clear();
         ghostsEatenThisPellet = 0;
         paused            = false;
-        frightenedSirenOn = false;
         pauseTimer = 2.0;
         state = State.GET_READY;
     }
@@ -205,44 +200,36 @@ public class PelletPursuitDemo extends Application {
     private void handleKey(KeyCode key) {
         if (key == KeyCode.SPACE && state == State.PLAYING && !freeze) {
             paused = !paused;
-            if (paused) audio.stopSiren(); else audio.startSiren();
         }
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
             if (gameUI.battleState == 1) {
+                gameUI.battleState = 2;
                 battle.playTurn();
+                gameUI.battleState = 1;
                 if (battle.getPStats()[1] < 5 && !criticalMusic) {
                     audio.playSong("critical");
                     criticalMusic = true;
                 }
                 if (battle.getPStats()[1] >= 5 && criticalMusic) {
-                    audio.playSong("champion");
+                    audio.playSong("eliteFour");
                     criticalMusic = false;
                 }
                 if (battle.battleEnd() == 1) {
-                    inBattle = false;
-                    freeze = false;
-                    criticalMusic = false;
-                    images1.setX(GameMap.TILE * -10);
-                    images2.setX(GameMap.TILE * -10);
-                    gameUI.battleState = 0;
-                    gameUI.selectX = 0;
-                    gameUI.selectY = 0;
+                    terminateBattle();
                     win(battleGhost);
                 }
                 if (battle.battleEnd() == 2) {
-                    inBattle = false;
-                    freeze = false;
-                    criticalMusic = false;
-                    images1.setX(GameMap.TILE * -10);
-                    images2.setX(GameMap.TILE * -10);
-                    gameUI.battleState = 0;
-                    gameUI.selectX = 0;
-                    gameUI.selectY = 0;
+                    terminateBattle();
                     death(battleGhost);
                 }
             } else if (gameUI.selectX == 0 && gameUI.selectY == 0) {
                 gameUI.battleState = 1;
             }
+        }
+        if (key == KeyCode.X && state == State.PLAYING && inBattle) {
+            gameUI.battleState = 0;
+            gameUI.selectX = 0;
+            gameUI.selectY = 0;
         }
         if (key == KeyCode.ENTER) {
             if (state == State.READY || state == State.WIN) {
@@ -253,16 +240,16 @@ public class PelletPursuitDemo extends Application {
         }
         if (state == State.PLAYING || state == State.GET_READY) player.handleKey(key);
         if (inBattle) {
-            if (key == KeyCode.RIGHT && gameUI.selectX == 0) {
+            if (key == KeyCode.RIGHT && gameUI.selectX == 0 && gameUI.verifyMoveSlot(1, 0)) {
                 gameUI.selectX = 1;
             }
-            if (key == KeyCode.LEFT && gameUI.selectX == 1) {
+            if (key == KeyCode.LEFT && gameUI.selectX == 1 && gameUI.verifyMoveSlot(-1, 0)) {
                 gameUI.selectX = 0;
             }
-            if (key == KeyCode.DOWN && gameUI.selectY == 0) {
+            if (key == KeyCode.DOWN && gameUI.selectY == 0 && gameUI.verifyMoveSlot(0, 1)) {
                 gameUI.selectY = 1;
             }
-            if (key == KeyCode.UP && gameUI.selectY == 1) {
+            if (key == KeyCode.UP && gameUI.selectY == 1 && gameUI.verifyMoveSlot(0, -1)) {
                 gameUI.selectY = 0;
             }
         }
@@ -275,7 +262,6 @@ public class PelletPursuitDemo extends Application {
         if (state == State.GET_READY) {
             pauseTimer -= dt;
             if (pauseTimer <= 0) {
-                audio.startSiren();
                 state = State.PLAYING;
             }
             return;
@@ -309,7 +295,6 @@ public class PelletPursuitDemo extends Application {
                         for (int i = 1; i < ghosts.size(); i++) ghosts.get(i).setActive(false);
                     }
                     scoreFlashes.clear();
-                    //frightenedSirenOn = false;
                     pauseTimer = 2.0;
                     state = State.GET_READY;
                 }
@@ -343,7 +328,6 @@ public class PelletPursuitDemo extends Application {
             } else {
                 audio.playChomp();
             }
-            audio.updateSirenRate((double) dotsEaten / map.getTotalDots());
             if (!extraLifeAwarded && score >= EXTRA_LIFE_THRESHOLD) {
                 lives++;
                 extraLifeAwarded = true;
@@ -362,17 +346,6 @@ public class PelletPursuitDemo extends Application {
         // Update ghosts
         for (Ghost g : ghosts) g.update(dt, map, player);
 
-        // Switch siren between normal and frightened mode as ghosts change state
-        //boolean anyFrightened = ghosts.stream().anyMatch(g -> g.isActive() && !g.isDead() && g.isFrightened());
-//        if (anyFrightened && !frightenedSirenOn) {
-//            frightenedSirenOn = true;
-//            audio.startFrightenedSiren();
-//        } else if (!anyFrightened && frightenedSirenOn) {
-//            frightenedSirenOn = false;
-//            audio.startSiren();
-//            audio.updateSirenRate((double) dotsEaten / map.getTotalDots());
-//        }
-
         // Ghost collisions
         for (Ghost g : ghosts) {
             if (!g.isActive() || g.isDead()) continue;
@@ -385,16 +358,11 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-//                    lives--;
-//                    killerGhost = g;
-                    audio.stopSiren();
-//                    audio.playDeath();
-//                    state      = State.DEAD_PAUSE;
-//                    pauseTimer = DEAD_PAUSE;
                     freeze = true;
-                    audio.playSong("champion");
+                    audio.playSong("eliteFour");
                     inBattle = true;
                     battleGhost = g;
+                    gameUI.battleState = 0;
                     //battle.startBattle();
                     return;
                 }
@@ -407,7 +375,6 @@ public class PelletPursuitDemo extends Application {
 
         // Level clear — flash the maze then advance
         if (map.allDotsEaten()) {
-            audio.stopSiren();
             scoreTree.insert(score, level);
             scoreTree.saveToFile(SCORES_FILE);
             pauseTimer = LEVEL_CLEAR_DURATION;
@@ -504,8 +471,8 @@ public class PelletPursuitDemo extends Application {
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
             gc.fillText("Health: " + battle.getEStats()[1] + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 3);
             gc.fillText("Health: " + battle.getPStats()[1] + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
-            images1.setX(GameMap.TILE);
-            images2.setX(GameMap.TILE * 9);
+            graphics.setImgX(0, GameMap.TILE);
+            graphics.setImgX(1, GameMap.TILE * 9);
             gameUI.renderBattle(gc);
         }
     }
@@ -607,7 +574,6 @@ public class PelletPursuitDemo extends Application {
         audio.playSong("town");
         lives--;
         killerGhost = g;
-        audio.stopSiren();
         audio.playDeath();
         state      = State.DEAD_PAUSE;
         pauseTimer = DEAD_PAUSE;
@@ -623,6 +589,17 @@ public class PelletPursuitDemo extends Application {
         scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
         g.kill();
         battle.resetBattle();
+    }
+
+    public void terminateBattle() {
+        inBattle = false;
+        freeze = false;
+        criticalMusic = false;
+        graphics.setImgX(0, GameMap.TILE * -10);
+        graphics.setImgX(1, GameMap.TILE * -10);
+        gameUI.battleState = 0;
+        gameUI.selectX = 0;
+        gameUI.selectY = 0;
     }
 
     public static void main(String[] args) { launch(args); }

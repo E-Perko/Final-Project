@@ -21,4 +21,12 @@ public class GraphicsManager {
         pane[imgNum] = new Pane(imgView[imgNum]);
         root.getChildren().addAll(pane[imgNum]);
     }
+
+    public void setImgX(int imgNum, int x) {
+        imgView[imgNum].setX(x);
+    }
+
+    public void setImgY(int imgNum, int y) {
+        imgView[imgNum].setY(y);
+    }
 }
