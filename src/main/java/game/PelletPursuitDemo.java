@@ -98,9 +98,10 @@ public class PelletPursuitDemo extends Application {
     public boolean inBattle          = false;
     private Ghost battleGhost = null;
 
-    public String battleMusic = "champion";
+    public String battleMusic = "gym";
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
+    public boolean betweenTurns = false;
 
     public boolean animHP;
     public double battlePauseTimer = 0.0;
@@ -127,11 +128,14 @@ public class PelletPursuitDemo extends Application {
 
         canvas = new Canvas(map.width, canvasH());
         GraphicsContext gc = canvas.getGraphicsContext2D();
+
         StackPane root = new StackPane(canvas);
+
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
-        graphics.displayImg("charmander_back", 4, -10, 3, 0, root);
-        graphics.displayImg("squirtle_front", 4, -10, 0, 1, root);
+        //graphics.displayImg("battle_background", 15, -20, 0, 0, root);
+        graphics.displayImg("charmander_back", 4, -10, 3.875, 1, root);
+        graphics.displayImg("squirtle_front", 4, -10, 0.875, 2, root);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -203,24 +207,14 @@ public class PelletPursuitDemo extends Application {
     }
 
     private void handleKey(KeyCode key) {
-        if (key == KeyCode.SPACE && state == State.PLAYING && !freeze) {
-            paused = !paused;
-        }
-        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0) {
-        //if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 0) {
+        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 1) {
             if (gameUI.battleState == 1) {
-                gameUI.battleState = 2;
-                battlePauseTimer = 0.5;
-                battle.playTurn();
-                if (battle.critical > 1) {
-                    criticalMessage = true;
-                }
-                animHP = true;
+                playTurn();
             } else if (gameUI.selectX == 0 && gameUI.selectY == 0) {
                 gameUI.battleState = 1;
             }
         }
-        if (key == KeyCode.X && state == State.PLAYING && inBattle && !animHP) {
+        if (key == KeyCode.X && state == State.PLAYING && inBattle && !animHP && battle.getTurn() % 2 == 1) {
             gameUI.battleState = 0;
             gameUI.selectX = 0;
             gameUI.selectY = 0;
@@ -230,6 +224,8 @@ public class PelletPursuitDemo extends Application {
                 level = 1; score = 0; lives = STARTING_LIVES; extraLifeAwarded = false; startLevel();
             } else if (state == State.GAME_OVER) {
                 level = 1; score = 0; lives = STARTING_LIVES; extraLifeAwarded = false; initGame(); startLevel();
+            } else if (state == State.PLAYING && !freeze) {
+                paused = !paused;
             }
         }
         if (state == State.PLAYING || state == State.GET_READY) player.handleKey(key);
@@ -265,7 +261,8 @@ public class PelletPursuitDemo extends Application {
                 }
                 if (battle.hpAnimP <= battle.getPStats()[1] && battle.hpAnimE <= battle.getEStats()[1]) {
                     animHP = false;
-                    gameUI.battleState = 0;
+                    betweenTurns = true;
+                    battlePauseTimer = 0.5;
                 }
             }
 
@@ -280,24 +277,33 @@ public class PelletPursuitDemo extends Application {
                 return;
             }
 
-            if (battle.hpAnimP / battle.getPStats()[2] < 0.25 && !criticalMusic) {
+            if (battle.hpAnimP / battle.getPStats()[2] < 0.25 && !criticalMusic && !animHP && battle.getPStats()[1] > 0) {
                 audio.playSong("critical");
                 criticalMusic = true;
             }
-            if (battle.hpAnimP / battle.getPStats()[2] > 0.25 && criticalMusic) {
+            if (battle.hpAnimP / battle.getPStats()[2] > 0.25 && criticalMusic && !animHP) {
                 audio.playSong(battleMusic);
                 criticalMusic = false;
             }
 
             if (criticalMessage && !animHP) {
                 criticalMessage = false;
-                gameUI.battleState = 3;
+                gameUI.battleState = 4;
                 battlePauseTimer = 1.0;
             }
 
             if (battle.critical > 1 && battlePauseTimer <= 0 && !animHP) {
                 gameUI.battleState = 0;
                 battle.critical = 1;
+            }
+
+            if (betweenTurns && battlePauseTimer <= 0 && !animHP) {
+                betweenTurns = false;
+                if (battle.getTurn() % 2 == 0) {
+                    playTurn();
+                } else {
+                    gameUI.battleState = 0;
+                }
             }
 
             if (battlePauseTimer > 0) {
@@ -408,6 +414,7 @@ public class PelletPursuitDemo extends Application {
                     g.kill();
                 } else {
                     freeze = true;
+                    //battle.setBattleStats();
                     battle.hpAnimP = battle.getPStats()[1];
                     battle.hpAnimE = battle.getEStats()[1];
                     audio.playSong(battleMusic);
@@ -509,8 +516,8 @@ public class PelletPursuitDemo extends Application {
         }
 
         if (inBattle) {
-            gc.setFill(Color.web("#c8c8c8"));
-            gc.fillRect(0, 0, map.width, GameMap.TILE * 10);
+            gc.setFill(Color.web("#c0c0c0"));
+            gc.fillRect(0, 0, map.width, map.height);
             gc.setFill(Color.web("#c0f0c0"));
             gc.fillRect(0, GameMap.TILE * 7, map.width, GameMap.TILE * 3);
             gc.setFill(Color.DARKSLATEGRAY);
@@ -520,8 +527,9 @@ public class PelletPursuitDemo extends Application {
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
-            graphics.setImgX(0, GameMap.TILE);
-            graphics.setImgX(1, GameMap.TILE * 9);
+            //graphics.setImgX(0, 0);
+            graphics.setImgX(1, GameMap.TILE);
+            graphics.setImgX(2, GameMap.TILE * 9);
             gameUI.renderBattle(gc);
             gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
             gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
@@ -650,8 +658,9 @@ public class PelletPursuitDemo extends Application {
         inBattle = false;
         freeze = false;
         criticalMusic = false;
-        graphics.setImgX(0, GameMap.TILE * -10);
+        //graphics.setImgX(0, GameMap.TILE * -20);
         graphics.setImgX(1, GameMap.TILE * -10);
+        graphics.setImgX(2, GameMap.TILE * -10);
         gameUI.battleState = 0;
         gameUI.selectX = 0;
         gameUI.selectY = 0;
@@ -665,6 +674,22 @@ public class PelletPursuitDemo extends Application {
         } else {
             return "#8bd95b";
         }
+    }
+
+    public void playTurn() {
+        if (battle.getTurn() % 2 == 1) {
+            gameUI.battleState = 2;
+        } else {
+            gameUI.battleState = 3;
+        }
+        battlePauseTimer = 0.5;
+        battle.playBattleTurn();
+        if (battle.critical > 1) {
+            criticalMessage = true;
+        }
+        animHP = true;
+        gameUI.selectX = 0;
+        gameUI.selectY = 0;
     }
 
     public static void main(String[] args) { launch(args); }

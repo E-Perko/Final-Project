@@ -1,22 +1,31 @@
 package game;
 
 public class Battle {
-    private int turn = 0;
-    private int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
-    private int[] eStats = {5, 15, 15, 8, 8, 8, 8, 8};
+    GameData data = new GameData();
+
+    private int turn = 1;
+    private int[] pBattleStats = {5, 15, 15, 8, 8, 8, 8, 8};
+    private int[] eBattleStats = {5, 15, 15, 8, 8, 8, 8, 8};
 
     public double hpAnimP = 0;
     public double hpAnimE = 0;
     public double critical = 1;
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
 
-    public void playTurn() {
-        turn++;
+    public void setBattleStats() {
+        data.generateStats("Charmander", "Player");
+        data.generateStats("Squirtle", "Player");
+        pBattleStats = data.pStats;
+        eBattleStats = data.eStats;
+    }
+
+    public void playBattleTurn() {
         if (turn % 2 == 0) {
-            pStats[1] -= calcDamage(pStats, eStats);
+            pBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
         } else {
-            eStats[1] -= calcDamage(eStats, pStats);
+            eBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
         }
+        turn++;
     }
 
     public int calcDamage(int[] atkStats, int[] defStats) {
@@ -52,18 +61,18 @@ public class Battle {
     }
 
     public int[] getPStats() {
-        return pStats;
+        return pBattleStats;
     }
 
     public int[] getEStats() {
-        return eStats;
+        return eBattleStats;
     }
 
     public void resetBattle() {
-        pStats[1] = 15;
-        pStats[2] = 15;
-        eStats[1] = 15;
-        eStats[2] = 15;
-        turn = 0;
+        for (int i = 0; i < data.pStats.length; i++) {
+            pBattleStats[i] = data.pStats[i];
+            eBattleStats[i] = data.eStats[i];
+        }
+        turn = 1;
     }
 }

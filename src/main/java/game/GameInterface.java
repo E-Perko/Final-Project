@@ -3,6 +3,7 @@ package game;
 import javafx.scene.canvas.GraphicsContext;
 
 public class GameInterface {
+    Battle battle = new Battle();
 
     public int selectX = 0;
     public int selectY = 0;
@@ -39,6 +40,9 @@ public class GameInterface {
                 gc.fillText("Charmander used Scratch!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 3 -> {
+                gc.fillText("Foe Squirtle used Tackle!", GameMap.TILE, GameMap.TILE * 8);
+            }
+            case 4 -> {
                 gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             default -> {}

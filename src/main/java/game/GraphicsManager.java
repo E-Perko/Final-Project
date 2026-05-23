@@ -6,13 +6,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public class GraphicsManager {
-    ImageView[] imgView = new ImageView[2];
-    Image[] image = new Image[2];
-    Pane[] pane = new Pane[2];
+    ImageView[] imgView = new ImageView[3];
+    Image[] image = new Image[3];
+    Pane[] pane = new Pane[3];
 
-    public void displayImg(String img, int width, int xPos, int yPos, int imgNum, StackPane root) {
+    public void displayImg(String img, double width, double xPos, double yPos, int imgNum, StackPane root) {
         imgView[imgNum] = new ImageView();
-        image[imgNum] = new Image("/" + img + ".png", GameMap.TILE * 7, GameMap.TILE * 7, true, false);
+        image[imgNum] = new Image("/" + img + ".png", GameMap.TILE * 30, 0, true, false);
         imgView[imgNum].setFitWidth(GameMap.TILE * width);
         imgView[imgNum].setPreserveRatio(true);
         imgView[imgNum].setX(GameMap.TILE * xPos);
