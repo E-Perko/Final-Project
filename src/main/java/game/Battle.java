@@ -2,33 +2,26 @@ package game;
 
 public class Battle {
     private int turn = 0;
-    public int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
+    private int[] pStats = {5, 15, 15, 8, 8, 8, 8, 8};
     private int[] eStats = {5, 15, 15, 8, 8, 8, 8, 8};
 
-    public double hpInitial;
-    public double hpFinal;
+    public double hpAnimP = 0;
+    public double hpAnimE = 0;
+    public double critical = 1;
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
-
-//    public void startBattle() {
-//
-//    }
 
     public void playTurn() {
         turn++;
         if (turn % 2 == 0) {
-            hpInitial = pStats[1];
             pStats[1] -= calcDamage(pStats, eStats);
-            hpFinal = pStats[1];
         } else {
-            hpInitial = eStats[1];
             eStats[1] -= calcDamage(eStats, pStats);
-            hpFinal = pStats[1];
         }
     }
 
     public int calcDamage(int[] atkStats, int[] defStats) {
         double estimate = (((atkStats[0] * 2 / 5.0) + 2) * 40 * atkStats[3] / ((double) defStats[4]) / 50.0);
-        double critical = 1;
+        critical = 1;
         if ((int) (Math.random() * 16) == 0) {
             critical = 2;
         }
@@ -45,9 +38,9 @@ public class Battle {
     }
 
     public int battleEnd() {
-        if (pStats[1] <= 0) {
+        if (hpAnimP <= 0) {
             return 2;
-        } else if (eStats[1] <= 0) {
+        } else if (hpAnimE <= 0) {
             return 1;
         } else {
             return 0;
@@ -72,7 +65,5 @@ public class Battle {
         eStats[1] = 15;
         eStats[2] = 15;
         turn = 0;
-        hpInitial = pStats[1];
-        hpFinal = eStats[1];
     }
 }

@@ -1,21 +1,35 @@
 name: "Pound"
 description: "Pounds the foe with\n forelegs or tail."
-effect: EFFECT_HIT
+effect: "EFFECT_HIT"
 power: 40
 type: "Normal"
 accuracy: 100
 pp: 35
 priority: 0
 category: "Physical"
+subCategory: "None"
 makesContact: true
 
+name: "Growl"
+description: "Growls cutely to reduce the\n foe's Attack."
+effect: "EFFECT_ATTACK_DOWN"
+power: 0
+type: "Normal"
+accuracy: 100
+pp: 40
+priority: 0
+category: "Status"
+subCategory: "Sound"
+makesContact: false
+
 name: "Tail Whip"
-description = "Wags the tail to lower the\n foe's Defense."
-effect = EFFECT_DEFENSE_DOWN
-power = 0
-type = TYPE_NORMAL
-accuracy = 100
-pp = 30
-priority = 0
-category = "Status"
+description: "Wags the tail to lower the\n foe's Defense."
+effect: "EFFECT_DEFENSE_DOWN"
+power: 0
+type: "Normal"
+accuracy: 100
+pp: 30
+priority: 0
+category: "Status"
+subCategory: "None"
 makesContact: false

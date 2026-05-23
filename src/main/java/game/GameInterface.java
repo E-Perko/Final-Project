@@ -7,7 +7,9 @@ public class GameInterface {
     public int selectX = 0;
     public int selectY = 0;
 
-    public String[][] battleMoves = {{"Scratch", "Tail Whip"}, {"------", "------"}};
+    public String[][] battleMoves = {{"Scratch", "Growl"}, {"------", "------"}};
+    public String[][] playerMoves = new String[6][4];
+    public String[][] opponentMoves = new String[6][4];
 
     public int battleState = 0;
     // 0: Initial Options
@@ -37,9 +39,13 @@ public class GameInterface {
                 gc.fillText("Charmander used Scratch!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 3 -> {
-
+                gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             default -> {}
+            // 0: Battle Options
+            // 1: Move Options
+            // 2: Attack Text
+            // 3: Critical Hit Text
         }
     }
 

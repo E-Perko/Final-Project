@@ -98,9 +98,12 @@ public class PelletPursuitDemo extends Application {
     public boolean inBattle          = false;
     private Ghost battleGhost = null;
 
+    public String battleMusic = "champion";
     public boolean criticalMusic = false;
+    public boolean criticalMessage = false;
 
-    public int currentAnimHP;
+    public boolean animHP;
+    public double battlePauseTimer = 0.0;
 
     private ScoreTree scoreTree = new ScoreTree();
     private long lastNano = -1;
@@ -203,32 +206,21 @@ public class PelletPursuitDemo extends Application {
         if (key == KeyCode.SPACE && state == State.PLAYING && !freeze) {
             paused = !paused;
         }
-        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle) {
+        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0) {
+        //if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 0) {
             if (gameUI.battleState == 1) {
                 gameUI.battleState = 2;
+                battlePauseTimer = 0.5;
                 battle.playTurn();
-                gameUI.battleState = 1;
-                if ((double) battle.getPStats()[1] / battle.getPStats()[2] < 0.25 && !criticalMusic) {
-                    audio.playSong("critical");
-                    criticalMusic = true;
+                if (battle.critical > 1) {
+                    criticalMessage = true;
                 }
-                if ((double) battle.getPStats()[1] / battle.getPStats()[2] > 0.25 && criticalMusic) {
-                    audio.playSong("eliteFour");
-                    criticalMusic = false;
-                }
-                if (battle.battleEnd() == 1) {
-                    terminateBattle();
-                    win(battleGhost);
-                }
-                if (battle.battleEnd() == 2) {
-                    terminateBattle();
-                    death(battleGhost);
-                }
+                animHP = true;
             } else if (gameUI.selectX == 0 && gameUI.selectY == 0) {
                 gameUI.battleState = 1;
             }
         }
-        if (key == KeyCode.X && state == State.PLAYING && inBattle) {
+        if (key == KeyCode.X && state == State.PLAYING && inBattle && !animHP) {
             gameUI.battleState = 0;
             gameUI.selectX = 0;
             gameUI.selectY = 0;
@@ -258,6 +250,61 @@ public class PelletPursuitDemo extends Application {
     }
 
     private void update(double dt) {
+        if (inBattle) {
+            if (animHP && battlePauseTimer <= 0) {
+                battlePauseTimer = 0;
+                if (battle.hpAnimP > battle.getPStats()[1]) {
+                    battle.hpAnimP -= dt * battle.getPStats()[2] / 2.5;
+                } else {
+                    battle.hpAnimP = battle.getPStats()[1];
+                }
+                if (battle.hpAnimE > battle.getEStats()[1]) {
+                    battle.hpAnimE -= dt * battle.getEStats()[2] / 2.5;
+                } else {
+                    battle.hpAnimE = battle.getEStats()[1];
+                }
+                if (battle.hpAnimP <= battle.getPStats()[1] && battle.hpAnimE <= battle.getEStats()[1]) {
+                    animHP = false;
+                    gameUI.battleState = 0;
+                }
+            }
+
+            if (battle.battleEnd() == 1 && battle.critical == 1) {
+                terminateBattle();
+                win(battleGhost);
+                return;
+            }
+            if (battle.battleEnd() == 2 && battle.critical == 1) {
+                terminateBattle();
+                death(battleGhost);
+                return;
+            }
+
+            if (battle.hpAnimP / battle.getPStats()[2] < 0.25 && !criticalMusic) {
+                audio.playSong("critical");
+                criticalMusic = true;
+            }
+            if (battle.hpAnimP / battle.getPStats()[2] > 0.25 && criticalMusic) {
+                audio.playSong(battleMusic);
+                criticalMusic = false;
+            }
+
+            if (criticalMessage && !animHP) {
+                criticalMessage = false;
+                gameUI.battleState = 3;
+                battlePauseTimer = 1.0;
+            }
+
+            if (battle.critical > 1 && battlePauseTimer <= 0 && !animHP) {
+                gameUI.battleState = 0;
+                battle.critical = 1;
+            }
+
+            if (battlePauseTimer > 0) {
+                battlePauseTimer -= dt;
+            }
+        }
+
         if (paused || freeze) return;
         if (hudMessageTimer > 0) hudMessageTimer -= dt;
 
@@ -361,11 +408,12 @@ public class PelletPursuitDemo extends Application {
                     g.kill();
                 } else {
                     freeze = true;
-                    audio.playSong("eliteFour");
+                    battle.hpAnimP = battle.getPStats()[1];
+                    battle.hpAnimE = battle.getEStats()[1];
+                    audio.playSong(battleMusic);
                     inBattle = true;
                     battleGhost = g;
                     gameUI.battleState = 0;
-                    //battle.startBattle();
                     return;
                 }
             }
@@ -468,20 +516,19 @@ public class PelletPursuitDemo extends Application {
             gc.setFill(Color.DARKSLATEGRAY);
             gc.setTextAlign(TextAlignment.LEFT);
             gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
-            gc.fillText("Turn: " + (battle.getTurn() / 2 + 1), GameMap.TILE, GameMap.TILE);
-            gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE * 2);
+            gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE);
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
-            gc.fillText("Health: " + battle.getEStats()[1] + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 3);
-            gc.fillText("Health: " + battle.getPStats()[1] + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
+            gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
+            gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
             graphics.setImgX(0, GameMap.TILE);
             graphics.setImgX(1, GameMap.TILE * 9);
             gameUI.renderBattle(gc);
-            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 3.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
+            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
             gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
-            gc.setFill(Color.web(hpColor((double) battle.getEStats()[1] / battle.getEStats()[2])));
-            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 3.25, GameMap.TILE * 3.0 * battle.getEStats()[1] / battle.getEStats()[2], GameMap.TILE / 4.0);
-            gc.setFill(Color.web(hpColor((double) battle.getPStats()[1] / battle.getPStats()[2])));
-            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.25, GameMap.TILE * 3.0 * battle.getPStats()[1] / battle.getPStats()[2], GameMap.TILE / 4.0);
+            gc.setFill(Color.web(hpColor(battle.hpAnimE / battle.getEStats()[2])));
+            gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.25, GameMap.TILE * 3.0 * battle.hpAnimE / battle.getEStats()[2], GameMap.TILE / 4.0);
+            gc.setFill(Color.web(hpColor(battle.hpAnimP / battle.getPStats()[2])));
+            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.25, GameMap.TILE * 3.0 * battle.hpAnimP / battle.getPStats()[2], GameMap.TILE / 4.0);
         }
     }
 
@@ -617,13 +664,6 @@ public class PelletPursuitDemo extends Application {
             return "#f7ed20";
         } else {
             return "#8bd95b";
-        }
-    }
-
-    public void hpBarAnim() {
-        while (battle.hpInitial != battle.hpFinal) {
-            battle.hpInitial -= 0.001;
-            currentAnimHP = (int) battle.hpInitial;
         }
     }
 
