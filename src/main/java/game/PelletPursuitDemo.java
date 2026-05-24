@@ -90,6 +90,7 @@ public class PelletPursuitDemo extends Application {
 
     private final AudioManager audio = new AudioManager();
     private final Battle battle = new Battle();
+    private final GameData data = new GameData();
     private final GraphicsManager graphics = new GraphicsManager();
     private final GameInterface gameUI = new GameInterface();
 
@@ -249,13 +250,13 @@ public class PelletPursuitDemo extends Application {
         if (inBattle) {
             if (animHP && battlePauseTimer <= 0) {
                 battlePauseTimer = 0;
-                if (battle.hpAnimP > battle.getPStats()[1]) {
-                    battle.hpAnimP -= dt * battle.getPStats()[2] / 2.5;
+                if (battle.hpAnimP > battle.getPStats()[1] + (dt * battle.getPStats()[2] / 2)) {
+                    battle.hpAnimP -= dt * battle.getPStats()[2] / 2;
                 } else {
                     battle.hpAnimP = battle.getPStats()[1];
                 }
-                if (battle.hpAnimE > battle.getEStats()[1]) {
-                    battle.hpAnimE -= dt * battle.getEStats()[2] / 2.5;
+                if (battle.hpAnimE > battle.getEStats()[1] + (dt * battle.getEStats()[2] / 2)) {
+                    battle.hpAnimE -= dt * battle.getEStats()[2] / 2;
                 } else {
                     battle.hpAnimE = battle.getEStats()[1];
                 }
@@ -413,12 +414,10 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
+                    battle.setBattleStats();
                     freeze = true;
-                    //battle.setBattleStats();
-                    battle.hpAnimP = battle.getPStats()[1];
-                    battle.hpAnimE = battle.getEStats()[1];
-                    audio.playSong(battleMusic);
                     inBattle = true;
+                    audio.playSong(battleMusic);
                     battleGhost = g;
                     gameUI.battleState = 0;
                     return;

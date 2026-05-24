@@ -1,17 +1,26 @@
+Bulbasaur
+10
+10
+10
+10
+10
+10
+Medium Slow
+
 Charmander
-HP: 39
-Attack: 52
-Defense: 43
-SAttack: 60
-SDefense: 50
-Speed: 65
-EXPGrowth: "Medium Slow"
+39
+52
+43
+60
+50
+65
+Medium Slow
 
 Squirtle
-HP: 44
-Attack: 48
-Defense: 65
-SAttack: 50
-SDefense: 64
-Speed: 43
-EXPGrowth: "Medium Slow"
+44
+48
+65
+50
+64
+43
+Medium Slow

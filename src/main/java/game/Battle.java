@@ -4,8 +4,8 @@ public class Battle {
     GameData data = new GameData();
 
     private int turn = 1;
-    private int[] pBattleStats = {5, 15, 15, 8, 8, 8, 8, 8};
-    private int[] eBattleStats = {5, 15, 15, 8, 8, 8, 8, 8};
+    private int[] pBattleStats = new int[8];
+    private int[] eBattleStats = new int[8];
 
     public double hpAnimP = 0;
     public double hpAnimE = 0;
@@ -14,35 +14,33 @@ public class Battle {
 
     public void setBattleStats() {
         data.generateStats("Charmander", "Player");
-        data.generateStats("Squirtle", "Player");
-        pBattleStats = data.pStats;
-        eBattleStats = data.eStats;
+        pBattleStats = data.getPStats();
+        data.generateStats("Squirtle", "Opponent");
+        eBattleStats = data.getEStats();
+        hpAnimP = pBattleStats[1];
+        hpAnimE = eBattleStats[1];
     }
 
     public void playBattleTurn() {
         if (turn % 2 == 0) {
-            pBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
+            pBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
         } else {
-            eBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
+            eBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
         }
         turn++;
     }
 
     public int calcDamage(int[] atkStats, int[] defStats) {
-        double estimate = (((atkStats[0] * 2 / 5.0) + 2) * 40 * atkStats[3] / ((double) defStats[4]) / 50.0);
+        double estimate = (((atkStats[0] * 2 / 5.0 + 2) * (40 * atkStats[3]) / (((double) defStats[4]) * 50.0))) + 2;
         critical = 1;
         if ((int) (Math.random() * 16) == 0) {
-            critical = 2;
+            critical = 1.5;
         }
-        estimate *= critical * ((int) (Math.random() * 15) + 85) / 100.0;
-        if (estimate > 1) {
-            if (estimate % 1 <= 0.5) {
-                return (int) estimate;
-            } else {
-                return (int) (estimate + 1);
-            }
-        } else {
+        estimate *= critical * ((int) (Math.random() * 16) + 85) / 100.0;
+        if (estimate < 1) {
             return 1;
+        } else {
+            return (int) estimate;
         }
     }
 
@@ -69,10 +67,8 @@ public class Battle {
     }
 
     public void resetBattle() {
-        for (int i = 0; i < data.pStats.length; i++) {
-            pBattleStats[i] = data.pStats[i];
-            eBattleStats[i] = data.eStats[i];
-        }
+        pBattleStats = data.getPStats();
+        eBattleStats = data.getEStats();
         turn = 1;
     }
 }
