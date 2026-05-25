@@ -1,10 +1,10 @@
 Bulbasaur
-10
-10
-10
-10
-10
-10
+45
+49
+49
+65
+65
+45
 Medium Slow
 
 Charmander

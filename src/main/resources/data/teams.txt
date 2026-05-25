@@ -1,35 +1,44 @@
-TRAINER_RIVAL_OAKS_LAB_SQUIRTLE
-Name: Gary
-Class: Rival
-Pic: rival
-Music: rival
-
-Squirtle
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
-- Tackle
-- Tail Whip
-
-TRAINER_RIVAL_OAKS_LAB_BULBASAUR
-Name: Gary
-Class: Rival
-Pic: rival
-Music: rival
-
-Bulbasaur
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
-- Tackle
-- Growl
-
-TRAINER_RIVAL_OAKS_LAB_CHARMANDER
-Name: Gary
-Class: Rival
-Pic: rival
-Music: rival
+Rival_1_Charmander
+Gary
+Rival
+rival
+rival
+1
 
 Charmander
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
-- Scratch
-- Growl
+5
+0 0 0 0 0 0
+Scratch
+Growl
+------
+------
+
+Rival_1_Squirtle
+Gary
+Rival
+rival
+rival
+1
+
+Squirtle
+5
+0 0 0 0 0 0
+Tackle
+Tail Whip
+------
+------
+
+Rival_1_Bulbasaur
+Gary
+Rival
+rival
+rival
+1
+
+Bulbasaur
+5
+0 0 0 0 0 0
+Tackle
+Growl
+------
+------

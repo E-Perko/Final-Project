@@ -1,28 +1,46 @@
 package game;
 
 public class Battle {
-    GameData data = new GameData();
 
     private int turn = 1;
+    int turnOrder = 2;
+    // 0: Player Moves First
+    // 1: Opponent Moves First
+    // 2: Speed Tie
+
     private int[] pBattleStats = new int[8];
     private int[] eBattleStats = new int[8];
+    // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
+
+    private int[] pStatMods = new int[7];
+    private int[] eStatMods = new int[7];
+    // {Attack, Defense, SAttack, SDefense, Speed, Accuracy, Evasion} Each stat ranges from -6 to 6
 
     public double hpAnimP = 0;
     public double hpAnimE = 0;
+    // Used to animate HP bars
+
     public double critical = 1;
-    // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
+    // The standard crit rate is 1/16, multiplying damage by 1.5
 
     public void setBattleStats() {
-        data.generateStats("Charmander", "Player");
-        pBattleStats = data.getPStats();
-        data.generateStats("Squirtle", "Opponent");
-        eBattleStats = data.getEStats();
+        GameData.generateStats("Charmander", "Player");
+        pBattleStats = GameData.getPStats();
+        GameData.generateStats(GameData.getEPokemon(0), "Opponent");
+        eBattleStats = GameData.getEStats();
         hpAnimP = pBattleStats[1];
         hpAnimE = eBattleStats[1];
     }
 
     public void playBattleTurn() {
-        if (turn % 2 == 0) {
+        if (pBattleStats[7] > eBattleStats[7]) {
+            turnOrder = 0;
+        } else if (pBattleStats[7] < eBattleStats[7]) {
+            turnOrder = 1;
+        } else {
+            turnOrder = 1;
+        }
+        if (turn % 2 == turnOrder) {
             pBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
         } else {
             eBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
@@ -66,9 +84,17 @@ public class Battle {
         return eBattleStats;
     }
 
+    public void setPBattleStats(int[] stats) {
+        pBattleStats = stats;
+    }
+
+    public void setEBattleStats(int[] stats) {
+        eBattleStats = stats;
+    }
+
     public void resetBattle() {
-        pBattleStats = data.getPStats();
-        eBattleStats = data.getEStats();
+        pBattleStats = GameData.getPStats();
+        eBattleStats = GameData.getEStats();
         turn = 1;
     }
 }

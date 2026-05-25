@@ -5,9 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -16,8 +14,6 @@ import javafx.stage.Stage;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.image.ImageView;
 
 public class PelletPursuitDemo extends Application {
 
@@ -90,7 +86,6 @@ public class PelletPursuitDemo extends Application {
 
     private final AudioManager audio = new AudioManager();
     private final Battle battle = new Battle();
-    private final GameData data = new GameData();
     private final GraphicsManager graphics = new GraphicsManager();
     private final GameInterface gameUI = new GameInterface();
 
@@ -112,6 +107,7 @@ public class PelletPursuitDemo extends Application {
 
     // Convenience — canvas height tracks HUD + current map height
     public int canvasH() { return map.height + HUD_HEIGHT; }
+    StackPane root;
 
     /**
      * Return the Tile[][] layout for a given level number.
@@ -130,7 +126,7 @@ public class PelletPursuitDemo extends Application {
         canvas = new Canvas(map.width, canvasH());
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        StackPane root = new StackPane(canvas);
+        root = new StackPane(canvas);
 
         Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
 
@@ -210,6 +206,7 @@ public class PelletPursuitDemo extends Application {
     private void handleKey(KeyCode key) {
         if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 1) {
             if (gameUI.battleState == 1) {
+                gameUI.setPlayerMove();
                 playTurn();
             } else if (gameUI.selectX == 0 && gameUI.selectY == 0) {
                 gameUI.battleState = 1;
@@ -414,6 +411,9 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
+                    GameData.generateOpponent("Rival_1_Squirtle");
+                    graphics.displayImg( GameData.getEPokemon(0) + "_front", 4, 9, 0.875, 2, root);
+                    gameUI.getPlayerMoves();
                     battle.setBattleStats();
                     freeze = true;
                     inBattle = true;
@@ -522,13 +522,12 @@ public class PelletPursuitDemo extends Application {
             gc.setFill(Color.DARKSLATEGRAY);
             gc.setTextAlign(TextAlignment.LEFT);
             gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
-            gc.fillText("Squirtle Level 5", GameMap.TILE, GameMap.TILE);
+            gc.fillText(GameData.getEPokemon(0) + " Level " + GameData.getELvls(0), GameMap.TILE, GameMap.TILE);
             gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
             //graphics.setImgX(0, 0);
             graphics.setImgX(1, GameMap.TILE);
-            graphics.setImgX(2, GameMap.TILE * 9);
             gameUI.renderBattle(gc);
             gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
             gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);

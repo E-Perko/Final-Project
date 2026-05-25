@@ -8,15 +8,16 @@ public class GameInterface {
     public int selectX = 0;
     public int selectY = 0;
 
-    public String[][] battleMoves = {{"Scratch", "Growl"}, {"------", "------"}};
-    public String[][] playerMoves = new String[6][4];
-    public String[][] opponentMoves = new String[6][4];
+    public String[][] battleMoves = new String[2][2];
+
+    private String playerMove;
 
     public int battleState = 0;
     // 0: Initial Options
     // 1: Move Select
-    // 2: Use Move
-    // 2: Post Move Text
+    // 2: Player's Move
+    // 3: Opponent's Move
+    // 4: Critical Hit
 
     public void renderBattle(GraphicsContext gc) {
         switch (battleState) {
@@ -37,23 +38,30 @@ public class GameInterface {
                 gc.fillText(battleMoves[1][1], GameMap.TILE * 6.5, GameMap.TILE * 9);
             }
             case 2 -> {
-                gc.fillText("Charmander used Scratch!", GameMap.TILE, GameMap.TILE * 8);
+                gc.fillText("Charmander used " + playerMove + "!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 3 -> {
-                gc.fillText("Foe Squirtle used Tackle!", GameMap.TILE, GameMap.TILE * 8);
+                gc.fillText("Foe " + GameData.getEPokemon(0) + " used " + GameData.getEMoves(0)[0] + "!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 4 -> {
                 gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             default -> {}
-            // 0: Battle Options
-            // 1: Move Options
-            // 2: Attack Text
-            // 3: Critical Hit Text
         }
     }
 
     public boolean verifyMoveSlot(int x, int y) {
         return (battleState == 0 || !battleMoves[selectY + y][selectX + x].equals("------"));
+    }
+
+    public void getPlayerMoves() {
+        battleMoves[0][0] = GameData.getPMoves(0)[0];
+        battleMoves[0][1] = GameData.getPMoves(0)[1];
+        battleMoves[1][0] = GameData.getPMoves(0)[2];
+        battleMoves[1][1] = GameData.getPMoves(0)[3];
+    }
+
+    public void setPlayerMove() {
+        playerMove = battleMoves[selectY][selectX];
     }
 }
