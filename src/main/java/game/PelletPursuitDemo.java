@@ -482,7 +482,7 @@ public class PelletPursuitDemo extends Application {
         if (state == State.LEVEL_CLEAR) {
             // Alternate between white and blue walls every 0.25 s
             Color wallColor = ((int)(pauseTimer / 0.25) % 2 == 0)
-                ? Color.web("#f0f0f0") : Color.web("#202090");
+                ? Color.web("#202090") : Color.web("#f0f0f0");
             map.draw(gc, wallColor);
         } else {
             map.draw(gc);
