@@ -15,15 +15,15 @@ public class GameInterface {
     public int battleState = 0;
     // 0: Initial Options
     // 1: Move Select
-    // 2: Player's Move
-    // 3: Opponent's Move
-    // 4: Critical Hit
+    // 2: Selected Move
+    // 3: Critical Hit
+    // 4: Other Post Battle Text
 
     public void renderBattle(GraphicsContext gc) {
         switch (battleState) {
             case 0 -> {
                 gc.fillText("What will", GameMap.TILE, GameMap.TILE * 8);
-                gc.fillText("Charmander do?", GameMap.TILE, GameMap.TILE * 9);
+                gc.fillText(GameData.getPPokemon(0) + " do?", GameMap.TILE, GameMap.TILE * 9);
                 gc.fillArc((GameMap.TILE * 8) + (GameMap.TILE * selectX * 3.5), (GameMap.TILE * 7.75) + (GameMap.TILE * selectY), 10, 10, 0, 360, javafx.scene.shape.ArcType.ROUND);
                 gc.fillText("Fight", GameMap.TILE * 8.5, GameMap.TILE * 8);
                 gc.fillText("Bag", GameMap.TILE * 12, GameMap.TILE * 8);
@@ -38,13 +38,17 @@ public class GameInterface {
                 gc.fillText(battleMoves[1][1], GameMap.TILE * 6.5, GameMap.TILE * 9);
             }
             case 2 -> {
-                gc.fillText("Charmander used " + playerMove + "!", GameMap.TILE, GameMap.TILE * 8);
+                if (battle.getTurn() % 2 == battle.getTurnOrder()) {
+                    gc.fillText( GameData.getPPokemon(0) + " used " + playerMove + "!", GameMap.TILE, GameMap.TILE * 8);
+                } else {
+                    gc.fillText("Foe " + GameData.getEPokemon(0) + " used " + GameData.getEMoves(0)[0] + "!", GameMap.TILE, GameMap.TILE * 8);
+                }
             }
             case 3 -> {
-                gc.fillText("Foe " + GameData.getEPokemon(0) + " used " + GameData.getEMoves(0)[0] + "!", GameMap.TILE, GameMap.TILE * 8);
+                gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 4 -> {
-                gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
+
             }
             default -> {}
         }

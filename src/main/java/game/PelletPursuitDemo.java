@@ -76,7 +76,7 @@ public class PelletPursuitDemo extends Application {
 
     // --- Level clear flash ---
     private static final double LEVEL_CLEAR_DURATION = 2.0;
-    private static final int    MAX_LEVEL             = 3;
+    private static final int    MAX_LEVEL             = 5;
 
     // --- HUD notification (e.g. "+1 UP!") ---
     private String hudMessage     = null;
@@ -94,7 +94,11 @@ public class PelletPursuitDemo extends Application {
     public boolean inBattle          = false;
     private Ghost battleGhost = null;
 
-    public String battleMusic = "gym";
+    public String battleMusic;
+    public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
+    public String currentBattle;
+    public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur"};
+
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
     public boolean betweenTurns = false;
@@ -286,7 +290,7 @@ public class PelletPursuitDemo extends Application {
 
             if (criticalMessage && !animHP) {
                 criticalMessage = false;
-                gameUI.battleState = 4;
+                gameUI.battleState = 3;
                 battlePauseTimer = 1.0;
             }
 
@@ -404,19 +408,23 @@ public class PelletPursuitDemo extends Application {
             if (!g.isActive() || g.isDead()) continue;
             if (g.collidesWith(player)) {
                 if (g.isFrightened()) {
-                    int pts = 200 * (1 << ghostsEatenThisPellet);
+                    int pts = Math.max(200 * (1 << ghostsEatenThisPellet), 1600);
                     score += pts;
                     ghostsEatenThisPellet++;
                     audio.playGhostEaten();
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    GameData.generateOpponent("Rival_1_Squirtle");
+                    currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
+                    GameData.generateTeam(currentBattle, "player");
+                    GameData.generateTeam(currentBattle, "opponent");
+                    graphics.displayImg( GameData.getPPokemon(0) + "_back", 4, 1, 3.875, 1, root);
                     graphics.displayImg( GameData.getEPokemon(0) + "_front", 4, 9, 0.875, 2, root);
                     gameUI.getPlayerMoves();
                     battle.setBattleStats();
                     freeze = true;
                     inBattle = true;
+                    battleMusic = randomMusic[(int) (Math.random() * randomMusic.length)];
                     audio.playSong(battleMusic);
                     battleGhost = g;
                     gameUI.battleState = 0;
@@ -474,7 +482,7 @@ public class PelletPursuitDemo extends Application {
         if (state == State.LEVEL_CLEAR) {
             // Alternate between white and blue walls every 0.25 s
             Color wallColor = ((int)(pauseTimer / 0.25) % 2 == 0)
-                ? Color.WHITE : Color.web("#1a1aff");
+                ? Color.web("#f0f0f0") : Color.web("#202090");
             map.draw(gc, wallColor);
         } else {
             map.draw(gc);
@@ -494,6 +502,8 @@ public class PelletPursuitDemo extends Application {
 
         // Overlays
         if (state == State.READY) {
+            gc.setFill(Color.color(0, 0, 0, 0.30));
+            gc.fillRect(0, 0, map.width, canvasH());
             drawCenteredText(gc, GAME_TITLE, (int) (GameMap.TILE * 2 / 3.0), Color.YELLOW, canvasH() / 2.0 - 40);
             drawCenteredText(gc, GAME_SUBTITLE, (int) (GameMap.TILE / 4.0), Color.web("#aaaaaa"), canvasH() / 2.0 - 10);
             drawCenteredText(gc, "PRESS ENTER TO START", (int) (GameMap.TILE / 3.0), HUD_TEXT, canvasH() / 2.0 + 20);
@@ -514,7 +524,7 @@ public class PelletPursuitDemo extends Application {
             gc.setFill(Color.color(0, 0, 0, 0.55));
             gc.fillRect(0, 0, map.width, canvasH());
             drawCenteredText(gc, "PAUSED", 40, Color.YELLOW, canvasH() / 2.0);
-            drawCenteredText(gc, "PRESS SPACE TO RESUME", 18, Color.WHITE, canvasH() / 2.0 + 40);
+            drawCenteredText(gc, "PRESS ENTER TO RESUME", 18, Color.WHITE, canvasH() / 2.0 + 40);
         }
 
         if (inBattle) {
@@ -526,11 +536,10 @@ public class PelletPursuitDemo extends Application {
             gc.setTextAlign(TextAlignment.LEFT);
             gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
             gc.fillText(GameData.getEPokemon(0) + " Level " + GameData.getELvls(0), GameMap.TILE, GameMap.TILE);
-            gc.fillText("Charmander Level 5", GameMap.TILE * 6, GameMap.TILE * 5);
+            gc.fillText(GameData.getPPokemon(0) + " Level " + GameData.getPLvls(0), GameMap.TILE * 6, GameMap.TILE * 5);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
             gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
             //graphics.setImgX(0, 0);
-            graphics.setImgX(1, GameMap.TILE);
             gameUI.renderBattle(gc);
             gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
             gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
@@ -688,11 +697,7 @@ public class PelletPursuitDemo extends Application {
     }
 
     public void playTurn() {
-        if (battle.getTurn() % 2 == 1) {
-            gameUI.battleState = 2;
-        } else {
-            gameUI.battleState = 3;
-        }
+        gameUI.battleState = 2;
         battlePauseTimer = 0.5;
         battle.playBattleTurn();
         if (battle.critical > 1) {

@@ -2,8 +2,8 @@ package game;
 
 public class Battle {
 
-    private int turn = 1;
-    int turnOrder = 2;
+    private static int turn = 1;
+    private static int turnOrder = 2;
     // 0: Player Moves First
     // 1: Opponent Moves First
     // 2: Speed Tie
@@ -24,7 +24,7 @@ public class Battle {
     // The standard crit rate is 1/16, multiplying damage by 1.5
 
     public void setBattleStats() {
-        GameData.generateStats("Charmander", "Player");
+        GameData.generateStats(GameData.getPPokemon(0), "Player");
         pBattleStats = GameData.getPStats();
         GameData.generateStats(GameData.getEPokemon(0), "Opponent");
         eBattleStats = GameData.getEStats();
@@ -74,6 +74,10 @@ public class Battle {
 
     public int getTurn() {
         return turn;
+    }
+
+    public int getTurnOrder() {
+        return turnOrder;
     }
 
     public int[] getPStats() {

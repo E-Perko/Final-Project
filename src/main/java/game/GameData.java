@@ -12,14 +12,17 @@ public class GameData {
     private static int[] pStats = new int[8];
     private static int[] eStats = new int[8];
 
-    private static String[][] pMoves = {{"Scratch", "Growl", "------", "------"}};
+    private static String[][] pMoves = new String[6][4];
     private static String[][] eMoves = new String[6][4];
 
-    private static String[] pPokemon = {"Charmander", null, null, null, null, null};
+    private static String[] pPokemon = new String[6];
     private static String[] ePokemon = new String[6];
 
-    private static int[] pLvls = {5, 0, 0, 0, 0, 0};
+    private static int[] pLvls = new int[6];
     private static int[] eLvls = new int[6];
+
+    private static String[][] pTypes = new String[2][6];
+    private static String[][] eTypes = new String[2][6];
 
     public static void generateStats(String pokemon, String owner) {
         try
@@ -30,6 +33,13 @@ public class GameData {
             while (statsScanner.hasNext())
             {
                 if (statsScanner.nextLine().equals(pokemon)) {
+                    if (owner.equals("Player")) {
+                        pTypes[0][0] = statsScanner.nextLine();
+                        pTypes[0][1] = statsScanner.nextLine();
+                    } else {
+                        eTypes[0][0] = statsScanner.nextLine();
+                        eTypes[0][1] = statsScanner.nextLine();
+                    }
                     for (int i = 0; i < 6; i++) {
                         stats[i] = statsScanner.nextInt();
                     }
@@ -67,28 +77,40 @@ public class GameData {
         return eStats;
     }
 
-    public static void generateOpponent(String trainer) {
+    public static void generateTeam(String battle, String person) {
         try
         {
-            File teamsFile = new File("src/main/resources/data/teams.txt");
+            File teamsFile = new File("src/main/resources/data/" + person + "Teams.txt");
             Scanner teamsScanner = new Scanner(teamsFile);
 
             while (teamsScanner.hasNext())
             {
-                if (teamsScanner.nextLine().equals(trainer)) {
-                    for (int i = 0; i < 4; i++) {
-                        String a = teamsScanner.nextLine();
+                if (teamsScanner.nextLine().equals(battle)) {
+                    if (person.equals("opponent")) {
+                        for (int i = 0; i < 4; i++) {
+                            String a = teamsScanner.nextLine();
+                        }
                     }
                     int pokenum = teamsScanner.nextInt();
                     String a = teamsScanner.nextLine();
                     a = teamsScanner.nextLine();
                     for (int i = 0; i < pokenum; i++) {
-                        ePokemon[i] = teamsScanner.nextLine();
-                        eLvls[i] = teamsScanner.nextInt();
-                        a = teamsScanner.nextLine();
-                        a = teamsScanner.nextLine();
-                        for (int j = 0; j < 4; j++) {
-                            eMoves[i][j] = teamsScanner.nextLine();
+                        if (person.equals("player")) {
+                            pPokemon[i] = teamsScanner.nextLine();
+                            pLvls[i] = teamsScanner.nextInt();
+                            a = teamsScanner.nextLine();
+                            a = teamsScanner.nextLine();
+                            for (int j = 0; j < 4; j++) {
+                                pMoves[i][j] = teamsScanner.nextLine();
+                            }
+                        } else {
+                            ePokemon[i] = teamsScanner.nextLine();
+                            eLvls[i] = teamsScanner.nextInt();
+                            a = teamsScanner.nextLine();
+                            a = teamsScanner.nextLine();
+                            for (int j = 0; j < 4; j++) {
+                                eMoves[i][j] = teamsScanner.nextLine();
+                            }
                         }
                     }
                     break;
@@ -109,10 +131,16 @@ public class GameData {
         return eMoves[slot];
     }
 
+    public static String getPPokemon(int slot) {
+        return pPokemon[slot];
+    }
     public static String getEPokemon(int slot) {
         return ePokemon[slot];
     }
 
+    public static int getPLvls(int slot) {
+        return pLvls[slot];
+    }
     public static int getELvls(int slot) {
         return eLvls[slot];
     }

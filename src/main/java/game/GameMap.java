@@ -63,7 +63,7 @@ public class GameMap {
     // Pass a different Tile[][] to GameMap(layout) for a custom maze.
     // ---------------------------------------------------------------
     public static final Tile[][] DEFAULT_LAYOUT = {
-        {W,  D,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  D,  W},
+        {W,  D,  W,  W,  W,  W,  W,  D,  W,  W,  W,  W,  W,  D,  W},
         {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
         {W,  D,  W,  W,  D,  W,  W,  W,  W,  W,  D,  W,  W,  D,  W},
         {W,  D,  D,  D,  D,  B,  G1, G0, G2, B,  D,  D,  D,  D,  W},
@@ -72,7 +72,7 @@ public class GameMap {
         {W,  D,  W,  D,  D,  D,  D,  BN, D,  D,  D,  D,  W,  D,  W},
         {W,  D,  D,  D,  W,  W,  D,  PL, D,  W,  W,  D,  D,  D,  W},
         {W,  D,  W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W,  D,  W},
-        {W,  D,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  D,  W},
+        {W,  D,  W,  W,  W,  W,  W,  D,  W,  W,  W,  W,  W,  D,  W},
     };
 
     // Original layout (never modified) and working copy (dots consumed as eaten)

@@ -1,4 +1,6 @@
 Bulbasaur
+Grass
+Poison
 45
 49
 49
@@ -8,6 +10,8 @@ Bulbasaur
 Medium Slow
 
 Charmander
+Fire
+None
 39
 52
 43
@@ -17,6 +21,8 @@ Charmander
 Medium Slow
 
 Squirtle
+Water
+None
 44
 48
 65
