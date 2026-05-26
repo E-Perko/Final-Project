@@ -32,6 +32,7 @@ public class GameMap {
         D,            // Dot
         P,            // Power pellet
         E,            // Empty
+        B,            // Player exclusive wall
         SPAWN_PLAYER, // Player spawn position
         SPAWN_G0,     // Ghost 0 (Shadow) spawn
         SPAWN_G1,     // Ghost 1 (Patrol) spawn
@@ -41,7 +42,7 @@ public class GameMap {
     }
 
     // Short aliases so the maze array below stays readable
-    private static final Tile W  = Tile.W,  D  = Tile.D,  P  = Tile.P,  E  = Tile.E;
+    private static final Tile W  = Tile.W,  D  = Tile.D,  P  = Tile.P,  E  = Tile.E, B = Tile.B;
     private static final Tile PL = Tile.SPAWN_PLAYER;
     private static final Tile G0 = Tile.SPAWN_G0, G1 = Tile.SPAWN_G1;
     private static final Tile G2 = Tile.SPAWN_G2, G3 = Tile.SPAWN_G3;
@@ -62,16 +63,16 @@ public class GameMap {
     // Pass a different Tile[][] to GameMap(layout) for a custom maze.
     // ---------------------------------------------------------------
     public static final Tile[][] DEFAULT_LAYOUT = {
-        {W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W},
+        {W,  D,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  D,  W},
         {W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W},
-        {W,  D,  W,  W,  W,  W,  W,  E,  W,  W,  W,  W,  W,  D,  W},
-        {W,  D,  D,  D,  W,  E,  G1, G0, G2, E,  W,  D,  D,  D,  W},
+        {W,  D,  W,  W,  D,  W,  W,  W,  W,  W,  D,  W,  W,  D,  W},
+        {W,  D,  D,  D,  D,  B,  G1, G0, G2, B,  D,  D,  D,  D,  W},
         {W,  D,  W,  D,  W,  E,  G3, E,  E,  E,  W,  D,  W,  D,  W},
-        {W,  D,  D,  D,  W,  W,  W,  D,  W,  W,  W,  D,  D,  D,  W},
-        {W,  D,  W,  W,  D,  D,  D,  PL, D,  D,  D,  W,  W,  D,  W},
-        {W,  D,  D,  D,  D,  W,  D,  BN, D,  W,  D,  D,  D,  D,  W},
-        {W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W,  W,  D,  W},
-        {W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W},
+        {D,  D,  D,  D,  W,  W,  W,  W,  W,  W,  W,  D,  D,  D,  D},
+        {W,  D,  W,  D,  D,  D,  D,  BN, D,  D,  D,  D,  W,  D,  W},
+        {W,  D,  D,  D,  W,  W,  D,  PL, D,  W,  W,  D,  D,  D,  W},
+        {W,  D,  W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W,  D,  W},
+        {W,  D,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  W,  D,  W},
     };
 
     // Original layout (never modified) and working copy (dots consumed as eaten)
@@ -170,6 +171,10 @@ public class GameMap {
         return getTile(col, row) == Tile.W;
     }
 
+    public boolean isPLayerWall(int col, int row) {
+        return getTile(col, row) == Tile.B;
+    }
+
     // Returns 0 if nothing eaten, 10 for dot, 50 for power pellet
     public int eatDot(int col, int row) {
         Tile t = getTile(col, row);
@@ -222,6 +227,11 @@ public class GameMap {
                 {
                     double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
                     gc.fillOval(cx - 7, cy - 7, TILE / 3.0, TILE / 3.0);
+                }
+                else if (t == Tile.B)
+                {
+                    gc.setFill(Color.web("#0a184a"));
+                    gc.fillRoundRect(px + 1, py + 1, TILE - 2, TILE - 2, 6, 6);
                 }
             }
         }

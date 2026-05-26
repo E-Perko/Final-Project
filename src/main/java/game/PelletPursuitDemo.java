@@ -20,7 +20,7 @@ public class PelletPursuitDemo extends Application {
     // ── Customize your game ──────────────────────────────────────────────────
     // Change any of these to make your submission feel like your own.
     private static final String GAME_TITLE        = "Pokémon CS Academy";
-    private static final String GAME_SUBTITLE     = "Pokmon in Pekmen???";
+    private static final String GAME_SUBTITLE     = "Two franchises in one game?!?";
     private static final String MSG_READY         = "GET READY!";
     private static final String MSG_DEAD          = "OUCH!";
     private static final String MSG_WIN           = "YOU WIN!";
@@ -32,7 +32,7 @@ public class PelletPursuitDemo extends Application {
     // ─────────────────────────────────────────────────────────────────────────
 
     // --- Layout ---
-    private static final int HUD_HEIGHT = 0;
+    private static final int HUD_HEIGHT = GameMap.TILE;
 
     // Canvas and stage stored as fields so startLevel() can resize them for variable-size maps
     private Canvas canvas;
@@ -128,7 +128,7 @@ public class PelletPursuitDemo extends Application {
 
         root = new StackPane(canvas);
 
-        Scene scene = new Scene(root, GameMap.TILE * 15, GameMap.TILE * 10, Color.BLACK);
+        Scene scene = new Scene(root, GameMap.TILE * 15, (GameMap.TILE * 10) + HUD_HEIGHT, Color.BLACK);
 
         //graphics.displayImg("battle_background", 15, -20, 0, 0, root);
         graphics.displayImg("charmander_back", 4, -10, 3.875, 1, root);
@@ -162,7 +162,7 @@ public class PelletPursuitDemo extends Application {
         // Shadow is the worked example — study it before implementing the others.
         // Add each ghost here after you finish its chooseTarget() in Phase 2:
         //   new Patrol(map), new Shy(map), new Ambush(map)
-        ghosts    = new ArrayList<>(List.of(new Shadow(map)));
+        ghosts    = new ArrayList<>(List.of(new Shadow(map), new Patrol(map), new Shy(map), new Ambush(map)));
         scoreTree = new ScoreTree();
         scoreTree.loadFromFile(SCORES_FILE);
         state  = State.READY;
@@ -174,7 +174,7 @@ public class PelletPursuitDemo extends Application {
         player = new Player(map);
         // Add each ghost here after you finish its chooseTarget() in Phase 2:
         //   new Patrol(map), new Shy(map), new Ambush(map)
-        ghosts = new ArrayList<>(List.of(new Shadow(map)));
+        ghosts = new ArrayList<>(List.of(new Shadow(map), new Patrol(map), new Shy(map), new Ambush(map)));
 
         // Resize the window only when the new layout has different pixel dimensions
         if (canvas != null &&
@@ -468,12 +468,9 @@ public class PelletPursuitDemo extends Application {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, map.width, canvasH());
 
-        // HUD
-        drawHUD(gc);
-
         // Game area shifted down by HUD_HEIGHT
         gc.save();
-        gc.translate(0, HUD_HEIGHT);
+        //gc.translate(0, HUD_HEIGHT);
         if (state == State.LEVEL_CLEAR) {
             // Alternate between white and blue walls every 0.25 s
             Color wallColor = ((int)(pauseTimer / 0.25) % 2 == 0)
@@ -488,12 +485,18 @@ public class PelletPursuitDemo extends Application {
         for (ScoreFlash f : scoreFlashes) f.draw(gc);
         gc.restore();
 
+        // HUD
+        if (inBattle) {
+            drawBattleHUD(gc);
+        } else {
+            drawHUD(gc);
+        }
+
         // Overlays
         if (state == State.READY) {
-            drawCenteredText(gc, GAME_TITLE, 40, Color.YELLOW, canvasH() / 2.0 - 40);
-            drawCenteredText(gc, GAME_SUBTITLE, 16, Color.web("#aaaaaa"), canvasH() / 2.0 - 10);
-            drawCenteredText(gc, "PRESS ENTER TO START", 20, HUD_TEXT, canvasH() / 2.0 + 20);
-            drawCenteredText(gc, "SPACE TO PAUSE", 16, Color.web("#aaa"), canvasH() / 2.0 + 46);
+            drawCenteredText(gc, GAME_TITLE, (int) (GameMap.TILE * 2 / 3.0), Color.YELLOW, canvasH() / 2.0 - 40);
+            drawCenteredText(gc, GAME_SUBTITLE, (int) (GameMap.TILE / 4.0), Color.web("#aaaaaa"), canvasH() / 2.0 - 10);
+            drawCenteredText(gc, "PRESS ENTER TO START", (int) (GameMap.TILE / 3.0), HUD_TEXT, canvasH() / 2.0 + 20);
         } else if (state == State.GET_READY) {
             drawCenteredText(gc, MSG_READY, 36, Color.YELLOW, canvasH() / 2.0);
         } else if (state == State.DEAD_PAUSE) {
@@ -540,29 +543,28 @@ public class PelletPursuitDemo extends Application {
 
     private void drawHUD(GraphicsContext gc) {
         gc.setFill(HUD_COLOR);
-        gc.fillRect(0, 0, map.width, HUD_HEIGHT);
-
-        gc.setFont(Font.font("Monospace", 18));
-        gc.setFill(HUD_TEXT);
-        gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("SCORE  " + score, 10, 30);
-
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("LEVEL " + level, map.width / 2.0, 30);
+        gc.fillRect(0, GameMap.TILE * 10, map.width, HUD_HEIGHT);
 
         // Lives as small pac-man icons
 
         for (int i = 0; i < lives; i++) {
-            double lx = map.width - 30 - i * 24, ly = 14;
+            double lx = map.width - (GameMap.TILE * 9 / 2.0) - i * (GameMap.TILE / 1.75);
             gc.setFill(Color.YELLOW);
-            gc.fillArc(lx, ly, 18, 18, 30, 300, javafx.scene.shape.ArcType.ROUND);
+            gc.fillArc(lx, GameMap.TILE * 10.25, GameMap.TILE / 2.0, GameMap.TILE / 2.0, 30, 300, javafx.scene.shape.ArcType.ROUND);
         }
 
         // Pause hint
-        gc.setFont(Font.font("Monospace", 12));
-        gc.setFill(Color.web("#555"));
+        gc.setFont(Font.font("Monospace", GameMap.TILE / 4.5));
+        gc.setFill(Color.WHITE);
         gc.setTextAlign(TextAlignment.RIGHT);
-        gc.fillText("SPACE: PAUSE", map.width - 10, HUD_HEIGHT - 6);
+        gc.fillText("USE ARROW KEYS TO MOVE", map.width - GameMap.TILE / 4.0, HUD_HEIGHT + (GameMap.TILE * 9.375));
+        gc.fillText("PRESS ENTER TO PAUSE", map.width - GameMap.TILE / 4.0, HUD_HEIGHT + (GameMap.TILE * 9.75));
+
+        gc.setFont(Font.font("Monospace", GameMap.TILE / 3.5));
+        gc.setFill(Color.WHITE);
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.fillText("SCORE:  " + score, GameMap.TILE, GameMap.TILE * 10.5);
+        gc.fillText("LEVEL " + level, GameMap.TILE * 5.5, GameMap.TILE * 10.5);
 
         // Transient HUD notification (extra life, etc.)
         if (hudMessageTimer > 0) {
@@ -571,6 +573,17 @@ public class PelletPursuitDemo extends Application {
             gc.setTextAlign(TextAlignment.CENTER);
             gc.fillText(hudMessage, map.width / 2.0, 44);
         }
+    }
+
+    private void drawBattleHUD(GraphicsContext gc) {
+        gc.setFill(Color.web("#a0c0a0"));
+        gc.fillRect(0, GameMap.TILE * 10, map.width, HUD_HEIGHT);
+        gc.setFont(Font.font("Monospace", GameMap.TILE / 3.5));
+        gc.setFill(Color.DARKSLATEGRAY);
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.fillText("Use arrow keys\nto move cursor", GameMap.TILE * 2, HUD_HEIGHT + (GameMap.TILE * 9.375));
+        gc.fillText("Press space\nto advance", GameMap.TILE * 6.5, HUD_HEIGHT + (GameMap.TILE * 9.375));
+        gc.fillText("Press X to\ngo back", GameMap.TILE * 10.5, HUD_HEIGHT + (GameMap.TILE * 9.375));
     }
 
     private void drawGameOver(GraphicsContext gc) {

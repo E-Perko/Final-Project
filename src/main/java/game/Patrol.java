@@ -7,7 +7,7 @@ public class Patrol extends Ghost {
 
     // How close (in tiles) the player must be before Patrol switches from
     // patrolling to chasing.  Try values between 5 and 12.
-    private static final double CHASE_RADIUS = 8.0;
+    private static final double CHASE_RADIUS = 4.0;
 
     // The row of Patrol's home corner (top edge of the maze).
     // Adjust this (and the target col below) to change which corner it patrols.
@@ -39,8 +39,21 @@ public class Patrol extends Ghost {
         // How to verify: run the game and stay far from the pink ghost — it should
         // move toward the top-right area of the maze. Walk close and it should
         // switch to chasing you directly.
-
-        return new int[]{ player.col(map), player.row(map) }; // placeholder — replace this
+        int pc = player.col(map), pr = player.row(map);
+        if (frightened) {
+            // Run away: target the corner farthest from the player
+            int[] corner = (pc < map.cols / 2)
+                    ? (pr < map.rows / 2 ? new int[]{map.cols - 2, map.rows - 2}
+                       : new int[]{map.cols - 2, 1})
+                    : (pr < map.rows / 2 ? new int[]{1, map.rows - 2}
+                       : new int[]{1, 1});
+            return corner;
+        }
+        if (Math.hypot(Math.abs(x - pc), Math.abs(y - pr)) <= CHASE_RADIUS) {
+            // Chase: target the player's current tile (BFS shortest path)
+            return new int[]{pc, pr};
+        }
+        return new int[]{Math.clamp((int) x, 1, map.cols-2), Math.clamp((int) y, 1, map.rows-2)};
     }
 
     // When chooseTarget() is working, add this ghost to the list in PelletPursuitDemo.java:

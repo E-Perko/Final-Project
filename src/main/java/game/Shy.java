@@ -14,31 +14,18 @@ public class Shy extends Ghost {
 
     @Override
     protected int[] chooseTarget(Player player, GameMap map) {
-        // TODO (Base): Implement Shy's personality.
-        //
-        // Shy has two modes:
-        //   1. FLEE   — target the maze corner FARTHEST from the player
-        //   2. ATTACK — target the player's exact tile (like Shadow)
-        //
-        // Shy switches from FLEE to ATTACK when it is "cornered":
-        //   Count how many of Shy's four neighbours (up/down/left/right) are open
-        //   (not walls).  If only ONE neighbour is open, Shy is cornered.
-        //   int gc = col(map), gr = row(map);  // Shy's current tile coordinates
-        //   int[][] dirs = {{0,-1},{-1,0},{1,0},{0,1}};
-        //   use map.isWall(gc + d[0], gr + d[1]) to test each neighbour.
-        //
-        // To find the farthest corner from the player:
-        //   int[][] corners = {{1,1},{map.cols-2,1},{1,map.rows-2},{map.cols-2,map.rows-2}};
-        //   pick the one with the largest Math.hypot distance to (player.col(map), player.row(map)).
-        //
-        // When frightened, CHASE the player instead of fleeing.
-        // Note: this is intentionally the OPPOSITE of every other ghost's frightened
-        // behaviour — Shy is bold when cornered and bold when scared.
-        //
-        // How to verify: run the game and walk toward Shy — it should move away
-        // from you. Trap it in a dead-end corridor and it should turn and chase.
-
-        return new int[]{ player.col(map), player.row(map) }; // placeholder — replace this
+        if (!frightened) {
+            // Run away: target the corner farthest from the player
+            int pc = player.col(map), pr = player.row(map);
+            int[] corner = (pc < map.cols / 2)
+                    ? (pr < map.rows / 2 ? new int[]{map.cols - 2, map.rows - 2}
+                       : new int[]{map.cols - 2, 1})
+                    : (pr < map.rows / 2 ? new int[]{1, map.rows - 2}
+                       : new int[]{1, 1});
+            return corner;
+        }
+        // Chase: target the player's current tile (BFS shortest path)
+        return new int[]{ player.col(map), player.row(map) };
     }
 
     // When chooseTarget() is working, add this ghost to the list in PelletPursuitDemo.java:
