@@ -108,7 +108,7 @@ public class LevelConfig {
         // --- bonus threshold -----------------------------------------------
         // Fixed at 70 dots for every level.
         // Change this if you want the bonus to appear earlier or later.
-        int bonus = 70;
+        int bonus = 75;
 
         return new LevelConfig(speed, frighten, spawn, bonus);
     }

@@ -38,7 +38,7 @@ public class Battle {
         } else if (pBattleStats[7] < eBattleStats[7]) {
             turnOrder = 1;
         } else {
-            turnOrder = 1;
+            turnOrder = 0;
         }
         if (turn % 2 == turnOrder) {
             pBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
