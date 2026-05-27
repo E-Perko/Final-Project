@@ -10,7 +10,7 @@ public class GameInterface {
 
     public String[][] battleMoves = new String[2][2];
 
-    private String playerMove;
+    private static String playerMove;
 
     public int battleState = 0;
     // 0: Initial Options
@@ -48,7 +48,12 @@ public class GameInterface {
                 gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             case 4 -> {
-
+                if (battle.getTurn() % 2 == battle.getTurnOrder()) {
+                    gc.fillText("Foe " + GameData.getEPokemon(0) + "'s Attack", GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText("was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                } else {
+                    gc.fillText( GameData.getPPokemon(0) + "'s Attack was lowered!", GameMap.TILE, GameMap.TILE * 8);
+                }
             }
             default -> {}
         }
@@ -63,6 +68,10 @@ public class GameInterface {
         battleMoves[0][1] = GameData.getPMoves(0)[1];
         battleMoves[1][0] = GameData.getPMoves(0)[2];
         battleMoves[1][1] = GameData.getPMoves(0)[3];
+    }
+
+    public static String getPlayerMove() {
+        return playerMove;
     }
 
     public void setPlayerMove() {

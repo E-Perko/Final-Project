@@ -2,7 +2,7 @@ Rival_1_Charmander
 1
 
 Bulbasaur
-5
+100
 0
 Tackle
 Growl
@@ -13,7 +13,7 @@ Rival_1_Squirtle
 1
 
 Charmander
-5
+100
 0
 Scratch
 Growl
@@ -24,7 +24,7 @@ Rival_1_Bulbasaur
 1
 
 Squirtle
-5
+100
 0
 Tackle
 Tail Whip

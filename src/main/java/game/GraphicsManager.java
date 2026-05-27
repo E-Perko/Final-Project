@@ -29,4 +29,8 @@ public class GraphicsManager {
     public void setImgY(int imgNum, int y) {
         imgView[imgNum].setY(y);
     }
+
+    public void deleteImage(int imgNum) {
+        imgView[imgNum].setImage(null);
+    }
 }

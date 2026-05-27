@@ -6,7 +6,7 @@ rival
 1
 
 Charmander
-5
+100
 0
 Scratch
 Growl
@@ -21,7 +21,7 @@ rival
 1
 
 Squirtle
-5
+100
 0
 Tackle
 Tail Whip
@@ -36,7 +36,7 @@ rival
 1
 
 Bulbasaur
-5
+100
 0
 Tackle
 Growl

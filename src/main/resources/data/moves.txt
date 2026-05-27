@@ -1,3 +1,4 @@
+
 Tackle
 Charges the foe with a full-\nbody tackle.
 EFFECT_HIT

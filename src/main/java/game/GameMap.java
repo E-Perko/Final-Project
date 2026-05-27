@@ -230,7 +230,7 @@ public class GameMap {
                 }
                 else if (t == Tile.B)
                 {
-                    gc.setFill(Color.web("#0a184a"));
+                    gc.setFill(wallColor);
                     gc.fillRoundRect(px + 1, py + 1, TILE - 2, TILE - 2, 6, 6);
                 }
             }

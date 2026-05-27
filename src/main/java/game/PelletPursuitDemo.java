@@ -102,6 +102,7 @@ public class PelletPursuitDemo extends Application {
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
     public boolean betweenTurns = false;
+    public boolean loweredStats = false;
 
     public boolean animHP;
     public double battlePauseTimer = 0.0;
@@ -291,6 +292,12 @@ public class PelletPursuitDemo extends Application {
             if (criticalMessage && !animHP) {
                 criticalMessage = false;
                 gameUI.battleState = 3;
+                battlePauseTimer = 1.0;
+            }
+
+            if (loweredStats && !animHP) {
+                loweredStats = false;
+                gameUI.battleState = 4;
                 battlePauseTimer = 1.0;
             }
 
@@ -517,14 +524,14 @@ public class PelletPursuitDemo extends Application {
             drawGameOver(gc);
         } else if (state == State.WIN) {
             drawCenteredText(gc, MSG_WIN, 40, Color.YELLOW, canvasH() / 2.0 - 40);
-            drawCenteredText(gc, "PRESS ENTER TO PLAY AGAIN", 16, Color.web("#666"), canvasH() / 2.0 + 30);
+            drawCenteredText(gc, "PRESS ENTER TO PLAY AGAIN", 16, Color.web("#666"), GameMap.TILE * 8);
         }
 
         if (paused) {
             gc.setFill(Color.color(0, 0, 0, 0.55));
             gc.fillRect(0, 0, map.width, canvasH());
-            drawCenteredText(gc, "PAUSED", 40, Color.YELLOW, canvasH() / 2.0);
-            drawCenteredText(gc, "PRESS ENTER TO RESUME", 18, Color.WHITE, canvasH() / 2.0 + 40);
+            drawCenteredText(gc, "PAUSED", 40, Color.YELLOW, GameMap.TILE * 5);
+            drawCenteredText(gc, "PRESS ENTER TO RESUME", 18, Color.WHITE, GameMap.TILE * 6);
         }
 
         if (inBattle) {
@@ -599,8 +606,8 @@ public class PelletPursuitDemo extends Application {
         gc.setFill(Color.color(0, 0, 0, 0.75));
         gc.fillRect(0, 0, map.width, canvasH());
 
-        drawCenteredText(gc, "GAME OVER", 40, Color.RED, 160);
-        drawCenteredText(gc, "SCORE: " + score, 26, Color.WHITE, 210);
+        drawCenteredText(gc, "GAME OVER", 40, Color.RED, GameMap.TILE * 3);
+        drawCenteredText(gc, "SCORE: " + score, 26, Color.WHITE, GameMap.TILE * 4);
 
         if (!scoreTree.isEmpty()) {
             drawCenteredText(gc, LEADERBOARD_TITLE, 18, Color.YELLOW, 260);
@@ -612,7 +619,7 @@ public class PelletPursuitDemo extends Application {
             }
         }
 
-        drawCenteredText(gc, "PRESS ENTER TO PLAY AGAIN", 18, Color.WHITE, canvasH() - 60);
+        drawCenteredText(gc, "PRESS ENTER TO PLAY AGAIN", 18, Color.WHITE, GameMap.TILE * 8);
     }
 
     private void drawCenteredText(GraphicsContext gc, String text, int size, Color color, double y) {
@@ -679,8 +686,8 @@ public class PelletPursuitDemo extends Application {
         freeze = false;
         criticalMusic = false;
         //graphics.setImgX(0, GameMap.TILE * -20);
-        graphics.setImgX(1, GameMap.TILE * -10);
-        graphics.setImgX(2, GameMap.TILE * -10);
+        graphics.deleteImage(1);
+        graphics.deleteImage(2);
         gameUI.battleState = 0;
         gameUI.selectX = 0;
         gameUI.selectY = 0;
@@ -700,6 +707,10 @@ public class PelletPursuitDemo extends Application {
         gameUI.battleState = 2;
         battlePauseTimer = 0.5;
         battle.playBattleTurn();
+        //if (GameData.moveCategory != null) {
+        if (GameData.moveCategory.equals("Status")) {
+            loweredStats = true;
+        }
         if (battle.critical > 1) {
             criticalMessage = true;
         }

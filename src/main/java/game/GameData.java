@@ -24,6 +24,13 @@ public class GameData {
     private static String[][] pTypes = new String[2][6];
     private static String[][] eTypes = new String[2][6];
 
+    public static String moveEffect;
+    public static int basePower;
+    public static String moveType;
+    public static int moveAccuracy;
+    public static int powerPoints;
+    public static String moveCategory;
+
     public static void generateStats(String pokemon, String owner) {
         try
         {
@@ -52,17 +59,18 @@ public class GameData {
         {
             System.out.println("File not found: " + e.getMessage());
         }
-        battleStats[0] = 5;
         battleStats[1] = (int) ((stats[0] * 2 + 15) * battleStats[0] / 100.0) + battleStats[0] + 10;
         battleStats[2] = battleStats[1];
         for (int i = 3; i < 8; i++) {
             battleStats[i] = (int) ((stats[i - 2] * 2 + 15) * battleStats[0] / 100.0) + 5;
         }
         if (owner.equals("Player")) {
+            battleStats[0] = pLvls[0];
             for (int i = 0; i < 8; i++) {
                 pStats[i] = battleStats[i];
             }
         } else {
+            battleStats[0] = eLvls[0];
             for (int i = 0; i < 8; i++) {
                 eStats[i] = battleStats[i];
             }
@@ -143,5 +151,32 @@ public class GameData {
     }
     public static int getELvls(int slot) {
         return eLvls[slot];
+    }
+
+    public static void getMoveInfo(String move) {
+        try {
+            File teamsFile = new File("src/main/resources/data/moves.txt");
+            Scanner movesScanner = new Scanner(teamsFile);
+
+            while (movesScanner.hasNext()) {
+                if (movesScanner.nextLine().equals(move)) {
+                    String a = movesScanner.nextLine();
+                    moveEffect = movesScanner.nextLine();
+                    basePower = movesScanner.nextInt();
+                    a = movesScanner.nextLine();
+                    moveType = movesScanner.nextLine();
+                    moveAccuracy = movesScanner.nextInt();
+                    powerPoints = movesScanner.nextInt();
+                    a = movesScanner.nextLine();
+                    a = movesScanner.nextLine();
+                    moveCategory = movesScanner.nextLine();
+                    break;
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            System.out.println("File not found: " + e.getMessage());
+        }
     }
 }
