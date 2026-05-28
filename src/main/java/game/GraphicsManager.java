@@ -12,7 +12,7 @@ public class GraphicsManager {
 
     public void displayImg(String img, double width, double xPos, double yPos, int imgNum, StackPane root) {
         imgView[imgNum] = new ImageView();
-        image[imgNum] = new Image("/" + img + ".png", GameMap.TILE * 30, 0, true, false);
+        image[imgNum] = new Image("/" + img.toLowerCase() + ".png", GameMap.TILE * 30, 0, true, false);
         imgView[imgNum].setFitWidth(GameMap.TILE * width);
         imgView[imgNum].setPreserveRatio(true);
         imgView[imgNum].setX(GameMap.TILE * xPos);

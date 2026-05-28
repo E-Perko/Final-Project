@@ -46,3 +46,135 @@ Normal
 Status
 None
 false
+
+Shadow Ball
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+80
+Ghost
+100
+15
+0
+Special
+Ball
+false
+
+Dark Pulse
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+80
+Dark
+100
+15
+0
+Special
+Pulse
+false
+
+Will-O-Wisp
+Scratches the foe with\n sharp claws.
+EFFECT_BURN
+0
+Fire
+85
+15
+0
+Status
+None
+false
+
+Sucker Punch
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+70
+Dark
+100
+5
+1
+Physical
+None
+true
+
+Dazzling Gleam
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+80
+Fairy
+100
+10
+0
+Special
+None
+false
+
+Sludge Bomb
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Poison
+100
+10
+0
+Special
+Bomb
+false
+
+Energy Ball
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Grass
+100
+10
+0
+Special
+Ball
+false
+
+Air Slash
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+75
+Flying
+95
+15
+0
+Special
+Slash
+false
+
+Aura Sphere
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+80
+Fighting
+100
+20
+0
+Special
+Pulse
+false
+
+Thunder Wave
+Scratches the foe with\n sharp claws.
+EFFECT_PARALYZE
+0
+Electric
+85
+20
+0
+Status
+None
+false
+
+Close Combat
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+120
+Fighting
+100
+5
+0
+Physical
+None
+true

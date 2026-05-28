@@ -19,6 +19,8 @@ public class GameInterface {
     // 3: Critical Hit
     // 4: Other Post Battle Text
 
+    public final String[] statNames = {"Attack", "Defense"};
+
     public void renderBattle(GraphicsContext gc) {
         switch (battleState) {
             case 0 -> {
@@ -49,10 +51,11 @@ public class GameInterface {
             }
             case 4 -> {
                 if (battle.getTurn() % 2 == battle.getTurnOrder()) {
-                    gc.fillText("Foe " + GameData.getEPokemon(0) + "'s Attack", GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText("Foe " + GameData.getEPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
                     gc.fillText("was lowered!", GameMap.TILE, GameMap.TILE * 9);
                 } else {
-                    gc.fillText( GameData.getPPokemon(0) + "'s Attack was lowered!", GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText( GameData.getPPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText( "was lowered!", GameMap.TILE, GameMap.TILE * 9);
                 }
             }
             default -> {}

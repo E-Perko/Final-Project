@@ -6,7 +6,7 @@ rival
 1
 
 Charmander
-100
+5
 0
 Scratch
 Growl
@@ -21,7 +21,7 @@ rival
 1
 
 Squirtle
-100
+5
 0
 Tackle
 Tail Whip
@@ -36,8 +36,68 @@ rival
 1
 
 Bulbasaur
-100
+5
 0
+Tackle
+Growl
+------
+------
+
+Cynthia_Spiritomb
+Gary
+Rival
+rival
+rival
+1
+
+Spititomb
+60
+31
+Shadow Ball
+Dark Pulse
+Will-O-Wisp
+Sucker Punch
+
+Cynthia_Roserade
+Gary
+Rival
+rival
+rival
+1
+
+Roserade
+60
+31
+Dazzling Gleam
+Shadow Ball
+Sludge Bomb
+Energy Ball
+
+Cynthia_Togekiss
+Gary
+Rival
+rival
+rival
+1
+
+Togekiss
+60
+31
+Air Slash
+Dazzling Gleam
+Aura Sphere
+Thunder Wave
+
+Cynthia_Milotic
+Gary
+Rival
+rival
+rival
+1
+
+Milotic
+80
+31
 Tackle
 Growl
 ------

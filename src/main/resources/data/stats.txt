@@ -30,3 +30,47 @@ None
 64
 43
 Medium Slow
+
+Milotic
+Water
+None
+95
+60
+79
+100
+125
+81
+Erratic
+
+Roserade
+Grass
+Poison
+60
+70
+65
+125
+105
+90
+Medium Slow
+
+Spiritomb
+Shost
+Dark
+50
+92
+108
+92
+108
+35
+Medium Fast
+
+Togekiss
+Fairy
+Flying
+85
+50
+95
+120
+115
+80
+Fast

@@ -8,12 +8,12 @@ public class Battle {
     // 0: Player Moves First
     // 1: Opponent Moves First
 
-    private int[] pBattleStats = new int[8];
-    private int[] eBattleStats = new int[8];
+    private static int[] pBattleStats = new int[8];
+    private static int[] eBattleStats = new int[8];
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
 
-    private int[] pStatMods = new int[7];
-    private int[] eStatMods = new int[7];
+    private static int[] pStatMods = new int[7];
+    private static int[] eStatMods = new int[7];
     public final double[] statModList = {2/8.0, 2/7.0, 2/6.0, 2/5.0, 2/4.0, 2/3.0, 2/2.0, 3/2.0, 4/2.0, 5/2.0, 6/2.0, 7/2.0, 8/2.0};
     // {Attack, Defense, SAttack, SDefense, Speed, Accuracy, Evasion} Each stat ranges from -6 to 6
 
@@ -23,6 +23,8 @@ public class Battle {
 
     public double critical = 1;
     // The standard crit rate is 1/16, multiplying damage by 1.5
+
+    public static String currentOwner;
 
     public static final String[] types = {"None", "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"};
     public static final double[][] typeChart = {
@@ -67,12 +69,16 @@ public class Battle {
         } else if (turn % 2 == 1) {
             turnOrder = (int)(Math.random() * 2);
         }
+        if (turn % 2 == turnOrder) {
+            currentOwner = "Player";
+        } else {
+            currentOwner = "Opponent";
+        }
         executeMove();
     }
 
     public int calcDamage(int[] atkStats, int[] defStats) {
         int physSpec;
-        //if (GameData.moveCategory != null) {
         if (GameData.moveCategory.equals("Physical")) {
            physSpec = 0;
         } else {
@@ -86,23 +92,20 @@ public class Battle {
         int atkMod;
         int defMod;
         if (turn % 2 == turnOrder) {
-            atkMod = pStatMods[3 + physSpec];
-            defMod = pStatMods[4 + physSpec];
-        } else {
             atkMod = eStatMods[3 + physSpec];
             defMod = eStatMods[4 + physSpec];
+        } else {
+            atkMod = pStatMods[3 + physSpec];
+            defMod = pStatMods[4 + physSpec];
         }
         if (critical == 1) {
             estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[atkMod + 6]) / (((double) defStats[4 + physSpec]) * statModList[defMod + 6] * 50.0))) + 2;
         } else {
             estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[Math.max(atkMod, 0) + 6]) / (((double) defStats[4 + physSpec]) * statModList[Math.min(defMod, 0) + 6] * 50.0))) + 2;
         }
+        System.out.println(GameData.basePower);
         estimate *= critical * ((int) (Math.random() * 16) + 85) / 100.0;
-        if (estimate < 1) {
-            return 1;
-        } else {
-            return (int) estimate;
-        }
+        return Math.max((int) estimate, 1);
     }
 
     public int battleEnd() {
@@ -131,12 +134,14 @@ public class Battle {
         return eBattleStats;
     }
 
-    public void setPStatMods(int stat, int change) {
-        pStatMods[stat] = Math.clamp(pStatMods[stat] + change,-6, 6);
+    public static void setPStatMods(int stat, int change) {
+        pStatMods[stat] += change;
+        pStatMods[stat] = Math.clamp(pStatMods[stat], -6, 6);
     }
 
-    public void setEStatMods(int stat, int change) {
-        pStatMods[stat] = Math.clamp(eStatMods[stat] + change, -6, 6);
+    public static void setEStatMods(int stat, int change) {
+        eStatMods[stat] += change;
+        eStatMods[stat] = Math.clamp(eStatMods[stat], -6, 6);
     }
 
     public void resetBattle() {
@@ -151,20 +156,32 @@ public class Battle {
 
     public void executeMove() {
         if (turn % 2 == turnOrder) {
-            GameData.getMoveInfo("Tackle");
+            GameData.getMoveInfo(GameData.getEMoves(0)[0]);
             if (GameData.moveCategory.equals("Status")) {
-                setPStatMods(3, -1);
+                GameData.computeEffect("Opponent");
             } else {
                 pBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
             }
         } else {
             GameData.getMoveInfo(GameInterface.getPlayerMove());
             if (GameData.moveCategory.equals("Status")) {
-                setEStatMods(3, -1);
+                GameData.computeEffect("Player");
             } else {
                 eBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
             }
         }
         turn++;
+    }
+
+    public static int statChanged;
+    public static int statChangedAmount;
+
+    public static void setStatChanges(String trainer, int stat, int change) {
+        if (trainer.equals("Player")) {
+            setPStatMods(stat, change);
+        } else {
+            setEStatMods(stat, change);
+        }
+        statChanged = stat;
     }
 }

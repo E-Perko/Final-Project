@@ -97,7 +97,7 @@ public class PelletPursuitDemo extends Application {
     public String battleMusic;
     public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
     public String currentBattle;
-    public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur"};
+    public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic"};
 
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
@@ -136,7 +136,7 @@ public class PelletPursuitDemo extends Application {
         Scene scene = new Scene(root, GameMap.TILE * 15, (GameMap.TILE * 10) + HUD_HEIGHT, Color.BLACK);
 
         //graphics.displayImg("battle_background", 15, -20, 0, 0, root);
-        graphics.displayImg("charmander_back", 4, -10, 3.875, 1, root);
+        graphics.displayImg("bulbasaur_back", 4, -10, 3.875, 1, root);
         graphics.displayImg("squirtle_front", 4, -10, 0.875, 2, root);
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
@@ -422,11 +422,14 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
+                    //currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
+                    currentBattle = randomBattle[(int) (Math.random() * 3) + 3];
                     GameData.generateTeam(currentBattle, "player");
                     GameData.generateTeam(currentBattle, "opponent");
-                    graphics.displayImg( GameData.getPPokemon(0) + "_back", 4, 1, 3.875, 1, root);
-                    graphics.displayImg( GameData.getEPokemon(0) + "_front", 4, 9, 0.875, 2, root);
+                    //GameData.generateTeam(randomBattle[2], "player");
+                    //GameData.generateTeam(randomBattle[2], "opponent");
+                    graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 4, 1, 3.875, 1, root);
+                    graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4, 9, 0.875, 2, root);
                     gameUI.getPlayerMoves();
                     battle.setBattleStats();
                     freeze = true;

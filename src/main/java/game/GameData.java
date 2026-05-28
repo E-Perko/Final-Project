@@ -59,18 +59,21 @@ public class GameData {
         {
             System.out.println("File not found: " + e.getMessage());
         }
-        battleStats[1] = (int) ((stats[0] * 2 + 15) * battleStats[0] / 100.0) + battleStats[0] + 10;
-        battleStats[2] = battleStats[1];
-        for (int i = 3; i < 8; i++) {
-            battleStats[i] = (int) ((stats[i - 2] * 2 + 15) * battleStats[0] / 100.0) + 5;
-        }
         if (owner.equals("Player")) {
             battleStats[0] = pLvls[0];
+        } else {
+            battleStats[0] = eLvls[0];
+        }
+        battleStats[1] = (int) ((stats[0] * 2 + 31) * battleStats[0] / 100.0) + battleStats[0] + 10;
+        battleStats[2] = battleStats[1];
+        for (int i = 3; i < 8; i++) {
+            battleStats[i] = (int) ((stats[i - 2] * 2 + 31) * battleStats[0] / 100.0) + 5;
+        }
+        if (owner.equals("Player")) {
             for (int i = 0; i < 8; i++) {
                 pStats[i] = battleStats[i];
             }
         } else {
-            battleStats[0] = eLvls[0];
             for (int i = 0; i < 8; i++) {
                 eStats[i] = battleStats[i];
             }
@@ -177,6 +180,18 @@ public class GameData {
         catch (IOException e)
         {
             System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
+    public static void computeEffect(String trainer) {
+        switch (moveEffect) {
+            case "EFFECT_ATTACK_DOWN" -> {
+                Battle.setStatChanges(trainer, 3, -1);
+            }
+            case "EFFECT_DEFENSE_DOWN" -> {
+                Battle.setStatChanges(trainer, 4, -1);
+            }
+            default -> {}
         }
     }
 }

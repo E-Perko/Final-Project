@@ -2,7 +2,7 @@ Rival_1_Charmander
 1
 
 Bulbasaur
-100
+5
 0
 Tackle
 Growl
@@ -13,7 +13,7 @@ Rival_1_Squirtle
 1
 
 Charmander
-100
+5
 0
 Scratch
 Growl
@@ -24,9 +24,53 @@ Rival_1_Bulbasaur
 1
 
 Squirtle
-100
+5
 0
 Tackle
 Tail Whip
+------
+------
+
+Cynthia_Spiritomb
+1
+
+Charmander
+100
+31
+Scratch
+Growl
+------
+------
+
+Cynthia_Roserade
+1
+
+Charmander
+100
+31
+Scratch
+Growl
+------
+------
+
+Cynthia_Togekiss
+1
+
+Charmander
+100
+31
+Scratch
+Growl
+------
+------
+
+Cynthia_Milotic
+1
+
+Charmander
+100
+31
+Scratch
+Growl
 ------
 ------
