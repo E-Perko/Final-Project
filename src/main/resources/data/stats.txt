@@ -74,3 +74,25 @@ Flying
 115
 80
 Fast
+
+Garchomp
+Dragon
+Ground
+108
+130
+95
+80
+85
+102
+Slow
+
+Lucario
+Fighting
+Steel
+70
+110
+70
+115
+70
+90
+Medium Slow

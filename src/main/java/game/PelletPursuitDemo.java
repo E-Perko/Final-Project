@@ -97,7 +97,7 @@ public class PelletPursuitDemo extends Application {
     public String battleMusic;
     public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
     public String currentBattle;
-    public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic"};
+    public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic", "Cynthia_Lucario", "Cynthia_Garchomp"};
 
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
@@ -422,8 +422,9 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    //currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
-                    currentBattle = randomBattle[(int) (Math.random() * 3) + 3];
+                    currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
+                    //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
+                    //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     GameData.generateTeam(currentBattle, "player");
                     GameData.generateTeam(currentBattle, "opponent");
                     //GameData.generateTeam(randomBattle[2], "player");

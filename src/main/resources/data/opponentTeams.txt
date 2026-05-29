@@ -50,8 +50,8 @@ rival
 rival
 1
 
-Spititomb
-60
+Spiritomb
+65
 31
 Shadow Ball
 Dark Pulse
@@ -66,7 +66,7 @@ rival
 1
 
 Roserade
-60
+65
 31
 Dazzling Gleam
 Shadow Ball
@@ -96,9 +96,39 @@ rival
 1
 
 Milotic
-80
+60
 31
-Tackle
-Growl
+Scald
+------
+------
+------
+
+Cynthia_Lucario
+Gary
+Rival
+rival
+rival
+1
+
+Lucario
+55
+31
+Close Combat
+------
+------
+------
+
+Cynthia_Garchomp
+Gary
+Rival
+rival
+rival
+1
+
+Garchomp
+50
+31
+Earthquake
+------
 ------
 ------

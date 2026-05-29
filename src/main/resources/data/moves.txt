@@ -178,3 +178,27 @@ Fighting
 Physical
 None
 true
+
+Earthquake
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+100
+Ground
+100
+10
+0
+Physical
+None
+false
+
+Scald
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+80
+Water
+100
+10
+0
+Special
+None
+false

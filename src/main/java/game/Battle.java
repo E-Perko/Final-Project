@@ -91,7 +91,7 @@ public class Battle {
         double estimate;
         int atkMod;
         int defMod;
-        if (turn % 2 == turnOrder) {
+        if (currentOwner.equals("Player")) {
             atkMod = eStatMods[3 + physSpec];
             defMod = eStatMods[4 + physSpec];
         } else {
@@ -103,7 +103,6 @@ public class Battle {
         } else {
             estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[Math.max(atkMod, 0) + 6]) / (((double) defStats[4 + physSpec]) * statModList[Math.min(defMod, 0) + 6] * 50.0))) + 2;
         }
-        System.out.println(GameData.basePower);
         estimate *= critical * ((int) (Math.random() * 16) + 85) / 100.0;
         return Math.max((int) estimate, 1);
     }
@@ -177,11 +176,12 @@ public class Battle {
     public static int statChangedAmount;
 
     public static void setStatChanges(String trainer, int stat, int change) {
-        if (trainer.equals("Player")) {
-            setPStatMods(stat, change);
-        } else {
-            setEStatMods(stat, change);
-        }
+//        if ((trainer.equals("Player") && ) {
+//            setPStatMods(stat, change);
+//        } else {
+//            setEStatMods(stat, change);
+//        }
+        setEStatMods(stat, change);
         statChanged = stat;
     }
 }
