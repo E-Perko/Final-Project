@@ -54,7 +54,7 @@ Poison
 Medium Slow
 
 Spiritomb
-Shost
+Ghost
 Dark
 50
 92
@@ -95,4 +95,15 @@ Steel
 115
 70
 90
+Medium Slow
+
+Zoroark
+Normal
+Ghost
+55
+100
+60
+125
+60
+110
 Medium Slow

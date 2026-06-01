@@ -24,29 +24,31 @@ public class Battle {
     public double critical = 1;
     // The standard crit rate is 1/16, multiplying damage by 1.5
 
+    public static double typeEffect;
+
     public static String currentOwner;
 
     public static final String[] types = {"None", "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"};
     public static final double[][] typeChart = {
-            {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1  },
-            {1,  1,  1,  1,  1,  1,  2,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1,  1  },
-            {1,  0.5,2,  1,  0.5,0.5,1,  1,  2,  1,  1,  0.5,2,  1,  1,  1,  0.5,0.5},
-            {1,  0.5,0.5,2,  2,  0.5,1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0.5,1  },
-            {1,  1,  1,  0.5,1,  1,  1,  1,  2,  0.5,1,  1,  1,  1,  1,  1,  0.5,1  },
-            {1,  2,  0.5,0.5,0.5,2,  1,  2,  0.5,2,  1,  2,  1,  1,  1,  1,  1,  1  },
-            {1,  2,  1,  1,  1,  0.5,2,  1,  1,  1,  1,  1,  2,  1,  1,  1,  2,  1  },
-            {1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  0.5,0.5,1,  1,  0.5,1,  2  },
-            {1,  1,  1,  1,  0.5,1,  0.5,0.5,2,  1,  2,  0.5,1,  1,  1,  1,  1,  0.5},
-            {1,  1,  2,  0,  2,  2,  1,  0.5,1,  1,  1,  1,  0.5,1,  1,  1,  1,  1  },
-            {1,  1,  1,  2,  0.5,2,  0.5,1,  0,  1,  1,  0.5,2,  1,  1,  1,  1,  1  },
-            {1,  1,  1,  1,  1,  1,  0.5,1,  1,  1,  0.5,2,  1,  2,  1,  2,  1,  1  },
-            {1,  2,  1,  1,  0.5,1,  0.5,1,  0.5,2,  1,  1,  2,  1,  1,  1,  1,  1  },
-            {0.5,0.5,2,  1,  2,  1,  2,  0.5,2,  0.5,1,  1,  1,  1,  1,  1,  2,  1  },
-            {0,  1,  1,  1,  1,  1,  0,  0.5,1,  1,  1,  0.5,1,  2,  1,  2,  1,  1  },
-            {1,  0.5,0.5,0.5,0.5,2,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2  },
-            {1,  1,  1,  1,  1,  1,  2,  1,  1,  1,  0,  2,  0,  0.5,1,  0.5,1,  2  },
-            {0.5,2,  1,  1,  0.5,0.5,2,  0,  2,  0.5,0.5,0.5,0.5,1,  0.5,1,  0.5,0.5},
-            {1,  1,  1,  1,  1,  1,  0.5,2,  1,  1,  1,  0.5,1,  1,  0,  0.5,2,  1  }
+            {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1  },
+            {1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1,  1  },
+            {1,  1,  0.5,2,  1,  0.5,0.5,1,  1,  2,  1,  1,  0.5,2,  1,  1,  1,  0.5,0.5},
+            {1,  1,  0.5,0.5,2,  2,  0.5,1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0.5,1  },
+            {1,  1,  1,  1,  0.5,1,  1,  1,  1,  2,  0.5,1,  1,  1,  1,  1,  1,  0.5,1  },
+            {1,  1,  2,  0.5,0.5,0.5,2,  1,  2,  0.5,2,  1,  2,  1,  1,  1,  1,  1,  1  },
+            {1,  1,  2,  1,  1,  1,  0.5,2,  1,  1,  1,  1,  1,  2,  1,  1,  1,  2,  1  },
+            {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  0.5,0.5,1,  1,  0.5,1,  2  },
+            {1,  1,  1,  1,  1,  0.5,1,  0.5,0.5,2,  1,  2,  0.5,1,  1,  1,  1,  1,  0.5},
+            {1,  1,  1,  2,  0,  2,  2,  1,  0.5,1,  1,  1,  1,  0.5,1,  1,  1,  1,  1  },
+            {1,  1,  1,  1,  2,  0.5,2,  0.5,1,  0,  1,  1,  0.5,2,  1,  1,  1,  1,  1  },
+            {1,  1,  1,  1,  1,  1,  1,  0.5,1,  1,  1,  0.5,2,  1,  2,  1,  2,  1,  1  },
+            {1,  1,  2,  1,  1,  0.5,1,  0.5,1,  0.5,2,  1,  1,  2,  1,  1,  1,  1,  1  },
+            {1,  0.5,0.5,2,  1,  2,  1,  2,  0.5,2,  0.5,1,  1,  1,  1,  1,  1,  2,  1  },
+            {1,  0,  1,  1,  1,  1,  1,  0,  0.5,1,  1,  1,  0.5,1,  2,  1,  2,  1,  1  },
+            {1,  1,  0.5,0.5,0.5,0.5,2,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2  },
+            {1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1,  0,  2,  0,  0.5,1,  0.5,1,  2  },
+            {1,  0.5,2,  1,  1,  0.5,0.5,2,  0,  2,  0.5,0.5,0.5,0.5,1,  0.5,1,  0.5,0.5},
+            {1,  1,  1,  1,  1,  1,  1,  0.5,2,  1,  1,  1,  0.5,1,  1,  0,  0.5,2,  1  }
     };
     //None, Normal, Fire, Water, Electric, Grass, Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost, Dragon, Dark, Steel, Fairy
     //Columns represent defensive interactions and rows represent offensive interactions.
@@ -78,6 +80,10 @@ public class Battle {
     }
 
     public int calcDamage(int[] atkStats, int[] defStats) {
+        typeEffect = typeChart[indexOfString(getTypes(1)[0][0], types)][indexOfString(GameData.moveType, types)] * typeChart[indexOfString(getTypes(1)[1][0], types)][indexOfString(GameData.moveType, types)];
+        if (typeEffect == 0) {
+            return 0;
+        }
         int physSpec;
         if (GameData.moveCategory.equals("Physical")) {
            physSpec = 0;
@@ -87,6 +93,10 @@ public class Battle {
         critical = 1;
         if ((int) (Math.random() * 16) == 0) {
             critical = 1.5;
+        }
+        double stab = 1;
+        if (GameData.moveType.equals(getTypes(0)[0][0]) || GameData.moveType.equals(getTypes(0)[1][0])) {
+            stab = 1.5;
         }
         double estimate;
         int atkMod;
@@ -103,9 +113,13 @@ public class Battle {
         } else {
             estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[Math.max(atkMod, 0) + 6]) / (((double) defStats[4 + physSpec]) * statModList[Math.min(defMod, 0) + 6] * 50.0))) + 2;
         }
-        estimate *= critical * ((int) (Math.random() * 16) + 85) / 100.0;
+        estimate *= critical * stab * typeEffect * ((int) (Math.random() * 16) + 85) / 100.0;
         return Math.max((int) estimate, 1);
     }
+
+//    public int damageRNG() {
+//        return 0;
+//    }
 
     public int battleEnd() {
         if (hpAnimP <= 0) {
@@ -183,5 +197,22 @@ public class Battle {
 //        }
         setEStatMods(stat, change);
         statChanged = stat;
+    }
+
+    public String[][] getTypes(int trainer) {
+        if ((turn % 2 == turnOrder && trainer == 0) || (turn % 2 == 1 - turnOrder && trainer == 1)) {
+            return GameData.getETypes();
+        } else {
+            return GameData.getPTypes();
+        }
+    }
+
+    public int indexOfString(String s, String[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(s)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

@@ -33,10 +33,10 @@ public class GameInterface {
                 gc.fillText("Run", GameMap.TILE * 12, GameMap.TILE * 9);
             }
             case 1 -> {
-                gc.fillArc((GameMap.TILE) + (GameMap.TILE * selectX * 5), (GameMap.TILE * 7.75) + (GameMap.TILE * selectY), 10, 10, 0, 360, javafx.scene.shape.ArcType.ROUND);
-                gc.fillText(battleMoves[0][0], GameMap.TILE * 1.5, GameMap.TILE * 8);
+                gc.fillArc((GameMap.TILE / 2.0) + (GameMap.TILE * selectX * 5.5), (GameMap.TILE * 7.75) + (GameMap.TILE * selectY), 10, 10, 0, 360, javafx.scene.shape.ArcType.ROUND);
+                gc.fillText(battleMoves[0][0], GameMap.TILE, GameMap.TILE * 8);
                 gc.fillText(battleMoves[0][1], GameMap.TILE * 6.5, GameMap.TILE * 8);
-                gc.fillText(battleMoves[1][0], GameMap.TILE * 1.5, GameMap.TILE * 9);
+                gc.fillText(battleMoves[1][0], GameMap.TILE, GameMap.TILE * 9);
                 gc.fillText(battleMoves[1][1], GameMap.TILE * 6.5, GameMap.TILE * 9);
             }
             case 2 -> {
@@ -56,6 +56,15 @@ public class GameInterface {
                 } else {
                     gc.fillText( GameData.getPPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
                     gc.fillText( "was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                }
+            }
+            case 5 -> {
+                if (Battle.typeEffect > 1) {
+                    gc.fillText("It's super effective!", GameMap.TILE, GameMap.TILE * 8);
+                } else if (Battle.typeEffect == 0) {
+                    gc.fillText("It had no effect...", GameMap.TILE, GameMap.TILE * 8);
+                } else {
+                    gc.fillText("It's not very effective...", GameMap.TILE, GameMap.TILE * 8);
                 }
             }
             default -> {}

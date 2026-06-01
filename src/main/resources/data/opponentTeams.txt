@@ -51,7 +51,7 @@ rival
 1
 
 Spiritomb
-65
+100
 31
 Shadow Ball
 Dark Pulse
@@ -66,7 +66,7 @@ rival
 1
 
 Roserade
-65
+100
 31
 Dazzling Gleam
 Shadow Ball
@@ -81,7 +81,7 @@ rival
 1
 
 Togekiss
-60
+100
 31
 Air Slash
 Dazzling Gleam
@@ -96,7 +96,7 @@ rival
 1
 
 Milotic
-60
+100
 31
 Scald
 ------
@@ -111,7 +111,7 @@ rival
 1
 
 Lucario
-55
+100
 31
 Close Combat
 ------
@@ -126,7 +126,7 @@ rival
 1
 
 Garchomp
-50
+100
 31
 Earthquake
 ------

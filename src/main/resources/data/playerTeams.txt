@@ -34,65 +34,65 @@ Tail Whip
 Cynthia_Spiritomb
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic
 
 Cynthia_Roserade
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic
 
 Cynthia_Togekiss
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic
 
 Cynthia_Milotic
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic
 
 Cynthia_Lucario
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic
 
 Cynthia_Garchomp
 1
 
-Charmander
+Zoroark
 100
 31
-Scratch
-Growl
-------
-------
+Hyper Voice
+Shadow Ball
+Flamethrower
+Psychic

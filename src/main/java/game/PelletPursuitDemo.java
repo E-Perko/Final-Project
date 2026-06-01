@@ -103,6 +103,7 @@ public class PelletPursuitDemo extends Application {
     public boolean criticalMessage = false;
     public boolean betweenTurns = false;
     public boolean loweredStats = false;
+    public boolean typeEffectMessage = false;
 
     public boolean animHP;
     public double battlePauseTimer = 0.0;
@@ -262,22 +263,11 @@ public class PelletPursuitDemo extends Application {
                 } else {
                     battle.hpAnimE = battle.getEStats()[1];
                 }
-                if (battle.hpAnimP <= battle.getPStats()[1] && battle.hpAnimE <= battle.getEStats()[1]) {
+                if (battle.hpAnimP <= Math.max(battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(battle.getEStats()[1], 0)) {
                     animHP = false;
                     betweenTurns = true;
                     battlePauseTimer = 0.5;
                 }
-            }
-
-            if (battle.battleEnd() == 1 && battle.critical == 1) {
-                terminateBattle();
-                win(battleGhost);
-                return;
-            }
-            if (battle.battleEnd() == 2 && battle.critical == 1) {
-                terminateBattle();
-                death(battleGhost);
-                return;
             }
 
             if (battle.hpAnimP / battle.getPStats()[2] < 0.25 && !criticalMusic && !animHP && battle.getPStats()[1] > 0) {
@@ -301,9 +291,26 @@ public class PelletPursuitDemo extends Application {
                 battlePauseTimer = 1.0;
             }
 
-            if (battle.critical > 1 && battlePauseTimer <= 0 && !animHP) {
+            if (battle.critical > 1 && battlePauseTimer <= 0 && !animHP && !typeEffectMessage) {
                 gameUI.battleState = 0;
                 battle.critical = 1;
+            }
+
+            if (typeEffectMessage && !animHP) {
+                typeEffectMessage = false;
+                gameUI.battleState = 5;
+                battlePauseTimer = 1.0;
+            }
+
+            if (battle.battleEnd() == 1 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0) {
+                terminateBattle();
+                win(battleGhost);
+                return;
+            }
+            if (battle.battleEnd() == 2 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0) {
+                terminateBattle();
+                death(battleGhost);
+                return;
             }
 
             if (betweenTurns && battlePauseTimer <= 0 && !animHP) {
@@ -427,8 +434,8 @@ public class PelletPursuitDemo extends Application {
                     //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     GameData.generateTeam(currentBattle, "player");
                     GameData.generateTeam(currentBattle, "opponent");
-                    //GameData.generateTeam(randomBattle[2], "player");
-                    //GameData.generateTeam(randomBattle[2], "opponent");
+                    //GameData.generateTeam(randomBattle[3], "player");
+                    //GameData.generateTeam(randomBattle[3], "opponent");
                     graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 4, 1, 3.875, 1, root);
                     graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4, 9, 0.875, 2, root);
                     gameUI.getPlayerMoves();
@@ -717,6 +724,9 @@ public class PelletPursuitDemo extends Application {
         }
         if (battle.critical > 1) {
             criticalMessage = true;
+        }
+        if (Battle.typeEffect != 1.0) {
+            typeEffectMessage = true;
         }
         animHP = true;
         gameUI.selectX = 0;

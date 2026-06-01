@@ -42,10 +42,10 @@ public class GameData {
                 if (statsScanner.nextLine().equals(pokemon)) {
                     if (owner.equals("Player")) {
                         pTypes[0][0] = statsScanner.nextLine();
-                        pTypes[0][1] = statsScanner.nextLine();
+                        pTypes[1][0] = statsScanner.nextLine();
                     } else {
                         eTypes[0][0] = statsScanner.nextLine();
-                        eTypes[0][1] = statsScanner.nextLine();
+                        eTypes[1][0] = statsScanner.nextLine();
                     }
                     for (int i = 0; i < 6; i++) {
                         stats[i] = statsScanner.nextInt();
@@ -154,6 +154,13 @@ public class GameData {
     }
     public static int getELvls(int slot) {
         return eLvls[slot];
+    }
+
+    public static String[][] getPTypes() {
+        return pTypes;
+    }
+    public static String[][] getETypes() {
+        return eTypes;
     }
 
     public static void getMoveInfo(String move) {

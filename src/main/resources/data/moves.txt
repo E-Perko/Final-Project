@@ -202,3 +202,39 @@ Water
 Special
 None
 false
+
+Hyper Voice
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Normal
+100
+10
+0
+Special
+Sound
+false
+
+Flamethrower
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Fire
+100
+10
+0
+Special
+None
+false
+
+Psychic
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Psychic
+100
+10
+0
+Special
+None
+false
