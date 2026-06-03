@@ -238,3 +238,39 @@ Psychic
 Special
 None
 false
+
+Meteor Mash
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Steel
+95
+10
+0
+Physical
+None
+true
+
+Ice Beam
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Ice
+100
+10
+0
+Special
+None
+false
+
+Poison Jab
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+90
+Poison
+100
+10
+0
+Physical
+None
+True

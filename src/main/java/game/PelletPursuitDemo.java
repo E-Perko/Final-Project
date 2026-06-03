@@ -437,7 +437,7 @@ public class PelletPursuitDemo extends Application {
                     //GameData.generateTeam(randomBattle[3], "player");
                     //GameData.generateTeam(randomBattle[3], "opponent");
                     graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 4, 1, 3.875, 1, root);
-                    graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4, 9, 0.875, 2, root);
+                    graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4, 9, 0.625, 2, root);
                     gameUI.getPlayerMoves();
                     battle.setBattleStats();
                     freeze = true;
