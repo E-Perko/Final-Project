@@ -1,7 +1,7 @@
-
 Tackle
 Charges the foe with a full-\nbody tackle.
 EFFECT_HIT
+0
 40
 Normal
 100
@@ -14,6 +14,7 @@ true
 Scratch
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 40
 Normal
 100
@@ -27,6 +28,7 @@ Growl
 Growls cutely to reduce the\n foe's Attack.
 EFFECT_ATTACK_DOWN
 0
+0
 Normal
 100
 40
@@ -39,6 +41,7 @@ Tail Whip
 Wags the tail to lower the\n foe's Defense.
 EFFECT_DEFENSE_DOWN
 0
+0
 Normal
 100
 30
@@ -50,6 +53,7 @@ false
 Shadow Ball
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 80
 Ghost
 100
@@ -62,6 +66,7 @@ false
 Dark Pulse
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 80
 Dark
 100
@@ -75,6 +80,7 @@ Will-O-Wisp
 Scratches the foe with\n sharp claws.
 EFFECT_BURN
 0
+0
 Fire
 85
 15
@@ -86,6 +92,7 @@ false
 Sucker Punch
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 70
 Dark
 100
@@ -98,6 +105,7 @@ true
 Dazzling Gleam
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 80
 Fairy
 100
@@ -110,6 +118,7 @@ false
 Sludge Bomb
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Poison
 100
@@ -122,6 +131,7 @@ false
 Energy Ball
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Grass
 100
@@ -134,6 +144,7 @@ false
 Air Slash
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 75
 Flying
 95
@@ -146,6 +157,7 @@ false
 Aura Sphere
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 80
 Fighting
 100
@@ -159,6 +171,7 @@ Thunder Wave
 Scratches the foe with\n sharp claws.
 EFFECT_PARALYZE
 0
+0
 Electric
 85
 20
@@ -170,6 +183,7 @@ false
 Close Combat
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 120
 Fighting
 100
@@ -182,6 +196,7 @@ true
 Earthquake
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 100
 Ground
 100
@@ -194,6 +209,7 @@ false
 Scald
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 80
 Water
 100
@@ -206,6 +222,7 @@ false
 Hyper Voice
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Normal
 100
@@ -218,6 +235,7 @@ false
 Flamethrower
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Fire
 100
@@ -230,6 +248,7 @@ false
 Psychic
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Psychic
 100
@@ -242,6 +261,7 @@ false
 Meteor Mash
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Steel
 95
@@ -254,6 +274,7 @@ true
 Ice Beam
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Ice
 100
@@ -266,8 +287,48 @@ false
 Poison Jab
 Scratches the foe with\n sharp claws.
 EFFECT_HIT
+0
 90
 Poison
+100
+10
+0
+Physical
+None
+True
+
+Body Press
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+80
+Fighting
+100
+10
+0
+Physical
+None
+True
+
+Avalanche
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+60
+Ice
+100
+10
+0
+Physical
+None
+True
+
+Recover
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+0
+Ice
 100
 10
 0

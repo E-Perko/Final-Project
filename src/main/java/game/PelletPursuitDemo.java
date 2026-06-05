@@ -68,7 +68,7 @@ public class PelletPursuitDemo extends Application {
     private int ghostsEatenThisPellet = 0;
 
     // --- Extra life ---
-    private static final int EXTRA_LIFE_THRESHOLD = 10_000;
+    private static final int EXTRA_LIFE_THRESHOLD = 2_500;
     private boolean extraLifeAwarded = false;
 
     // --- Score flashes (points that float up when a ghost is eaten) ---
@@ -98,6 +98,7 @@ public class PelletPursuitDemo extends Application {
     public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
     public String currentBattle;
     public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic", "Cynthia_Lucario", "Cynthia_Garchomp"};
+    public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Tyler", "Player_Zoroark", "Player_Sinistcha", "Player_Avalugg", "Player_Appletun"};
 
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
@@ -254,12 +255,12 @@ public class PelletPursuitDemo extends Application {
             if (animHP && battlePauseTimer <= 0) {
                 battlePauseTimer = 0;
                 if (battle.hpAnimP > battle.getPStats()[1] + (dt * battle.getPStats()[2] / 2)) {
-                    battle.hpAnimP -= dt * battle.getPStats()[2] / 2;
+                    battle.hpAnimP -= dt * Math.min(Battle.damage * 2.5, battle.getEStats()[2] / 2.0);
                 } else {
                     battle.hpAnimP = battle.getPStats()[1];
                 }
                 if (battle.hpAnimE > battle.getEStats()[1] + (dt * battle.getEStats()[2] / 2)) {
-                    battle.hpAnimE -= dt * battle.getEStats()[2] / 2;
+                    battle.hpAnimE -= dt * Math.min(Battle.damage * 2.5, battle.getEStats()[2] / 2.0);
                 } else {
                     battle.hpAnimE = battle.getEStats()[1];
                 }
@@ -279,8 +280,15 @@ public class PelletPursuitDemo extends Application {
                 criticalMusic = false;
             }
 
-            if (criticalMessage && !animHP) {
+            if (typeEffectMessage && !animHP && battlePauseTimer <= 0) {
+                typeEffectMessage = false;
+                gameUI.battleState = 5;
+                battlePauseTimer = 1.0;
+            }
+
+            if (criticalMessage && !animHP && battlePauseTimer <= 0) {
                 criticalMessage = false;
+                battle.critical = 1;
                 gameUI.battleState = 3;
                 battlePauseTimer = 1.0;
             }
@@ -291,25 +299,13 @@ public class PelletPursuitDemo extends Application {
                 battlePauseTimer = 1.0;
             }
 
-            if (battle.critical > 1 && battlePauseTimer <= 0 && !animHP && !typeEffectMessage) {
-                gameUI.battleState = 0;
-                battle.critical = 1;
-            }
-
-            if (typeEffectMessage && !animHP) {
-                typeEffectMessage = false;
-                gameUI.battleState = 5;
-                battlePauseTimer = 1.0;
-            }
-
-            if (battle.battleEnd() == 1 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0) {
+            if (battle.battleEnd() != 0 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0 && !criticalMessage && !typeEffectMessage) {
                 terminateBattle();
-                win(battleGhost);
-                return;
-            }
-            if (battle.battleEnd() == 2 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0) {
-                terminateBattle();
-                death(battleGhost);
+                if (battle.battleEnd() == 1) {
+                    win(battleGhost);
+                } else {
+                    death(battleGhost);
+                }
                 return;
             }
 
@@ -429,15 +425,23 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    currentBattle = randomBattle[(int) (Math.random() * randomBattle.length)];
+                    int random = (int) (Math.random() * randomBattle.length);
+                    currentBattle = randomBattle[random];
                     //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
                     //currentBattle = randomBattle[(int) (Math.random() * 3)];
-                    GameData.generateTeam(currentBattle, "player");
+                    if (random > 2 && (int) (Math.random() * (7 - level)) == 0 && level != 1) {
+                        GameData.generateTeam(playerTeams[3], "player");
+                    } else if (random > 2) {
+                    //if (random > 2) {
+                        GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 4)) + 4], "player");
+                    } else {
+                        GameData.generateTeam(currentBattle, "player");
+                    }
                     GameData.generateTeam(currentBattle, "opponent");
                     //GameData.generateTeam(randomBattle[3], "player");
                     //GameData.generateTeam(randomBattle[3], "opponent");
-                    graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 5, 1, 2, 1, root);
-                    graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 5, 8.5, -0.75, 2, root);
+                    graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 4.5, 1, 2.5, 1, root);
+                    graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4.5, 8.5, -0.75, 2, root);
                     gameUI.getPlayerMoves();
                     battle.setBattleStats();
                     freeze = true;

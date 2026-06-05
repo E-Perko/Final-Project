@@ -62,7 +62,11 @@ public class GameInterface {
                 if (Battle.typeEffect > 1) {
                     gc.fillText("It's super effective!", GameMap.TILE, GameMap.TILE * 8);
                 } else if (Battle.typeEffect == 0) {
-                    gc.fillText("It had no effect...", GameMap.TILE, GameMap.TILE * 8);
+                    if (battle.getTurn() % 2 == battle.getTurnOrder()) {
+                        gc.fillText("It doesn't affect " + GameData.getEPokemon(0) + "...", GameMap.TILE, GameMap.TILE * 8);
+                    } else {
+                        gc.fillText("It doesn't affect " + GameData.getPPokemon(0) + "...", GameMap.TILE, GameMap.TILE * 8);
+                    }
                 } else {
                     gc.fillText("It's not very effective...", GameMap.TILE, GameMap.TILE * 8);
                 }

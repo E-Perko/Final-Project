@@ -25,6 +25,7 @@ public class GameData {
     private static String[][] eTypes = new String[2][6];
 
     public static String moveEffect;
+    public static int effectChance;
     public static int basePower;
     public static String moveType;
     public static int moveAccuracy;
@@ -172,6 +173,7 @@ public class GameData {
                 if (movesScanner.nextLine().equals(move)) {
                     String a = movesScanner.nextLine();
                     moveEffect = movesScanner.nextLine();
+                    effectChance = movesScanner.nextInt();
                     basePower = movesScanner.nextInt();
                     a = movesScanner.nextLine();
                     moveType = movesScanner.nextLine();

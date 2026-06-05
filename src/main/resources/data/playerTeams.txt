@@ -31,7 +31,7 @@ Tail Whip
 ------
 ------
 
-Cynthia_Spiritomb
+Player_Zoroark
 1
 
 Zoroark
@@ -42,57 +42,57 @@ Shadow Ball
 Flamethrower
 Psychic
 
-Cynthia_Roserade
+Player_Milotic
 1
 
-Zoroark
+Milotic
 100
 31
-Hyper Voice
-Shadow Ball
-Flamethrower
-Psychic
+Scald
+Ice Beam
+------
+------
 
-Cynthia_Togekiss
+Player_Tyler
 1
 
-Zoroark
+Tyler
 100
 31
-Hyper Voice
-Shadow Ball
-Flamethrower
-Psychic
+Tackle
+Close Combat
+Meteor Mash
+Sucker Punch
 
-Cynthia_Milotic
+Player_Sinistcha
 1
 
-Zoroark
+Sinistcha
 100
 31
-Hyper Voice
+Energy Ball
 Shadow Ball
-Flamethrower
 Psychic
+------
 
-Cynthia_Lucario
+Player_Avalugg
 1
 
-Zoroark
+Avalugg
 100
 31
-Hyper Voice
-Shadow Ball
-Flamethrower
-Psychic
+Ice Beam
+Close Combat
+Earthquake
+------
 
-Cynthia_Garchomp
+Player_Appletun
 1
 
-Zoroark
+Appletun
 100
 31
-Hyper Voice
-Shadow Ball
-Flamethrower
-Psychic
+Energy Ball
+Close Combat
+Sucker Punch
+------

@@ -28,6 +28,8 @@ public class Battle {
 
     public static String currentOwner;
 
+    public static int damage;
+
     public static final String[] types = {"None", "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"};
     public static final double[][] typeChart = {
             {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1  },
@@ -72,9 +74,9 @@ public class Battle {
             turnOrder = (int)(Math.random() * 2);
         }
         if (turn % 2 == turnOrder) {
-            currentOwner = "Player";
-        } else {
             currentOwner = "Opponent";
+        } else {
+            currentOwner = "Player";
         }
         executeMove();
     }
@@ -102,12 +104,13 @@ public class Battle {
         int atkMod;
         int defMod;
         if (currentOwner.equals("Player")) {
-            atkMod = eStatMods[3 + physSpec];
+            atkMod = pStatMods[3 + physSpec];
             defMod = eStatMods[4 + physSpec];
         } else {
-            atkMod = pStatMods[3 + physSpec];
+            atkMod = eStatMods[3 + physSpec];
             defMod = pStatMods[4 + physSpec];
         }
+
         if (critical == 1) {
             estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[atkMod + 6]) / (((double) defStats[4 + physSpec]) * statModList[defMod + 6] * 50.0))) + 2;
         } else {
@@ -168,19 +171,21 @@ public class Battle {
     }
 
     public void executeMove() {
-        if (turn % 2 == turnOrder) {
+        if (currentOwner.equals("Opponent")) {
             GameData.getMoveInfo(GameData.getEMoves(0)[0]);
             if (GameData.moveCategory.equals("Status")) {
-                GameData.computeEffect("Opponent");
+                GameData.computeEffect("Player");
             } else {
-                pBattleStats[1] -= calcDamage(eBattleStats, pBattleStats);
+                damage = calcDamage(eBattleStats, pBattleStats);
+                pBattleStats[1] -= damage;
             }
         } else {
             GameData.getMoveInfo(GameInterface.getPlayerMove());
             if (GameData.moveCategory.equals("Status")) {
-                GameData.computeEffect("Player");
+                GameData.computeEffect("Opponent");
             } else {
-                eBattleStats[1] -= calcDamage(pBattleStats, eBattleStats);
+                damage = calcDamage(pBattleStats, eBattleStats);
+                eBattleStats[1] -= damage;
             }
         }
         turn++;

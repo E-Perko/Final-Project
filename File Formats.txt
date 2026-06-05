@@ -5,6 +5,7 @@ moves.txt
 - Name
 - Description
 - Effect
+- Effect Chance
 - Power
 - Type
 - Accuracy
