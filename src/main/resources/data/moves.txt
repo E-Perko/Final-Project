@@ -27,7 +27,7 @@ true
 Growl
 Growls cutely to reduce the\n foe's Attack.
 EFFECT_ATTACK_DOWN
-0
+100
 0
 Normal
 100
@@ -40,7 +40,7 @@ false
 Tail Whip
 Wags the tail to lower the\n foe's Defense.
 EFFECT_DEFENSE_DOWN
-0
+100
 0
 Normal
 100
@@ -52,8 +52,8 @@ false
 
 Shadow Ball
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_SPDEFENSE_DOWN
+20
 80
 Ghost
 100
@@ -65,8 +65,8 @@ false
 
 Dark Pulse
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_FLINCH
+20
 80
 Dark
 100
@@ -79,7 +79,7 @@ false
 Will-O-Wisp
 Scratches the foe with\n sharp claws.
 EFFECT_BURN
-0
+100
 0
 Fire
 85
@@ -117,8 +117,8 @@ false
 
 Sludge Bomb
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_POISON
+30
 90
 Poison
 100
@@ -130,8 +130,8 @@ false
 
 Energy Ball
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_SPDEFENSE_DOWN
+10
 90
 Grass
 100
@@ -143,8 +143,8 @@ false
 
 Air Slash
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_FLINCH
+30
 75
 Flying
 95
@@ -325,13 +325,65 @@ True
 
 Recover
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
+EFFECT_HEAL_HALF
+100
 0
-0
-Ice
+Normal
 100
 10
+0
+Status
+None
+False
+
+Rapid Spin
+Scratches the foe with\n sharp claws.
+EFFECT_ATTACK_DOWN
+100
+55
+Normal
+95
+30
 0
 Physical
 None
 True
+
+Draco Meteor
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+130
+Dragon
+90
+5
+0
+Special
+None
+False
+
+Apple Acid
+Scratches the foe with\n sharp claws.
+EFFECT_SPDEFENSE_DOWN
+100
+90
+Grass
+100
+10
+0
+Special
+None
+False
+
+Dragon Pulse
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+85
+Dragon
+100
+10
+0
+Special
+None
+False

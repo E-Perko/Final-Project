@@ -19,7 +19,7 @@ public class GameInterface {
     // 3: Critical Hit
     // 4: Other Post Battle Text
 
-    public final String[] statNames = {"Attack", "Defense"};
+    public final String[] statNames = {"Attack", "Defense", "Special Attack", "Special Defense", "Speed"};
 
     public void renderBattle(GraphicsContext gc) {
         switch (battleState) {

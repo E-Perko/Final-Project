@@ -140,14 +140,3 @@ Ghost
 80
 70
 Medium Fast
-
-Tyler
-Normal
-None
-85
-100
-100
-80
-70
-80
-Fast

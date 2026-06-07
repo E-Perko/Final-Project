@@ -98,12 +98,11 @@ public class PelletPursuitDemo extends Application {
     public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
     public String currentBattle;
     public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic", "Cynthia_Lucario", "Cynthia_Garchomp"};
-    public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Tyler", "Player_Zoroark", "Player_Sinistcha", "Player_Avalugg", "Player_Appletun"};
+    public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Zoroark", "Player_Sinistcha", "Player_Avalugg", "Player_Appletun"};
 
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
     public boolean betweenTurns = false;
-    public boolean loweredStats = false;
     public boolean typeEffectMessage = false;
 
     public boolean animHP;
@@ -254,28 +253,32 @@ public class PelletPursuitDemo extends Application {
         if (inBattle) {
             if (animHP && battlePauseTimer <= 0) {
                 battlePauseTimer = 0;
-                if (battle.hpAnimP > battle.getPStats()[1] + (dt * battle.getPStats()[2] / 2)) {
-                    battle.hpAnimP -= dt * Math.min(Battle.damage * 2.5, battle.getEStats()[2] / 2.0);
+                if (battle.hpAnimP > Battle.getPStats()[1] + (dt * Battle.getPStats()[2] / 2) && Battle.damage > 0) {
+                    battle.hpAnimP -= dt * Math.min(Battle.damage * 2.5, Battle.getEStats()[2] / 2.0);
+                } else if (battle.hpAnimP < Battle.getPStats()[1] - (dt * Battle.getPStats()[2] / 2) && Battle.damage < 0) {
+                    battle.hpAnimP -= dt * Math.max(Battle.damage * 2.5, Battle.getPStats()[2] / -2.0);
                 } else {
-                    battle.hpAnimP = battle.getPStats()[1];
+                    battle.hpAnimP = Battle.getPStats()[1];
                 }
-                if (battle.hpAnimE > battle.getEStats()[1] + (dt * battle.getEStats()[2] / 2)) {
-                    battle.hpAnimE -= dt * Math.min(Battle.damage * 2.5, battle.getEStats()[2] / 2.0);
+                if (battle.hpAnimE > Battle.getEStats()[1] + (dt * Battle.getEStats()[2] / 2) && Battle.damage > 0) {
+                    battle.hpAnimE -= dt * Math.min(Battle.damage * 2.5, Battle.getEStats()[2] / 2.0);
+                } else if (battle.hpAnimE < Battle.getEStats()[1] - (dt * Battle.getEStats()[2] / 2) && Battle.damage < 0) {
+                    battle.hpAnimE -= dt * Math.max(Battle.damage * 2.5, Battle.getEStats()[2] / -2.0);
                 } else {
-                    battle.hpAnimE = battle.getEStats()[1];
+                    battle.hpAnimE = Battle.getEStats()[1];
                 }
-                if (battle.hpAnimP <= Math.max(battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(battle.getEStats()[1], 0)) {
+                if ((Battle.damage > 0 && battle.hpAnimP <= Math.max(Battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(Battle.getEStats()[1], 0)) || (Battle.damage < 0 && battle.hpAnimP == Math.min(Battle.getPStats()[1], Battle.getPStats()[2]) && battle.hpAnimE == Math.min(Battle.getEStats()[1], Battle.getEStats()[2])) || Battle.damage == 0) {
                     animHP = false;
                     betweenTurns = true;
                     battlePauseTimer = 0.5;
                 }
             }
 
-            if (battle.hpAnimP / battle.getPStats()[2] < 0.25 && !criticalMusic && !animHP && battle.getPStats()[1] > 0) {
+            if (battle.hpAnimP / Battle.getPStats()[2] < 0.25 && !criticalMusic && !animHP && Battle.getPStats()[1] > 0) {
                 audio.playSong("critical");
                 criticalMusic = true;
             }
-            if (battle.hpAnimP / battle.getPStats()[2] > 0.25 && criticalMusic && !animHP) {
+            if (battle.hpAnimP / Battle.getPStats()[2] > 0.25 && criticalMusic && !animHP) {
                 audio.playSong(battleMusic);
                 criticalMusic = false;
             }
@@ -293,8 +296,8 @@ public class PelletPursuitDemo extends Application {
                 battlePauseTimer = 1.0;
             }
 
-            if (loweredStats && !animHP) {
-                loweredStats = false;
+            if (GameData.loweredStats && !animHP) {
+                GameData.loweredStats = false;
                 gameUI.battleState = 4;
                 battlePauseTimer = 1.0;
             }
@@ -426,20 +429,19 @@ public class PelletPursuitDemo extends Application {
                     g.kill();
                 } else {
                     int random = (int) (Math.random() * randomBattle.length);
+//                    int random = (int) (Math.random() * 3);
+//                    int random = 3;
+//                    int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
                     currentBattle = randomBattle[random];
-                    //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
-                    //currentBattle = randomBattle[(int) (Math.random() * 3)];
-                    if (random > 2 && (int) (Math.random() * (7 - level)) == 0 && level != 1) {
-                        GameData.generateTeam(playerTeams[3], "player");
-                    } else if (random > 2) {
-                    //if (random > 2) {
-                        GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 4)) + 4], "player");
+//                    currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
+//                    currentBattle = randomBattle[(int) (Math.random() * 3)];
+                    if (random > 2) {
+                        GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
+                        //GameData.generateTeam(playerTeams[5], "player");
                     } else {
                         GameData.generateTeam(currentBattle, "player");
                     }
                     GameData.generateTeam(currentBattle, "opponent");
-                    //GameData.generateTeam(randomBattle[3], "player");
-                    //GameData.generateTeam(randomBattle[3], "opponent");
                     graphics.displayImg( GameData.getPPokemon(0).toLowerCase() + "_back", 4.5, 1, 2.5, 1, root);
                     graphics.displayImg( GameData.getEPokemon(0).toLowerCase() + "_front", 4.5, 8.5, -0.75, 2, root);
                     gameUI.getPlayerMoves();
@@ -722,10 +724,6 @@ public class PelletPursuitDemo extends Application {
         gameUI.battleState = 2;
         battlePauseTimer = 0.5;
         battle.playBattleTurn();
-        //if (GameData.moveCategory != null) {
-        if (GameData.moveCategory.equals("Status")) {
-            loweredStats = true;
-        }
         if (battle.critical > 1) {
             criticalMessage = true;
         }

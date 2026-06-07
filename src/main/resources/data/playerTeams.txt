@@ -53,17 +53,6 @@ Ice Beam
 ------
 ------
 
-Player_Tyler
-1
-
-Tyler
-100
-31
-Tackle
-Close Combat
-Meteor Mash
-Sucker Punch
-
 Player_Sinistcha
 1
 
@@ -81,10 +70,10 @@ Player_Avalugg
 Avalugg
 100
 31
-Ice Beam
-Close Combat
-Earthquake
-------
+Rapid Spin
+Avalanche
+Body Press
+Recover
 
 Player_Appletun
 1
@@ -92,7 +81,7 @@ Player_Appletun
 Appletun
 100
 31
-Energy Ball
-Close Combat
-Sucker Punch
-------
+Apple Acid
+Draco Meteor
+Dragon Pulse
+Recover

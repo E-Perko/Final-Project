@@ -142,11 +142,11 @@ public class Battle {
         return turnOrder;
     }
 
-    public int[] getPStats() {
+    public static int[] getPStats() {
         return pBattleStats;
     }
 
-    public int[] getEStats() {
+    public static int[] getEStats() {
         return eBattleStats;
     }
 
@@ -173,20 +173,18 @@ public class Battle {
     public void executeMove() {
         if (currentOwner.equals("Opponent")) {
             GameData.getMoveInfo(GameData.getEMoves(0)[0]);
-            if (GameData.moveCategory.equals("Status")) {
-                GameData.computeEffect("Player");
-            } else {
+            if (!GameData.moveCategory.equals("Status")) {
                 damage = calcDamage(eBattleStats, pBattleStats);
                 pBattleStats[1] -= damage;
             }
+            GameData.computeEffect("Player");
         } else {
             GameData.getMoveInfo(GameInterface.getPlayerMove());
-            if (GameData.moveCategory.equals("Status")) {
-                GameData.computeEffect("Opponent");
-            } else {
+            if (!GameData.moveCategory.equals("Status")) {
                 damage = calcDamage(pBattleStats, eBattleStats);
                 eBattleStats[1] -= damage;
             }
+            GameData.computeEffect("Opponent");
         }
         turn++;
     }
@@ -195,13 +193,12 @@ public class Battle {
     public static int statChangedAmount;
 
     public static void setStatChanges(String trainer, int stat, int change) {
-//        if ((trainer.equals("Player") && ) {
-//            setPStatMods(stat, change);
-//        } else {
-//            setEStatMods(stat, change);
-//        }
-        setEStatMods(stat, change);
-        statChanged = stat;
+       if (trainer.equals("Player")) {
+           setEStatMods(stat, change);
+       } else {
+           setPStatMods(stat, change);
+       }
+       statChanged = stat;
     }
 
     public String[][] getTypes(int trainer) {
@@ -219,5 +216,17 @@ public class Battle {
             }
         }
         return -1;
+    }
+
+    public static void heal(String trainer) {
+        if (trainer.equals("player")) {
+            Battle.damage = -1 * Battle.getEStats()[2] / 2;
+            //eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
+            eBattleStats[1] -= damage;
+        } else {
+            Battle.damage = -1 * Battle.getPStats()[2] / 2;
+            //pBattleStats[1] = Math.min(pBattleStats[1] - damage, pBattleStats[2]);
+            pBattleStats[1] -= damage;
+        }
     }
 }

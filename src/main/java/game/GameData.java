@@ -32,6 +32,8 @@ public class GameData {
     public static int powerPoints;
     public static String moveCategory;
 
+    public static boolean loweredStats = false;
+
     public static void generateStats(String pokemon, String owner) {
         try
         {
@@ -193,14 +195,33 @@ public class GameData {
     }
 
     public static void computeEffect(String trainer) {
-        switch (moveEffect) {
-            case "EFFECT_ATTACK_DOWN" -> {
-                Battle.setStatChanges(trainer, 3, -1);
+        if ((int) (Math.random() * 100) < effectChance) {
+            switch (moveEffect) {
+                case "EFFECT_ATTACK_DOWN" -> {
+                    loweredStats = true;
+                    Battle.setStatChanges(trainer, 3, -1);
+                }
+                case "EFFECT_SPATTACK_DOWN" -> {
+                    loweredStats = true;
+                    Battle.setStatChanges(trainer, 5, -1);
+                }
+                case "EFFECT_DEFENSE_DOWN" -> {
+                    loweredStats = true;
+                    Battle.setStatChanges(trainer, 4, -1);
+                }
+                case "EFFECT_SPDEFENSE_DOWN" -> {
+                    loweredStats = true;
+                    Battle.setStatChanges(trainer, 6, -1);
+                }
+                case "EFFECT_SPEED_DOWN" -> {
+                    loweredStats = true;
+                    Battle.setStatChanges(trainer, 7, -1);
+                }
+                case "EFFECT_HEAL_HALF" -> {
+                    Battle.heal(trainer);
+                }
+                default -> {}
             }
-            case "EFFECT_DEFENSE_DOWN" -> {
-                Battle.setStatChanges(trainer, 4, -1);
-            }
-            default -> {}
         }
     }
 }
