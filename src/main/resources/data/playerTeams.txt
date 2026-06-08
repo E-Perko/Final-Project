@@ -53,15 +53,15 @@ Ice Beam
 ------
 ------
 
-Player_Sinistcha
+Player_Polteageist
 1
 
-Sinistcha
+Polteageist
 100
 31
-Energy Ball
 Shadow Ball
 Psychic
+Sucker Punch
 ------
 
 Player_Avalugg

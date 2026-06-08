@@ -130,13 +130,13 @@ Dragon
 30
 Erratic
 
-Sinistcha
-Grass
+Polteageist
 Ghost
-71
+None
 60
-106
-121
-80
+65
+65
+134
+114
 70
 Medium Fast

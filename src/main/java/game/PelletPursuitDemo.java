@@ -98,7 +98,7 @@ public class PelletPursuitDemo extends Application {
     public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
     public String currentBattle;
     public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic", "Cynthia_Lucario", "Cynthia_Garchomp"};
-    public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Zoroark", "Player_Sinistcha", "Player_Avalugg", "Player_Appletun"};
+    public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Zoroark", "Player_Polteageist", "Player_Avalugg", "Player_Appletun", "Player_Milotic"};
 
     public boolean criticalMusic = false;
     public boolean criticalMessage = false;
@@ -439,7 +439,7 @@ public class PelletPursuitDemo extends Application {
                     //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     if (random > 2) {
                         GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
-                        //GameData.generateTeam(playerTeams[5], "player");
+                        //GameData.generateTeam(playerTeams[7], "player");
                     } else {
                         GameData.generateTeam(currentBattle, "player");
                     }
