@@ -267,7 +267,9 @@ public class PelletPursuitDemo extends Application {
                 } else {
                     battle.hpAnimE = Battle.getEStats()[1];
                 }
-                if ((Battle.damage > 0 && battle.hpAnimP <= Math.max(Battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(Battle.getEStats()[1], 0)) || (Battle.damage < 0 && battle.hpAnimP == Math.min(Battle.getPStats()[1], Battle.getPStats()[2]) && battle.hpAnimE == Math.min(Battle.getEStats()[1], Battle.getEStats()[2])) || Battle.damage == 0) {
+                if ((Battle.damage > 0 && battle.hpAnimP <= Math.max(Battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(Battle.getEStats()[1], 0)) || (Battle.damage < 0 && battle.hpAnimP >= Math.min(Battle.getPStats()[1], Battle.getPStats()[2]) && battle.hpAnimE >= Math.min(Battle.getEStats()[1], Battle.getEStats()[2])) || Battle.damage == 0) {
+                    battle.hpAnimP = Battle.getPStats()[1];
+                    battle.hpAnimE = Battle.getEStats()[1];
                     animHP = false;
                     betweenTurns = true;
                     battlePauseTimer = 0.5;
@@ -429,12 +431,12 @@ public class PelletPursuitDemo extends Application {
                     g.kill();
                 } else {
                     int random = (int) (Math.random() * randomBattle.length);
-//                    int random = (int) (Math.random() * 3);
-//                    int random = 3;
-//                    int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
+                    //int random = (int) (Math.random() * 3);
+                    //int random = 8;
+                    //int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
                     currentBattle = randomBattle[random];
-//                    currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
-//                    currentBattle = randomBattle[(int) (Math.random() * 3)];
+                    //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
+                    //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     if (random > 2) {
                         GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
                         //GameData.generateTeam(playerTeams[5], "player");

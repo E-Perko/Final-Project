@@ -221,12 +221,12 @@ public class Battle {
     public static void heal(String trainer) {
         if (trainer.equals("player")) {
             Battle.damage = -1 * Battle.getEStats()[2] / 2;
-            //eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
-            eBattleStats[1] -= damage;
+            eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
+            //eBattleStats[1] -= damage;
         } else {
             Battle.damage = -1 * Battle.getPStats()[2] / 2;
-            //pBattleStats[1] = Math.min(pBattleStats[1] - damage, pBattleStats[2]);
-            pBattleStats[1] -= damage;
+            pBattleStats[1] = Math.min(pBattleStats[1] - damage, pBattleStats[2]);
+            //pBattleStats[1] -= damage;
         }
     }
 }
