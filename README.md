@@ -27,6 +27,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 ### Current Bugs:
 
 - Type effectiveness box appears after using Recover
+- Growl and Tail Whip lower your own stats (?)
 
 ### What I'll probably add next:
 
