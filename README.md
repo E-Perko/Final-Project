@@ -53,7 +53,7 @@ https://github.com/user-attachments/assets/07bb8ab7-e322-43ab-97f2-6f3d102a19cc
 
 ## Credits
 
-- This project branches off of the template _Pellet Pursuit_, which was created by Kyle Stewart and Claude AI. The template is made to guide students to create a Pac-Man clone, and can be found [here]().
+- This project branches off of the template _Pellet Pursuit_, which was created by Kyle Stewart and Claude AI. The template is made to guide students to create a Pac-Man clone, and can be found [here](https://github.com/SBHS-Computer-Science-Academy/PelletPursuit).
 - I used Bulbapedia to find damage formulas and stat calculations.
 - I used Serebii to find data on Pokémon stats, types, moves, and the type chart.
 - For resources, credits to:
