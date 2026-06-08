@@ -49,7 +49,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 
 I had to make an advertising video for this project to show to other computer science students and parents, shown below.
 
-https://github.com/user-attachments/assets/07bb8ab7-e322-43ab-97f2-6f3d102a19cc
+https://github.com/E-Perko/Final-Project/blob/22e15fb62ce6f083ddc98073e8b0e4f1f41ccfb4/perko_edward_video.mp4
 
 ## Credits
 
