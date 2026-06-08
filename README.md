@@ -13,7 +13,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 
 ### Pokémon Features
 
-- Text files are used to house Pokémon stats and teams for both the player and opponent.
+- Text files are used to house Pokémon stats and teams for both the player and opponent
 - Type chart/effectiveness
 - Turn order based on speed
 - Critical hits
