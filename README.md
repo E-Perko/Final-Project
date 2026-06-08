@@ -2,6 +2,12 @@
 
 This is a game which combines Pac-Man's gameplay loop with Pokémon's battle system.
 
+## Features
+
+### Pac-Man Features
+
+### Pokémon Features
+
 ## Advertising Video
 
 I had to make an advertising video for this project to show to other computer science students and parents, shown below.
