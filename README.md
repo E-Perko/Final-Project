@@ -31,6 +31,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 
 ### What I'll probably add next:
 
+- Move Accuracy
 - Priority
 - Status conditions
 - Opponent AI
