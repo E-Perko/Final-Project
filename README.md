@@ -26,8 +26,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 
 ### Current Bugs:
 
-- Type effectiveness box appears after using Recover
-- Growl and Tail Whip lower your own stats (?)
+None as of now
 
 ### What I'll probably add next:
 
@@ -60,6 +59,7 @@ https://github.com/user-attachments/assets/af4fb3b1-c276-4865-a4a1-a1f6c6bfc726
   - leParagon for Appletun back sprite
   - Z-nogyroP and leParagon for Polteageist back sprite
   - aXi for Avalugg back sprite
+  - Hematite for Hisuian Zoroark back sprite
   - Nintendo and Gamefreak for all other sprites and music
 
 Custom sprites were taken from the Smogon Sprite Project. 
