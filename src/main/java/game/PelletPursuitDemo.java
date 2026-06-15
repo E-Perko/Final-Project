@@ -430,16 +430,16 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    int random = (int) (Math.random() * randomBattle.length);
+                    //int random = (int) (Math.random() * randomBattle.length);
                     //int random = (int) (Math.random() * 3);
-                    //int random = 8;
+                    int random = 8;
                     //int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
                     currentBattle = randomBattle[random];
                     //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
                     //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     if (random > 2) {
-                        GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
-                        //GameData.generateTeam(playerTeams[7], "player");
+                        //GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
+                        GameData.generateTeam(playerTeams[6], "player");
                     } else {
                         GameData.generateTeam(currentBattle, "player");
                     }

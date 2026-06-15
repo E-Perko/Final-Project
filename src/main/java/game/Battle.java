@@ -66,6 +66,7 @@ public class Battle {
     }
 
     public void playBattleTurn() {
+        Battle.typeEffect = 1.0;
         if (pBattleStats[7] > eBattleStats[7]) {
             turnOrder = 0;
         } else if (pBattleStats[7] < eBattleStats[7]) {
@@ -177,14 +178,14 @@ public class Battle {
                 damage = calcDamage(eBattleStats, pBattleStats);
                 pBattleStats[1] -= damage;
             }
-            GameData.computeEffect("Player");
+            GameData.computeEffect("Opponent");
         } else {
             GameData.getMoveInfo(GameInterface.getPlayerMove());
             if (!GameData.moveCategory.equals("Status")) {
                 damage = calcDamage(pBattleStats, eBattleStats);
                 eBattleStats[1] -= damage;
             }
-            GameData.computeEffect("Opponent");
+            GameData.computeEffect("Player");
         }
         turn++;
     }
@@ -194,9 +195,9 @@ public class Battle {
 
     public static void setStatChanges(String trainer, int stat, int change) {
        if (trainer.equals("Player")) {
-           setEStatMods(stat, change);
-       } else {
            setPStatMods(stat, change);
+       } else {
+           setEStatMods(stat, change);
        }
        statChanged = stat;
     }
@@ -219,14 +220,12 @@ public class Battle {
     }
 
     public static void heal(String trainer) {
-        if (trainer.equals("player")) {
-            Battle.damage = -1 * Battle.getEStats()[2] / 2;
-            eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
-            //eBattleStats[1] -= damage;
-        } else {
+        if (trainer.equals("Player")) {
             Battle.damage = -1 * Battle.getPStats()[2] / 2;
             pBattleStats[1] = Math.min(pBattleStats[1] - damage, pBattleStats[2]);
-            //pBattleStats[1] -= damage;
+        } else {
+            Battle.damage = -1 * Battle.getEStats()[2] / 2;
+            eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
         }
     }
 }

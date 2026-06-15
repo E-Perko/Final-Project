@@ -195,27 +195,33 @@ public class GameData {
     }
 
     public static void computeEffect(String trainer) {
+        String opponent;
+        if (trainer.equals("Player")) {
+            opponent = "Opponent";
+        } else {
+            opponent = "Player";
+        }
         if ((int) (Math.random() * 100) < effectChance) {
             switch (moveEffect) {
                 case "EFFECT_ATTACK_DOWN" -> {
                     loweredStats = true;
-                    Battle.setStatChanges(trainer, 3, -1);
+                    Battle.setStatChanges(opponent, 3, -1);
                 }
                 case "EFFECT_SPATTACK_DOWN" -> {
                     loweredStats = true;
-                    Battle.setStatChanges(trainer, 5, -1);
+                    Battle.setStatChanges(opponent, 5, -1);
                 }
                 case "EFFECT_DEFENSE_DOWN" -> {
                     loweredStats = true;
-                    Battle.setStatChanges(trainer, 4, -1);
+                    Battle.setStatChanges(opponent, 4, -1);
                 }
                 case "EFFECT_SPDEFENSE_DOWN" -> {
                     loweredStats = true;
-                    Battle.setStatChanges(trainer, 6, -1);
+                    Battle.setStatChanges(opponent, 6, -1);
                 }
                 case "EFFECT_SPEED_DOWN" -> {
                     loweredStats = true;
-                    Battle.setStatChanges(trainer, 7, -1);
+                    Battle.setStatChanges(opponent, 7, -1);
                 }
                 case "EFFECT_HEAL_HALF" -> {
                     Battle.heal(trainer);
