@@ -25,10 +25,12 @@ public class Battle {
     // The standard crit rate is 1/16, multiplying damage by 1.5
 
     public static double typeEffect;
+    public static boolean miss = false;
 
     public static String currentOwner;
 
     public static int damage;
+
 
     public static final String[] types = {"None", "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"};
     public static final double[][] typeChart = {
@@ -121,10 +123,6 @@ public class Battle {
         return Math.max((int) estimate, 1);
     }
 
-//    public int damageRNG() {
-//        return 0;
-//    }
-
     public int battleEnd() {
         if (hpAnimP <= 0) {
             return 2;
@@ -174,18 +172,27 @@ public class Battle {
     public void executeMove() {
         if (currentOwner.equals("Opponent")) {
             GameData.getMoveInfo(GameData.getEMoves(0)[0]);
-            if (!GameData.moveCategory.equals("Status")) {
-                damage = calcDamage(eBattleStats, pBattleStats);
-                pBattleStats[1] -= damage;
+            if ((int) (Math.random() * 100) < GameData.moveAccuracy) {
+                if (!GameData.moveCategory.equals("Status")) {
+                    damage = calcDamage(eBattleStats, pBattleStats);
+                    pBattleStats[1] -= damage;
+                }
+                GameData.computeEffect("Opponent");
+            } else {
+                miss = true;
             }
-            GameData.computeEffect("Opponent");
         } else {
             GameData.getMoveInfo(GameInterface.getPlayerMove());
-            if (!GameData.moveCategory.equals("Status")) {
-                damage = calcDamage(pBattleStats, eBattleStats);
-                eBattleStats[1] -= damage;
+            if ((int) (Math.random() * 100) < GameData.moveAccuracy) {
+                if (!GameData.moveCategory.equals("Status")) {
+                    damage = calcDamage(pBattleStats, eBattleStats);
+                    eBattleStats[1] -= damage;
+                }
+                GameData.computeEffect("Player");
+
+            } else {
+                miss = true;
             }
-            GameData.computeEffect("Player");
         }
         turn++;
     }

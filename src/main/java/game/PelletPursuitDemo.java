@@ -101,9 +101,11 @@ public class PelletPursuitDemo extends Application {
     public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Zoroark", "Player_Polteageist", "Player_Avalugg", "Player_Appletun", "Player_Milotic"};
 
     public boolean criticalMusic = false;
-    public boolean criticalMessage = false;
     public boolean betweenTurns = false;
-    public boolean typeEffectMessage = false;
+
+    public static boolean[] battleMessageValues = new boolean[4];
+    //Move Missed, Type Effectiveness, Stat Lowered, Critical Hit
+    //public ArrayList<Integer> currentBattleMessages = new ArrayList<>();
 
     public boolean animHP;
     public double battlePauseTimer = 0.0;
@@ -285,26 +287,27 @@ public class PelletPursuitDemo extends Application {
                 criticalMusic = false;
             }
 
-            if (typeEffectMessage && !animHP && battlePauseTimer <= 0) {
-                typeEffectMessage = false;
-                gameUI.battleState = 5;
-                battlePauseTimer = 1.0;
+            battleMessageValues[0] = Battle.miss;
+            battleMessageValues[2] = GameData.loweredStats;
+
+            for (int i = 0; i < battleMessageValues.length; i++) {
+                if (battleMessageValues[i] && !animHP && battlePauseTimer <= 0) {
+                    battleMessageValues[i] = false;
+                    gameUI.battleState = i + 3;
+                    battlePauseTimer = 1.0;
+                    if (i == 0) {
+                       Battle.miss = false;
+                    }
+                    if (i == 2) {
+                        GameData.loweredStats = false;
+                    }
+                    if (i == 3) {
+                        battle.critical = 1;
+                    }
+                }
             }
 
-            if (criticalMessage && !animHP && battlePauseTimer <= 0) {
-                criticalMessage = false;
-                battle.critical = 1;
-                gameUI.battleState = 3;
-                battlePauseTimer = 1.0;
-            }
-
-            if (GameData.loweredStats && !animHP) {
-                GameData.loweredStats = false;
-                gameUI.battleState = 4;
-                battlePauseTimer = 1.0;
-            }
-
-            if (battle.battleEnd() != 0 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0 && !criticalMessage && !typeEffectMessage) {
+            if (battle.battleEnd() != 0 && battle.critical == 1 && betweenTurns && battlePauseTimer <= 0 && !battleMessageValues[3] && !battleMessageValues[1]) {
                 terminateBattle();
                 if (battle.battleEnd() == 1) {
                     win(battleGhost);
@@ -430,16 +433,14 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    //int random = (int) (Math.random() * randomBattle.length);
+                    int random = (int) (Math.random() * randomBattle.length);
                     //int random = (int) (Math.random() * 3);
-                    int random = 8;
+                    //int random = 8;
                     //int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
                     currentBattle = randomBattle[random];
-                    //currentBattle = randomBattle[(int) (Math.random() * 6) + 3];
-                    //currentBattle = randomBattle[(int) (Math.random() * 3)];
                     if (random > 2) {
-                        //GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
-                        GameData.generateTeam(playerTeams[6], "player");
+                        GameData.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
+                        //GameData.generateTeam(playerTeams[7], "player");
                     } else {
                         GameData.generateTeam(currentBattle, "player");
                     }
@@ -727,10 +728,10 @@ public class PelletPursuitDemo extends Application {
         battlePauseTimer = 0.5;
         battle.playBattleTurn();
         if (battle.critical > 1) {
-            criticalMessage = true;
+            battleMessageValues[3] = true;
         }
         if (Battle.typeEffect != 1.0) {
-            typeEffectMessage = true;
+            battleMessageValues[1] = true;
         }
         animHP = true;
         gameUI.selectX = 0;

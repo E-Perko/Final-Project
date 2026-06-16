@@ -16,8 +16,10 @@ public class GameInterface {
     // 0: Initial Options
     // 1: Move Select
     // 2: Selected Move
-    // 3: Critical Hit
-    // 4: Other Post Battle Text
+    // 3: Miss
+    // 4: Type Effectiveness
+    // 5: Lower Stats
+    // 6: Critical Hit
 
     public final String[] statNames = {"Attack", "Defense", "Special Attack", "Special Defense", "Speed"};
 
@@ -47,18 +49,13 @@ public class GameInterface {
                 }
             }
             case 3 -> {
-                gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
-            }
-            case 4 -> {
                 if (battle.getTurn() % 2 == battle.getTurnOrder()) {
-                    gc.fillText("Foe " + GameData.getEPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
-                    gc.fillText("was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                    gc.fillText(GameData.getEPokemon(0) + " avoided the attack!", GameMap.TILE, GameMap.TILE * 8);
                 } else {
-                    gc.fillText( GameData.getPPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
-                    gc.fillText( "was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                    gc.fillText(GameData.getPPokemon(0) + " avoided the attack!", GameMap.TILE, GameMap.TILE * 8);
                 }
             }
-            case 5 -> {
+            case 4 -> {
                 if (Battle.typeEffect > 1) {
                     gc.fillText("It's super effective!", GameMap.TILE, GameMap.TILE * 8);
                 } else if (Battle.typeEffect == 0) {
@@ -70,6 +67,18 @@ public class GameInterface {
                 } else {
                     gc.fillText("It's not very effective...", GameMap.TILE, GameMap.TILE * 8);
                 }
+            }
+            case 5 -> {
+                if (battle.getTurn() % 2 == battle.getTurnOrder()) {
+                    gc.fillText("Foe " + GameData.getEPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText("was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                } else {
+                    gc.fillText( GameData.getPPokemon(0) + "'s " + statNames[Battle.statChanged - 3], GameMap.TILE, GameMap.TILE * 8);
+                    gc.fillText( "was lowered!", GameMap.TILE, GameMap.TILE * 9);
+                }
+            }
+            case 6 -> {
+                gc.fillText("A critical hit!", GameMap.TILE, GameMap.TILE * 8);
             }
             default -> {}
         }
