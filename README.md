@@ -23,6 +23,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 - Healing from the move Recover
 - Animated HP bars
 - Basic battle UI
+- Move Accuracy
 
 ### Current Bugs:
 
@@ -30,7 +31,6 @@ None as of now
 
 ### What I'll probably add next:
 
-- Move Accuracy
 - Priority
 - Status conditions
 - Opponent AI
