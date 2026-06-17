@@ -2,32 +2,39 @@ package game;
 
 public class Battle {
 
-    private static int turn = 1;
-    private static int turnOrder = 2;
-    public static String currentPlayer;
-    // 0: Player Moves First
-    // 1: Opponent Moves First
+    static GameData player = new GameData();
+    static GameData opponent = new GameData();
 
-    private static int[] pBattleStats = new int[8];
-    private static int[] eBattleStats = new int[8];
+    public static String moveEffect;
+    public static int effectChance;
+    public static int basePower;
+    public static String moveType;
+    public static int moveAccuracy;
+    public static int powerPoints;
+    public static String moveCategory;
+
+    public static int turn = 1;
+    public static int turnOrder = 2;
+    public static String currentOwner;
+
+    public static int[] pBattleStats = new int[8];
+    public static int[] eBattleStats = new int[8];
     // {Level, Current HP, Max HP, Attack, Defense, SAttack, SDefense, Speed}
 
-    private static int[] pStatMods = new int[7];
-    private static int[] eStatMods = new int[7];
-    public final double[] statModList = {2/8.0, 2/7.0, 2/6.0, 2/5.0, 2/4.0, 2/3.0, 2/2.0, 3/2.0, 4/2.0, 5/2.0, 6/2.0, 7/2.0, 8/2.0};
+    public static int[] pStatMods = new int[7];
+    public static int[] eStatMods = new int[7];
+    public static final double[] statModList = {2/8.0, 2/7.0, 2/6.0, 2/5.0, 2/4.0, 2/3.0, 2/2.0, 3/2.0, 4/2.0, 5/2.0, 6/2.0, 7/2.0, 8/2.0};
     // {Attack, Defense, SAttack, SDefense, Speed, Accuracy, Evasion} Each stat ranges from -6 to 6
 
     public double hpAnimP = 0;
     public double hpAnimE = 0;
     // Used to animate HP bars
 
-    public double critical = 1;
+    public static double critical = 1;
     // The standard crit rate is 1/16, multiplying damage by 1.5
 
     public static double typeEffect;
     public static boolean miss = false;
-
-    public static String currentOwner;
 
     public static int damage;
 
@@ -59,15 +66,15 @@ public class Battle {
     //2 represents weaknesses/super effective hits, 0.5 represents resistances/resisted hits, 1 represents neutral hits, and 0 represents immunities.
 
     public void setBattleStats() {
-        GameData.generateStats(GameData.getPPokemon(0), "Player");
-        pBattleStats = GameData.getPStats();
-        GameData.generateStats(GameData.getEPokemon(0), "Opponent");
-        eBattleStats = GameData.getEStats();
+        player.generateStats(player.pokemon[0]);
+        pBattleStats = player.battleStats;
+        opponent.generateStats(opponent.pokemon[0]);
+        eBattleStats = opponent.battleStats;
         hpAnimP = pBattleStats[1];
         hpAnimE = eBattleStats[1];
     }
 
-    public void playBattleTurn() {
+    public static void playBattleTurn() {
         Battle.typeEffect = 1.0;
         if (pBattleStats[7] > eBattleStats[7]) {
             turnOrder = 0;
@@ -84,13 +91,14 @@ public class Battle {
         executeMove();
     }
 
-    public int calcDamage(int[] atkStats, int[] defStats) {
-        typeEffect = typeChart[indexOfString(getTypes(1)[0][0], types)][indexOfString(GameData.moveType, types)] * typeChart[indexOfString(getTypes(1)[1][0], types)][indexOfString(GameData.moveType, types)];
+    public static int calcDamage(int[] atkStats, int[] defStats) {
+        setPersonBattleVars();
+        typeEffect = typeChart[indexOfString(getTypes(1)[0][0], types)][indexOfString(moveType, types)] * typeChart[indexOfString(getTypes(1)[1][0], types)][indexOfString(moveType, types)];
         if (typeEffect == 0) {
             return 0;
         }
         int physSpec;
-        if (GameData.moveCategory.equals("Physical")) {
+        if (moveCategory.equals("Physical")) {
            physSpec = 0;
         } else {
             physSpec = 2;
@@ -100,7 +108,7 @@ public class Battle {
             critical = 1.5;
         }
         double stab = 1;
-        if (GameData.moveType.equals(getTypes(0)[0][0]) || GameData.moveType.equals(getTypes(0)[1][0])) {
+        if (moveType.equals(getTypes(0)[0][0]) || moveType.equals(getTypes(0)[1][0])) {
             stab = 1.5;
         }
         double estimate;
@@ -115,9 +123,9 @@ public class Battle {
         }
 
         if (critical == 1) {
-            estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[atkMod + 6]) / (((double) defStats[4 + physSpec]) * statModList[defMod + 6] * 50.0))) + 2;
+            estimate = (((atkStats[0] * 2 / 5.0 + 2) * (basePower * atkStats[3 + physSpec] * statModList[atkMod + 6]) / (((double) defStats[4 + physSpec]) * statModList[defMod + 6] * 50.0))) + 2;
         } else {
-            estimate = (((atkStats[0] * 2 / 5.0 + 2) * (GameData.basePower * atkStats[3 + physSpec] * statModList[Math.max(atkMod, 0) + 6]) / (((double) defStats[4 + physSpec]) * statModList[Math.min(defMod, 0) + 6] * 50.0))) + 2;
+            estimate = (((atkStats[0] * 2 / 5.0 + 2) * (basePower * atkStats[3 + physSpec] * statModList[Math.max(atkMod, 0) + 6]) / (((double) defStats[4 + physSpec]) * statModList[Math.min(defMod, 0) + 6] * 50.0))) + 2;
         }
         estimate *= critical * stab * typeEffect * ((int) (Math.random() * 16) + 85) / 100.0;
         return Math.max((int) estimate, 1);
@@ -160,8 +168,8 @@ public class Battle {
     }
 
     public void resetBattle() {
-        pBattleStats = GameData.getPStats();
-        eBattleStats = GameData.getEStats();
+        pBattleStats = player.stats;
+        eBattleStats = opponent.stats;
         for (int i = 0; i < pStatMods.length; i++) {
             pStatMods[i] = 0;
             eStatMods[i] = 0;
@@ -169,11 +177,11 @@ public class Battle {
         turn = 1;
     }
 
-    public void executeMove() {
+    public static void executeMove() {
         if (currentOwner.equals("Opponent")) {
-            GameData.getMoveInfo(GameData.getEMoves(0)[0]);
-            if ((int) (Math.random() * 100) < GameData.moveAccuracy) {
-                if (!GameData.moveCategory.equals("Status")) {
+            opponent.getMoveInfo(opponent.moves[0][0]);
+            if ((int) (Math.random() * 100) < opponent.moveAccuracy) {
+                if (!opponent.moveCategory.equals("Status")) {
                     damage = calcDamage(eBattleStats, pBattleStats);
                     pBattleStats[1] -= damage;
                 }
@@ -182,9 +190,9 @@ public class Battle {
                 miss = true;
             }
         } else {
-            GameData.getMoveInfo(GameInterface.getPlayerMove());
-            if ((int) (Math.random() * 100) < GameData.moveAccuracy) {
-                if (!GameData.moveCategory.equals("Status")) {
+            player.getMoveInfo(GameInterface.getPlayerMove());
+            if ((int) (Math.random() * 100) < player.moveAccuracy) {
+                if (!player.moveCategory.equals("Status")) {
                     damage = calcDamage(pBattleStats, eBattleStats);
                     eBattleStats[1] -= damage;
                 }
@@ -198,7 +206,6 @@ public class Battle {
     }
 
     public static int statChanged;
-    public static int statChangedAmount;
 
     public static void setStatChanges(String trainer, int stat, int change) {
        if (trainer.equals("Player")) {
@@ -209,15 +216,15 @@ public class Battle {
        statChanged = stat;
     }
 
-    public String[][] getTypes(int trainer) {
+    public static String[][] getTypes(int trainer) {
         if ((turn % 2 == turnOrder && trainer == 0) || (turn % 2 == 1 - turnOrder && trainer == 1)) {
-            return GameData.getETypes();
+            return opponent.types;
         } else {
-            return GameData.getPTypes();
+            return player.types;
         }
     }
 
-    public int indexOfString(String s, String[] array) {
+    public static int indexOfString(String s, String[] array) {
         for (int i = 0; i < array.length; i++) {
             if (array[i].equals(s)) {
                 return i;
@@ -235,4 +242,32 @@ public class Battle {
             eBattleStats[1] = Math.min(eBattleStats[1] - damage, eBattleStats[2]);
         }
     }
+
+    public static void setPersonBattleVars() {
+        if (currentOwner.equals("Player")) {
+            moveEffect = player.moveEffect;
+            effectChance = player.effectChance;
+            basePower = player.basePower;
+            moveType = player.moveType;
+            moveAccuracy = player.moveAccuracy;
+            powerPoints = player.powerPoints;
+            moveCategory = player.moveCategory;
+        } else {
+            moveEffect = opponent.moveEffect;
+            effectChance = opponent.effectChance;
+            basePower = opponent.basePower;
+            moveType = opponent.moveType;
+            moveAccuracy = opponent.moveAccuracy;
+            powerPoints = opponent.powerPoints;
+            moveCategory = opponent.moveCategory;
+        }
+    }
+
+//    public GameData getPlayerData(String trainer) {
+//        if (trainer.equals("Player")) {
+//            return player;
+//        } else {
+//            return opponent;
+//        }
+//    }
 }
