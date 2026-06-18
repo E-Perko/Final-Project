@@ -11,6 +11,7 @@ public class Battle {
     public static String moveType;
     public static int moveAccuracy;
     public static int powerPoints;
+    public static int movePriority;
     public static String moveCategory;
 
     public static int turn = 1;
@@ -76,9 +77,11 @@ public class Battle {
 
     public static void playBattleTurn() {
         Battle.typeEffect = 1.0;
-        if (pBattleStats[7] > eBattleStats[7]) {
+        opponent.getMoveInfo(opponent.moves[0][0]);
+        player.getMoveInfo(GameInterface.getPlayerMove());
+        if (pBattleStats[7] > eBattleStats[7] || player.movePriority > opponent.movePriority) {
             turnOrder = 0;
-        } else if (pBattleStats[7] < eBattleStats[7]) {
+        } else if (pBattleStats[7] < eBattleStats[7] || player.movePriority < opponent.movePriority) {
             turnOrder = 1;
         } else if (turn % 2 == 1) {
             turnOrder = (int)(Math.random() * 2);
@@ -92,7 +95,6 @@ public class Battle {
     }
 
     public static int calcDamage(int[] atkStats, int[] defStats) {
-        setPersonBattleVars();
         typeEffect = typeChart[indexOfString(getTypes(1)[0][0], types)][indexOfString(moveType, types)] * typeChart[indexOfString(getTypes(1)[1][0], types)][indexOfString(moveType, types)];
         if (typeEffect == 0) {
             return 0;
@@ -178,8 +180,8 @@ public class Battle {
     }
 
     public static void executeMove() {
+        setPersonBattleVars();
         if (currentOwner.equals("Opponent")) {
-            opponent.getMoveInfo(opponent.moves[0][0]);
             if ((int) (Math.random() * 100) < opponent.moveAccuracy) {
                 if (!opponent.moveCategory.equals("Status")) {
                     damage = calcDamage(eBattleStats, pBattleStats);
@@ -190,7 +192,6 @@ public class Battle {
                 miss = true;
             }
         } else {
-            player.getMoveInfo(GameInterface.getPlayerMove());
             if ((int) (Math.random() * 100) < player.moveAccuracy) {
                 if (!player.moveCategory.equals("Status")) {
                     damage = calcDamage(pBattleStats, eBattleStats);
@@ -251,6 +252,7 @@ public class Battle {
             moveType = player.moveType;
             moveAccuracy = player.moveAccuracy;
             powerPoints = player.powerPoints;
+            movePriority = player.movePriority;
             moveCategory = player.moveCategory;
         } else {
             moveEffect = opponent.moveEffect;
@@ -259,6 +261,7 @@ public class Battle {
             moveType = opponent.moveType;
             moveAccuracy = opponent.moveAccuracy;
             powerPoints = opponent.powerPoints;
+            movePriority = opponent.movePriority;
             moveCategory = opponent.moveCategory;
         }
     }

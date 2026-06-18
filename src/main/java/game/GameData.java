@@ -18,6 +18,7 @@ public class GameData {
     public String moveType;
     public int moveAccuracy;
     public int powerPoints;
+    public int movePriority;
     public String moveCategory;
 
     public static boolean loweredStats = false;
@@ -105,7 +106,7 @@ public class GameData {
                     moveType = movesScanner.nextLine();
                     moveAccuracy = movesScanner.nextInt();
                     powerPoints = movesScanner.nextInt();
-                    a = movesScanner.nextLine();
+                    movePriority = movesScanner.nextInt();
                     a = movesScanner.nextLine();
                     moveCategory = movesScanner.nextLine();
                     break;

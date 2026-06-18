@@ -434,12 +434,12 @@ public class PelletPursuitDemo extends Application {
                 } else {
                     int random = (int) (Math.random() * randomBattle.length);
                     //int random = (int) (Math.random() * 3);
-                    //int random = 8;
+                    //int random = 7;
                     //int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
                     currentBattle = randomBattle[random];
                     if (random > 2) {
                         Battle.player.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
-                        //GameData.generateTeam(playerTeams[7], "player");
+                        //Battle.player.generateTeam(playerTeams[4], "player");
                     } else {
                         Battle.player.generateTeam(currentBattle, "player");
                     }
