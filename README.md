@@ -16,7 +16,7 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 - Randomly generated battles with random music
 - Text files are used to house Pokémon stats and teams for both the player and opponent
 - Type chart/effectiveness
-- Turn order based on speed
+- Turn order based on speed and priority
 - Critical hits
 - Stat debuff moves (Growl and tail Whip)
 - Secondary effect stat debuffs (Guaranteed or random chance)
@@ -24,11 +24,10 @@ This is a game which combines Pac-Man's gameplay loop with Pokémon's battle sys
 - Animated HP bars
 - Basic battle UI
 - Move Accuracy
-- Priority
 
 ### Current Bugs:
 
-None as of now
+- Stat change message shows even after a Pokémon faints
 
 ### What I'll probably add next:
 
@@ -43,6 +42,9 @@ None as of now
 - Custom font
 - Scrolling overworld map
 - Experience system
+- Battle selection memory
+- Seamlessly looping music
+- Implement unique move effects
 
 ## Advertising Video
 

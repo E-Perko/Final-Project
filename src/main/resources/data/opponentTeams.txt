@@ -99,9 +99,9 @@ Milotic
 100
 31
 Scald
-------
-------
-------
+Ice Beam
+Recover
+Toxic
 
 Cynthia_Lucario
 Gary
@@ -114,9 +114,9 @@ Lucario
 100
 31
 Close Combat
-------
-------
-------
+Meteor Mash
+Earthquake
+Extreme Speed
 
 Cynthia_Garchomp
 Gary
@@ -128,7 +128,12 @@ rival
 Garchomp
 100
 31
+Will-O-Wisp
+------
+------
+------
+
+Dragon Claw
 Earthquake
-------
-------
-------
+Swords Dance
+Poison Jab

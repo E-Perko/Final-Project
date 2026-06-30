@@ -51,7 +51,7 @@ public class GameMap {
     // Spawn tiles are walkable — treated as empty during gameplay
     private static final EnumSet<Tile> SPAWN_TILES = EnumSet.of(
         Tile.SPAWN_PLAYER, Tile.SPAWN_G0, Tile.SPAWN_G1,
-        Tile.SPAWN_G2, Tile.SPAWN_G3, Tile.SPAWN_BONUS
+        Tile.SPAWN_G2, Tile.SPAWN_G3
     );
 
     public static boolean isSpawnTile(Tile t) { return SPAWN_TILES.contains(t); }
@@ -69,7 +69,7 @@ public class GameMap {
         {W,  D,  D,  D,  D,  B,  G1, G0, G2, B,  D,  D,  D,  D,  W},
         {W,  D,  W,  D,  W,  E,  G3, E,  E,  E,  W,  D,  W,  D,  W},
         {D,  D,  D,  D,  W,  W,  W,  W,  W,  W,  W,  D,  D,  D,  D},
-        {W,  D,  W,  D,  D,  D,  D,  BN, D,  D,  D,  D,  W,  D,  W},
+        {W,  D,  W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W,  D,  W},
         {W,  D,  D,  D,  W,  W,  D,  PL, D,  W,  W,  D,  D,  D,  W},
         {W,  D,  W,  D,  D,  D,  D,  D,  D,  D,  D,  D,  W,  D,  W},
         {W,  D,  W,  W,  W,  W,  W,  D,  W,  W,  W,  W,  W,  D,  W},

@@ -170,7 +170,7 @@ false
 Thunder Wave
 Scratches the foe with\n sharp claws.
 EFFECT_PARALYZE
-0
+100
 0
 Electric
 85
@@ -182,8 +182,8 @@ false
 
 Close Combat
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_CLOSE_COMBAT
+100
 120
 Fighting
 100
@@ -208,8 +208,8 @@ false
 
 Scald
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_BURN
+30
 80
 Water
 100
@@ -234,8 +234,8 @@ false
 
 Flamethrower
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_BURN
+10
 90
 Fire
 100
@@ -247,8 +247,8 @@ false
 
 Psychic
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_SPDEFENSE_DOWN
+10
 90
 Psychic
 100
@@ -260,8 +260,8 @@ false
 
 Meteor Mash
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_SELF_ATTACK_UP
+20
 90
 Steel
 95
@@ -273,8 +273,8 @@ true
 
 Ice Beam
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_FREEZE
+10
 90
 Ice
 100
@@ -286,9 +286,9 @@ false
 
 Poison Jab
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
-90
+EFFECT_POISON
+30
+80
 Poison
 100
 10
@@ -325,7 +325,7 @@ True
 
 Recover
 Scratches the foe with\n sharp claws.
-EFFECT_HEAL_HALF
+EFFECT_HEAL_HALF_MAX
 100
 0
 Normal
@@ -338,7 +338,7 @@ False
 
 Rapid Spin
 Scratches the foe with\n sharp claws.
-EFFECT_ATTACK_DOWN
+EFFECT_SELF_SPEED_UP
 100
 55
 Normal
@@ -351,8 +351,8 @@ True
 
 Draco Meteor
 Scratches the foe with\n sharp claws.
-EFFECT_HIT
-0
+EFFECT_DRACO_METEOR
+100
 130
 Dragon
 90
@@ -385,5 +385,96 @@ Dragon
 10
 0
 Special
+None
+False
+
+Extreme Speed
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+80
+Normal
+100
+5
+2
+Physical
+None
+True
+
+Dragon Claw
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+80
+Dragon
+100
+10
+0
+Physical
+None
+True
+
+Giga Drain
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+75
+Grass
+100
+10
+0
+Special
+None
+True
+
+Dragon Tail
+Scratches the foe with\n sharp claws.
+EFFECT_HIT
+0
+60
+Dragon
+90
+10
+-6
+Physical
+None
+True
+
+Leech Seed
+Scratches the foe with\n sharp claws.
+EFFECT_LEECH_SEED
+100
+0
+Grass
+85
+10
+0
+Status
+None
+False
+
+Toxic
+Scratches the foe with\n sharp claws.
+EFFECT_BADLY_POISON
+100
+0
+Poison
+85
+10
+0
+Status
+None
+False
+
+Swords Dance
+Scratches the foe with\n sharp claws.
+EFFECT_SWORDS_DANCE
+100
+0
+Normal
+100
+20
+0
+Status
 None
 False

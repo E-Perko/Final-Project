@@ -50,8 +50,8 @@ Milotic
 31
 Scald
 Ice Beam
-------
-------
+Dragon Tail
+Recover
 
 Player_Polteageist
 1
@@ -61,8 +61,8 @@ Polteageist
 31
 Shadow Ball
 Psychic
+Giga Drain
 Sucker Punch
-------
 
 Player_Avalugg
 1
@@ -84,4 +84,4 @@ Appletun
 Apple Acid
 Draco Meteor
 Dragon Pulse
-Recover
+Leech Seed

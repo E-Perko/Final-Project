@@ -6,11 +6,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public class GraphicsManager {
-    ImageView[] imgView = new ImageView[3];
-    Image[] image = new Image[3];
-    Pane[] pane = new Pane[3];
+    public static ImageView[] imgView = new ImageView[3];
+    public static Image[] image = new Image[3];
+    public static Pane[] pane = new Pane[3];
 
-    public void displayImg(String img, double width, double xPos, double yPos, int imgNum, StackPane root) {
+    public static void displayImg(String img, double width, double xPos, double yPos, int imgNum, StackPane root) {
         imgView[imgNum] = new ImageView();
         image[imgNum] = new Image("/" + img.toLowerCase() + ".png", GameMap.TILE * 30, 0, true, false);
         imgView[imgNum].setFitWidth(GameMap.TILE * width);
@@ -22,15 +22,15 @@ public class GraphicsManager {
         root.getChildren().addAll(pane[imgNum]);
     }
 
-    public void setImgX(int imgNum, int x) {
-        imgView[imgNum].setX(x);
+    public static void setImgX(int imgNum, double x) {
+        imgView[imgNum].setX(x * GameMap.TILE);
     }
 
-    public void setImgY(int imgNum, int y) {
-        imgView[imgNum].setY(y);
+    public static void setImgY(int imgNum, double y) {
+        imgView[imgNum].setY(y * GameMap.TILE);
     }
 
-    public void deleteImage(int imgNum) {
+    public static void deleteImage(int imgNum) {
         imgView[imgNum].setImage(null);
     }
 }

@@ -11,6 +11,8 @@ public class GameData {
     public String[] pokemon = new String[6];
     public int[] levels = new int[6];
     public String[][] types = new String[2][6];
+    public String[] statuses = {"None", "None", "None", "None", "None", "None"};
+    //Burned, Paralyzed, Frozen, Asleep, Poisoned, Badly Poisoned
 
     public String moveEffect;
     public int effectChance;
@@ -21,7 +23,15 @@ public class GameData {
     public int movePriority;
     public String moveCategory;
 
-    public static boolean loweredStats = false;
+    public String[] moveInfo = {"Description", "Effect", "Effect Chance", "Base Power", "Type", "Accuracy", "Power Points", "Priority", "Category", "Sub Category", "Contact"};
+
+    public static boolean changedStats = false;
+    public static boolean status = false;
+    public double para = 1;
+    public double burn = 1;
+
+    public int[] moveEffectTurns = new int[1];
+    //Freeze/Sleep/Toxic Poison
 
     public void generateStats(String pokemon) {
         try
@@ -128,29 +138,36 @@ public class GameData {
         }
         if ((int) (Math.random() * 100) < Battle.effectChance) {
             switch (Battle.moveEffect) {
-                case "EFFECT_ATTACK_DOWN" -> {
-                    loweredStats = true;
-                    Battle.setStatChanges(opponent, 3, -1);
+                case "EFFECT_ATTACK_DOWN" -> Battle.setStatChanges(opponent, 3, -1);
+                case "EFFECT_SPATTACK_DOWN" -> Battle.setStatChanges(opponent, 5, -1);
+                case "EFFECT_DEFENSE_DOWN" -> Battle.setStatChanges(opponent, 4, -1);
+                case "EFFECT_SPDEFENSE_DOWN" -> Battle.setStatChanges(opponent, 6, -1);
+                case "EFFECT_SPEED_DOWN" -> Battle.setStatChanges(opponent, 7, -1);
+
+                case "EFFECT_SELF_ATTACK_UP" -> Battle.setStatChanges(trainer, 3, 1);
+                case "EFFECT_SELF_SPEED_UP" -> Battle.setStatChanges(trainer, 7, 1);
+                case "EFFECT_SWORDS_DANCE" -> Battle.setStatChanges(trainer, 3, 2);
+
+                case "EFFECT_CLOSE_COMBAT" -> {
+                    Battle.setStatChanges(trainer, 4, -1);
+                    Battle.setStatChanges(trainer, 6, -1);
                 }
-                case "EFFECT_SPATTACK_DOWN" -> {
-                    loweredStats = true;
-                    Battle.setStatChanges(opponent, 5, -1);
+                case "EFFECT_DRACO_METEOR" -> Battle.setStatChanges(trainer, 5, -2);
+
+                case "EFFECT_BURN" -> Battle.inflictStatus(opponent, "Burned");
+                case "EFFECT_PARALYZE" -> Battle.inflictStatus(opponent, "Paralyzed");
+                case "EFFECT_FREEZE" -> Battle.inflictStatus(opponent, "Frozen");
+                case "EFFECT_SLEEP" -> Battle.inflictStatus(opponent, "Asleep");
+                case "EFFECT_POISON" -> Battle.inflictStatus(opponent, "Poisoned");
+
+                case "EFFECT_FLINCH" -> {
+                    if (Battle.turn % 2 == 1) {
+                        Battle.missCases[3] = true;
+                    }
                 }
-                case "EFFECT_DEFENSE_DOWN" -> {
-                    loweredStats = true;
-                    Battle.setStatChanges(opponent, 4, -1);
-                }
-                case "EFFECT_SPDEFENSE_DOWN" -> {
-                    loweredStats = true;
-                    Battle.setStatChanges(opponent, 6, -1);
-                }
-                case "EFFECT_SPEED_DOWN" -> {
-                    loweredStats = true;
-                    Battle.setStatChanges(opponent, 7, -1);
-                }
-                case "EFFECT_HEAL_HALF" -> {
-                    Battle.heal(trainer);
-                }
+
+                case "EFFECT_HEAL_HALF_MAX" -> Battle.heal(trainer);
+
                 default -> {}
             }
         }

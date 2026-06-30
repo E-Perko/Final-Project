@@ -13,6 +13,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PelletPursuitDemo extends Application {
@@ -57,7 +58,7 @@ public class PelletPursuitDemo extends Application {
     private LevelConfig config = LevelConfig.forLevel(1);
 
     // --- Bonus items ---
-    private final List<BonusItem> bonusItems = new ArrayList<>();
+    //private final List<BonusItem> bonusItems = new ArrayList<>();
     private int dotsEaten = 0;
 
     // --- Ghost spawn stagger ---
@@ -86,7 +87,6 @@ public class PelletPursuitDemo extends Application {
 
     private final AudioManager audio = new AudioManager();
     private static final Battle battle = new Battle();
-    private final GraphicsManager graphics = new GraphicsManager();
 
     private boolean paused            = false;
     private boolean freeze            = false;
@@ -94,19 +94,29 @@ public class PelletPursuitDemo extends Application {
     private Ghost battleGhost = null;
 
     public String battleMusic;
-    public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle"};
+    public String[] randomMusic = {"gym", "eliteFour", "champion", "gym2", "battle", "champion2"};
     public String currentBattle;
     public String[] randomBattle = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Cynthia_Spiritomb", "Cynthia_Roserade", "Cynthia_Togekiss", "Cynthia_Milotic", "Cynthia_Lucario", "Cynthia_Garchomp"};
     public String[] playerTeams = {"Rival_1_Charmander", "Rival_1_Squirtle", "Rival_1_Bulbasaur", "Player_Zoroark", "Player_Polteageist", "Player_Avalugg", "Player_Appletun", "Player_Milotic"};
 
-    public boolean criticalMusic = false;
-    public boolean betweenTurns = false;
+    public static  boolean criticalMusic = false;
+    public static boolean betweenTurns = false;
 
-    public static boolean[] battleMessageValues = new boolean[4];
-    //Move Missed, Type Effectiveness, Stat Lowered, Critical Hit
-    //public ArrayList<Integer> currentBattleMessages = new ArrayList<>();
+    public static boolean playerStatus = false;
+    public static boolean opponentStatus = false;
 
-    public static boolean animHP;
+    public static final String[] statusColors = {"#d62320", "#fae543", "#9bc2de", "#dfecf5", "#724080", "#724080"};
+    public static final String[] statuses = {"Burned", "Paralyzed", "Frozen", "Asleep", "Poisoned", "Badly Poisoned"};
+
+    public static boolean[] battleMessageValues = new boolean[5];
+    //Move Missed, Type Effectiveness, Stat Lowered, Critical Hit, Status
+
+    public static boolean animHP = false;
+
+    public static boolean deathAnim = false;
+    public static double imageY;
+    public static double imageYVel = 0;
+
     public static double battlePauseTimer = 0.0;
 
     private ScoreTree scoreTree = new ScoreTree();
@@ -131,15 +141,16 @@ public class PelletPursuitDemo extends Application {
         initGame();
 
         canvas = new Canvas(map.width, canvasH());
-        GraphicsContext gc = canvas.getGraphicsContext2D();
 
         root = new StackPane(canvas);
 
         Scene scene = new Scene(root, GameMap.TILE * 15, (GameMap.TILE * 10) + HUD_HEIGHT, Color.BLACK);
 
         //graphics.displayImg("battle_background", 15, -20, 0, 0, root);
-        graphics.displayImg("bulbasaur_back", 4, -10, 3.875, 1, root);
-        graphics.displayImg("squirtle_front", 4, -10, 0.875, 2, root);
+        GraphicsManager.displayImg("bulbasaur_back", 4, -10, 3.875, 1, root);
+        GraphicsManager.displayImg("squirtle_front", 4, -10, 0.875, 2, root);
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
 
         scene.setOnKeyPressed(e -> handleKey(e.getCode()));
 
@@ -202,7 +213,7 @@ public class PelletPursuitDemo extends Application {
             for (int i = 1; i < ghosts.size(); i++) ghosts.get(i).setActive(false);
         }
         dotsEaten = 0;
-        bonusItems.clear();
+        //bonusItems.clear();
         scoreFlashes.clear();
         ghostsEatenThisPellet = 0;
         paused            = false;
@@ -211,7 +222,7 @@ public class PelletPursuitDemo extends Application {
     }
 
     private void handleKey(KeyCode key) {
-        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 1) {
+        if (key == KeyCode.SPACE && state == State.PLAYING && inBattle && !deathAnim && !animHP && battlePauseTimer <= 0 && battle.getTurn() % 2 == 1) {
             if (GameInterface.battleState == 1) {
                 GameInterface.setPlayerMove();
                 playTurn();
@@ -219,7 +230,7 @@ public class PelletPursuitDemo extends Application {
                 GameInterface.battleState = 1;
             }
         }
-        if (key == KeyCode.X && state == State.PLAYING && inBattle && !animHP && battle.getTurn() % 2 == 1) {
+        if (key == KeyCode.X && state == State.PLAYING && inBattle && !deathAnim && !animHP && battle.getTurn() % 2 == 1) {
             GameInterface.battleState = 0;
             GameInterface.selectX = 0;
             GameInterface.selectY = 0;
@@ -234,28 +245,32 @@ public class PelletPursuitDemo extends Application {
             }
         }
         if (state == State.PLAYING || state == State.GET_READY) player.handleKey(key);
-        if (inBattle) {
+        if (inBattle && !deathAnim) {
             if (key == KeyCode.RIGHT && GameInterface.selectX == 0 && GameInterface.verifyMoveSlot(1, 0)) {
                 GameInterface.selectX = 1;
+                Battle.player.getMoveInfo(GameInterface.battleMoves[GameInterface.selectY][GameInterface.selectX]);
             }
             if (key == KeyCode.LEFT && GameInterface.selectX == 1 && GameInterface.verifyMoveSlot(-1, 0)) {
                 GameInterface.selectX = 0;
+                Battle.player.getMoveInfo(GameInterface.battleMoves[GameInterface.selectY][GameInterface.selectX]);
             }
             if (key == KeyCode.DOWN && GameInterface.selectY == 0 && GameInterface.verifyMoveSlot(0, 1)) {
                 GameInterface.selectY = 1;
+                Battle.player.getMoveInfo(GameInterface.battleMoves[GameInterface.selectY][GameInterface.selectX]);
             }
             if (key == KeyCode.UP && GameInterface.selectY == 1 && GameInterface.verifyMoveSlot(0, -1)) {
                 GameInterface.selectY = 0;
+                Battle.player.getMoveInfo(GameInterface.battleMoves[GameInterface.selectY][GameInterface.selectX]);
             }
         }
     }
 
     private void update(double dt) {
-        if (inBattle) {
+        if (inBattle && !deathAnim) {
             if (animHP && battlePauseTimer <= 0) {
                 battlePauseTimer = 0;
                 if (battle.hpAnimP > Battle.getPStats()[1] + (dt * Battle.getPStats()[2] / 2) && Battle.damage > 0) {
-                    battle.hpAnimP -= dt * Math.min(Battle.damage * 2.5, Battle.getEStats()[2] / 2.0);
+                    battle.hpAnimP -= dt * Math.min(Battle.damage * 2.5, Battle.getPStats()[2] / 2.0);
                 } else if (battle.hpAnimP < Battle.getPStats()[1] - (dt * Battle.getPStats()[2] / 2) && Battle.damage < 0) {
                     battle.hpAnimP -= dt * Math.max(Battle.damage * 2.5, Battle.getPStats()[2] / -2.0);
                 } else {
@@ -268,12 +283,12 @@ public class PelletPursuitDemo extends Application {
                 } else {
                     battle.hpAnimE = Battle.getEStats()[1];
                 }
-                if ((Battle.damage > 0 && battle.hpAnimP <= Math.max(Battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(Battle.getEStats()[1], 0)) || (Battle.damage < 0 && battle.hpAnimP >= Math.min(Battle.getPStats()[1], Battle.getPStats()[2]) && battle.hpAnimE >= Math.min(Battle.getEStats()[1], Battle.getEStats()[2])) || Battle.damage == 0) {
+                if ((Battle.damage >= 1 && battle.hpAnimP <= Math.max(Battle.getPStats()[1], 0) && battle.hpAnimE <= Math.max(Battle.getEStats()[1], 0)) || (Battle.damage <= 1 && battle.hpAnimP >= Math.min(Battle.getPStats()[1], Battle.getPStats()[2]) && battle.hpAnimE >= Math.min(Battle.getEStats()[1], Battle.getEStats()[2])) || Battle.damage == 0) {
                     battle.hpAnimP = Battle.getPStats()[1];
                     battle.hpAnimE = Battle.getEStats()[1];
                     animHP = false;
                     betweenTurns = true;
-                    battlePauseTimer = 0.5;
+                    battlePauseTimer = 0.3;
                 }
             }
 
@@ -286,33 +301,55 @@ public class PelletPursuitDemo extends Application {
                 criticalMusic = false;
             }
 
-            battleMessageValues[0] = Battle.miss;
-            battleMessageValues[2] = GameData.loweredStats;
+            battleMessageValues[0] = Battle.missReason != -1;
+            battleMessageValues[2] = GameData.changedStats;
+            battleMessageValues[4] = GameData.status;
 
             for (int i = 0; i < battleMessageValues.length; i++) {
-                if (battleMessageValues[i] && !animHP && battlePauseTimer <= 0) {
+                if (battleMessageValues[i] && !animHP && (battlePauseTimer <= 0 || immediateMessage)) {
                     battleMessageValues[i] = false;
+                    immediateMessage = false;
                     GameInterface.battleState = i + 3;
-                    battlePauseTimer = 1.0;
-                    if (i == 0) {
-                       Battle.miss = false;
-                    }
-                    if (i == 2) {
-                        GameData.loweredStats = false;
-                    }
-                    if (i == 3) {
-                        Battle.critical = 1;
+                    battlePauseTimer = 1.25;
+                    switch (i) {
+                        case 0 -> {
+                            GameInterface.missMessage = Battle.missReason;
+                            Battle.missReason = -1;
+                            Arrays.fill(Battle.missCases, false);
+                            Battle.missCases[4] = true;
+                        }
+                        case 2 -> {
+                            for (int j = 0; j < Battle.statsChanged.length; j++) {
+                                if (Battle.statsChanged[j] != 0 && j > Battle.statChanged) {
+                                    Battle.statChanged = j;
+                                    battleMessageValues[2] = true;
+                                    break;
+                                }
+                            }
+                            for (int j = Battle.statChanged + 1; j < Battle.statsChanged.length; j++) {
+                                if (Battle.statsChanged[j] != 0) {
+                                    return;
+                                }
+                            }
+                            GameData.changedStats = false;
+                        }
+                        case 3 -> Battle.critical = 1;
+                        case 4 -> {
+                            GameData.status = false;
+                            if (!Battle.player.statuses[0].equals("None")) {
+                                playerStatus = true;
+                            }
+                            if (!Battle.opponent.statuses[0].equals("None")) {
+                                opponentStatus = true;
+                            }
+                        }
                     }
                 }
             }
 
             if (battle.battleEnd() != 0 && Battle.critical == 1 && betweenTurns && battlePauseTimer <= 0 && !battleMessageValues[3] && !battleMessageValues[1]) {
-                terminateBattle();
-                if (battle.battleEnd() == 1) {
-                    win(battleGhost);
-                } else {
-                    death(battleGhost);
-                }
+                deathAnim = true;
+                battlePauseTimer = 1.1;
                 return;
             }
 
@@ -324,10 +361,42 @@ public class PelletPursuitDemo extends Application {
                     GameInterface.battleState = 0;
                 }
             }
+        }
 
-            if (battlePauseTimer > 0) {
-                battlePauseTimer -= dt;
+        if (deathAnim) {
+            if (battlePauseTimer <= 0) {
+                deathAnim = false;
+                imageYVel = 0;
+                terminateBattle();
+                if (battle.battleEnd() == 1) {
+                    win(battleGhost);
+                } else {
+                    death(battleGhost);
+                }
+                return;
             }
+            GameInterface.battleState = 9;
+            if (battlePauseTimer == 1.1) {
+                if (battle.battleEnd() == 1) {
+                    imageY = -0.25;
+                } else {
+                    imageY = 2.5;
+                }
+                imageYVel = 0.25;
+            }
+            if (battlePauseTimer <= 1) {
+                imageYVel += dt / 10;
+                imageY += imageYVel;
+                if (battle.battleEnd() == 1) {
+                    GraphicsManager.setImgY(2, imageY);
+                } else {
+                    GraphicsManager.setImgY(1, imageY);
+                }
+            }
+        }
+
+        if (battlePauseTimer > 0) {
+            battlePauseTimer -= dt;
         }
 
         if (paused || freeze) return;
@@ -408,14 +477,7 @@ public class PelletPursuitDemo extends Application {
                 hudMessage     = "+1 UP!";
                 hudMessageTimer = 2.0;
             }
-            if (bonusItems.isEmpty() && dotsEaten >= config.bonusThreshold) {
-                double bx = map.tileCenterX(map.spawnCol(GameMap.Tile.SPAWN_BONUS)) - GameMap.TILE / 2.0;
-                double by = map.tileCenterY(map.spawnRow(GameMap.Tile.SPAWN_BONUS)) - GameMap.TILE / 2.0;
-                bonusItems.add(new Cherry(bx, by));
-            }
         }
-
-        updateBonusItems(dt);
 
         // Update ghosts
         for (Ghost g : ghosts) g.update(dt, map, player);
@@ -432,21 +494,27 @@ public class PelletPursuitDemo extends Application {
                     scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
                     g.kill();
                 } else {
-                    int random = (int) (Math.random() * randomBattle.length);
-                    //int random = (int) (Math.random() * 3);
-                    //int random = 7;
-                    //int random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
+                    int random;
+                    if ((int) (Math.random() * (3 + (level * 2))) == 0) {
+                        random = (int) (Math.random() * 3);
+                    } else {
+                        random = (int) (Math.random() * (randomBattle.length - 3)) + 3;
+                    }
+                    //random = 8;
+                    //random = (int) (Math.random() * 3);
                     currentBattle = randomBattle[random];
                     if (random > 2) {
                         Battle.player.generateTeam(playerTeams[(int) (Math.random() * (playerTeams.length - 3)) + 3], "player");
-                        //Battle.player.generateTeam(playerTeams[4], "player");
+                        //Battle.player.generateTeam(playerTeams[5], "player");
                     } else {
                         Battle.player.generateTeam(currentBattle, "player");
                     }
                     Battle.opponent.generateTeam(currentBattle, "opponent");
-                    graphics.displayImg( Battle.player.pokemon[0].toLowerCase() + "_back", 4.5, 1, 2.5, 1, root);
-                    graphics.displayImg( Battle.opponent.pokemon[0].toLowerCase() + "_front", 4.5, 8.5, -0.75, 2, root);
+                    //graphics.displayImg( "battle_background", 15, 0, 0, 0, root);
+                    GraphicsManager.displayImg( Battle.player.pokemon[0].toLowerCase() + "_back", 4.5, 2, 2.5, 1, root);
+                    GraphicsManager.displayImg( Battle.opponent.pokemon[0].toLowerCase() + "_front", 4.5, 8.75, -0.25, 2, root);
                     GameInterface.getPlayerMoves();
+                    Battle.player.getMoveInfo(GameInterface.battleMoves[0][0]);
                     battle.setBattleStats();
                     freeze = true;
                     inBattle = true;
@@ -472,31 +540,7 @@ public class PelletPursuitDemo extends Application {
         }
     }
 
-    private void updateBonusItems(double dt) {
-        // TODO (Phase 3): Update every bonus item and handle collection and expiry.
-        //
-        // Step 1 — update each item and award points if the player touches it:
-        //   for (BonusItem item : bonusItems) {
-        //       item.update(dt, map);
-        //       if (item.collidesWith(player)) {
-        //           score += item.getPoints();
-        //           audio.playBonus();
-        //       }
-        //   }
-        //
-        // Step 2 — build a removal list, then remove those items:
-        //   List<BonusItem> toRemove = new ArrayList<>();
-        //   for (BonusItem item : bonusItems) {
-        //       if (item.collidesWith(player) || item.isExpired()) {
-        //           toRemove.add(item);
-        //       }
-        //   }
-        //   bonusItems.removeAll(toRemove);
-        //
-        // Why two loops? Java throws a ConcurrentModificationException if you
-        // call bonusItems.remove() inside a for-each loop over bonusItems.
-        // Collecting items to remove first and deleting them after is the safe pattern.
-    }
+    public static boolean immediateMessage = false;
 
     private void render(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
@@ -515,7 +559,6 @@ public class PelletPursuitDemo extends Application {
         }
         player.draw(gc);
         for (Ghost g : ghosts) g.draw(gc);
-        for (BonusItem b : bonusItems) b.draw(gc);
         for (ScoreFlash f : scoreFlashes) f.draw(gc);
         gc.restore();
 
@@ -560,19 +603,27 @@ public class PelletPursuitDemo extends Application {
             gc.fillRect(0, GameMap.TILE * 7, map.width, GameMap.TILE * 3);
             gc.setFill(Color.DARKSLATEGRAY);
             gc.setTextAlign(TextAlignment.LEFT);
-            gc.setFont(Font.font("Monospace", GameMap.TILE * 2 / 3.0));
+            gc.setFont(Font.font("Monospace", GameMap.TILE * 3 / 5.0));
             gc.fillText(Battle.opponent.pokemon[0] + " Level " + Battle.opponent.levels[0], GameMap.TILE, GameMap.TILE);
-            gc.fillText(Battle.player.pokemon[0] + " Level " + Battle.player.levels[0], GameMap.TILE * 6, GameMap.TILE * 5);
-            gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + Battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
-            gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + Battle.getPStats()[2], GameMap.TILE * 6, GameMap.TILE * 6);
-            //graphics.setImgX(0, 0);
+            gc.fillText(Battle.player.pokemon[0] + " Level " + Battle.player.levels[0], GameMap.TILE * 7, GameMap.TILE * 5);
+            gc.fillText("Health: " + Math.max((int) Math.ceil(battle.hpAnimE / Battle.getEStats()[2] * 100), 0) + "%", GameMap.TILE, GameMap.TILE * 2);
+            //gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimE), 0) + " / " + Battle.getEStats()[2], GameMap.TILE, GameMap.TILE * 2);
+            gc.fillText("Health: " + Math.max(Math.round(battle.hpAnimP), 0) + " / " + Battle.getPStats()[2], GameMap.TILE * 7, GameMap.TILE * 6);
             GameInterface.renderBattle(gc);
             gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
-            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
+            gc.fillRect(GameMap.TILE * 10, GameMap.TILE * 6.125, GameMap.TILE * 3, GameMap.TILE / 2.0);
             gc.setFill(Color.web(hpColor(battle.hpAnimE / Battle.getEStats()[2])));
             gc.fillRect(GameMap.TILE * 4, GameMap.TILE * 2.25, GameMap.TILE * 3.0 * battle.hpAnimE / Battle.getEStats()[2], GameMap.TILE / 4.0);
             gc.setFill(Color.web(hpColor(battle.hpAnimP / Battle.getPStats()[2])));
-            gc.fillRect(GameMap.TILE * 9, GameMap.TILE * 6.25, GameMap.TILE * 3.0 * battle.hpAnimP / Battle.getPStats()[2], GameMap.TILE / 4.0);
+            gc.fillRect(GameMap.TILE * 10, GameMap.TILE * 6.25, GameMap.TILE * 3.0 * battle.hpAnimP / Battle.getPStats()[2], GameMap.TILE / 4.0);
+            if (opponentStatus) {
+                gc.setFill(Color.web(statusColors[Battle.indexOfString(Battle.opponent.statuses[0], statuses)]));
+                gc.fillOval(GameMap.TILE * 8, GameMap.TILE * 3 / 2.0, GameMap.TILE / 2.0, GameMap.TILE / 2.0);
+            }
+            if (playerStatus) {
+                gc.setFill(Color.web(statusColors[Battle.indexOfString(Battle.player.statuses[0], statuses)]));
+                gc.fillOval(GameMap.TILE * 14, GameMap.TILE * 11 / 2.0, GameMap.TILE / 2.0, GameMap.TILE / 2.0);
+            }
         }
     }
 
@@ -686,7 +737,6 @@ public class PelletPursuitDemo extends Application {
         audio.playDeath();
         state      = State.DEAD_PAUSE;
         pauseTimer = DEAD_PAUSE;
-        battle.resetBattle();
     }
 
     public void win(Ghost g) {
@@ -697,19 +747,27 @@ public class PelletPursuitDemo extends Application {
         audio.playGhostEaten();
         scoreFlashes.add(new ScoreFlash(g.centerX(), g.centerY(), pts));
         g.kill();
-        battle.resetBattle();
     }
 
     public void terminateBattle() {
         inBattle = false;
         freeze = false;
         criticalMusic = false;
-        //graphics.setImgX(0, GameMap.TILE * -20);
-        graphics.deleteImage(1);
-        graphics.deleteImage(2);
+        //GraphicsManager.deleteImage(0);
+        GraphicsManager.deleteImage(1);
+        GraphicsManager.deleteImage(2);
+        battle.resetBattle();
         GameInterface.battleState = 0;
         GameInterface.selectX = 0;
         GameInterface.selectY = 0;
+        Arrays.fill(Battle.player.statuses, "None");
+        Arrays.fill(Battle.opponent.statuses, "None");
+        Arrays.fill(Battle.pStatMods, 0);
+        Arrays.fill(Battle.eStatMods, 0);
+        Arrays.fill(Battle.missCases, false);
+        Battle.missCases[4] = true;
+        playerStatus = false;
+        opponentStatus = false;
     }
 
     public String hpColor(double hpRatio) {
@@ -723,8 +781,6 @@ public class PelletPursuitDemo extends Application {
     }
 
     public static void playTurn() {
-        GameInterface.battleState = 2;
-        battlePauseTimer = 0.5;
         Battle.playBattleTurn();
         if (Battle.critical > 1) {
             battleMessageValues[3] = true;
@@ -735,6 +791,7 @@ public class PelletPursuitDemo extends Application {
         animHP = true;
         GameInterface.selectX = 0;
         GameInterface.selectY = 0;
+        Battle.turn++;
     }
 
     public static void main(String[] args) { launch(args); }
